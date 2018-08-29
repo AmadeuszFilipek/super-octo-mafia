@@ -1,2 +1,2 @@
 main:
-	dot docs/states.dot -Tpng > docs/states.png
+	dot docs/state_machine.dot -Tpng > docs/state_machine.png

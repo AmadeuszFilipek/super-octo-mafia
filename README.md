@@ -2,7 +2,7 @@
 
 ## State machine
 
-![State machine](docs/states.png)
+![State machine](docs/state_machine.png)
 
 ## API
 
