@@ -46,9 +46,8 @@
     "slug": "",
   },
   "state": {
-    "type": "day_voting",
-    "attributes": {
-    },
+    "id": "day_voting",
+    "other": "attributes"
   },
   "players": [
     {
