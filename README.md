@@ -1,10 +1,13 @@
 # Mafia
 
+## State machine
+
+![State machine](docs/state_machine.png)
+
 ## API
 
-(./API.md)[API]
+[API](docs/API.md)
 
 ## Backend
 
-* http://flask.pocoo.org/org
-*
+* Flask "http://flask.pocoo.org/"
