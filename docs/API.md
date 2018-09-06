@@ -28,11 +28,11 @@
 }
 ```
 
-## POST `/rooms`
+## POST `/towns`
 
 ```json
 {
-  "room": {
+  "town": {
     "name": ""
   }
 }
@@ -42,7 +42,7 @@
 
 ```json
 {
-  "room": {
+  "town": {
     "slug": "",
   },
   "state": {
@@ -68,4 +68,3 @@
   ],
 }
 ```
-
