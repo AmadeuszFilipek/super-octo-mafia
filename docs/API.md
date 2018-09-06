@@ -42,9 +42,7 @@
 
 ```json
 {
-  "town": {
-    "slug": "",
-  },
+  "slug": "",
   "state": {
     "id": "day_voting",
     "other": "attributes"
@@ -66,5 +64,17 @@
       "traits": ["mafioso"]
     }
   ],
+}
+```
+
+### Fresh town
+
+```
+{
+  "slug": "",
+  "state": {
+    "id": "waiting_for_players",
+  },
+  "players": {},
 }
 ```
