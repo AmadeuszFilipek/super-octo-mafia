@@ -1,0 +1,8 @@
+curl -X POST -H "Content-Type: application/json" -d '{
+  "town": {
+    "name": "Walbrzych"
+  }
+}' http://localhost:5000/towns 2>/dev/null
+
+curl -X GET -H "Content-Type: application/json" http://localhost:5000/towns/przypal 2>/dev/null
+
