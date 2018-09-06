@@ -1,0 +1,28 @@
+{
+  "players": {
+    "06234071-a2f6-4244-98da-77d56271d5b7": {
+      "id": "06234071-a2f6-4244-98da-77d56271d5b7",
+      "name": "Krzysztof"
+    }
+  },
+  "slug": "walbrzych",
+  "state": {
+    "id": "waiting_for_players"
+  }
+}
+
+
+
+{
+  "players": {
+    "06234071-a2f6-4244-98da-77d56271d5b7": {
+      "id": "06234071-a2f6-4244-98da-77d56271d5b7",
+      "name": "Krzysztof"
+    }
+  },
+  "slug": "walbrzych",
+  "state": {
+    "id": "waiting_for_players"
+  }
+}
+
