@@ -11,5 +11,6 @@ get '/poll' do
   request.logger.info "sleep STTART"
   sleep 1
   request.logger.info 'sleep END'
-  { time: Time.now.to_i }.to_json
+
+  DateTime.now.iso8601.to_json
 end

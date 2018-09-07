@@ -1,27 +1,13 @@
-
 <script type="text/javascript">
-  function log(val) {
-    let json = JSON.stringify(val);
-    document.write(`${json}<br/>`);
-
-    console.log(val);
-  }
-
-  async function poll(prevReq) {
-    if (prevReq) {
-      let json = await prevReq.json();
-      log(json);
-    } else {
-      log('start polling');
-    }
-
-    let req = await fetch('/poll')
-    await poll(req);
-  }
-
   setTimeout(async () => {
-    poll();
-  });
+    while (true) {
+      document.write('request ... ');
 
+      let res = await fetch('/poll')
+      let json = await res.json();
+
+      document.write(`response ${JSON.stringify(json)}<br/>`);
+    }
+  });
 </script>
 
