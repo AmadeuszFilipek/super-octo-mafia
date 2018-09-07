@@ -1,0 +1,24 @@
+
+
+omg
+<ul id="list"></ul>
+hax
+
+
+<script type="text/javascript">
+  let opts = {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    cache: 'no-cache',
+  }
+  function poll(response) {
+    if (response) {
+      console.log('response = ', response.json());
+    } else {
+      console.log('start polling');
+    }
+    fetch('/poll', opts).then(poll);
+  }
+  poll();
+</script>
