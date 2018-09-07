@@ -1,24 +1,27 @@
 
-
-omg
-<ul id="list"></ul>
-hax
-
-
 <script type="text/javascript">
-  let opts = {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    cache: 'no-cache',
+  function log(val) {
+    let json = JSON.stringify(val);
+    document.write(`${json}<br/>`);
+
+    console.log(val);
   }
-  function poll(response) {
-    if (response) {
-      console.log('response = ', response.json());
+
+  async function poll(prevReq) {
+    if (prevReq) {
+      let json = await prevReq.json();
+      log(json);
     } else {
-      console.log('start polling');
+      log('start polling');
     }
-    fetch('/poll', opts).then(poll);
+
+    let req = await fetch('/poll')
+    await poll(req);
   }
-  poll();
+
+  setTimeout(async () => {
+    poll();
+  });
+
 </script>
+

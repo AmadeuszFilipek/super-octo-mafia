@@ -9,7 +9,7 @@ end
 
 get '/poll' do
   request.logger.info "sleep STTART"
-  sleep 5
+  sleep 1
   request.logger.info 'sleep END'
-  'true'
+  { time: Time.now.to_i }.to_json
 end
