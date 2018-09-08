@@ -1,0 +1,5 @@
+while true
+do
+  curl -X GET http://localhost:4567/poll 2>/dev/null
+done
+

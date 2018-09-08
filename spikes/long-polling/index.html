@@ -1,13 +1,56 @@
 <script type="text/javascript">
+  let polls = [];
+  let states = [];
+
+  // poll loop
   setTimeout(async () => {
     while (true) {
-      document.write('request ... ');
+      polls.push('request');
 
-      let res = await fetch('/poll')
-      let json = await res.json();
+      try {
+        let res = await fetch('/poll')
+        let json = await res.json();
 
-      document.write(`response ${JSON.stringify(json)}<br/>`);
+        polls.push(`response ${JSON.stringify(json)}<br/>`);
+      } catch (e) { }
     }
   });
+
+  async function sendState() {
+    let $input = document.getElementById('newState');
+    let $button = document.getElementById('sendState');
+
+    let body = JSON.stringify({ state: $input.value });
+    let res = await fetch('/state', { method: 'POST', body: body });
+    return await res.json();
+  }
+
+  function render() {
+    let left = polls.join("<br/>");
+    let right = changes.join("<br/>");
+    let table = `<table><tr><td>${left}</td><td>${right}</td></tr></table>`;
+    let form = 'New state: <input id="newState"/><button onClick="sendState()" id="sendState">Set State</button>';
+    let html = `${form}<hr/>${table}`;
+
+    document.clear();
+    document.write(html);
+  }
+
+  // change state loop
+  // setTimeout(async () => {
+  //   while (true) {
+  //     document.write('<br/>----- set state request<br/>');
+
+  //     try {
+  //       stateCounter+= 1;
+  //       let body = JSON.stringify({ date: Date.new, counter: stateCounter });
+  //       let res = await fetch('/state', { method: 'POST', body: body })
+  //       let json = await res.json();
+  //       stateCounter = json['counter'];
+
+  //       document.write(`${JSON.stringify(json)}<br/>`);
+  //     } catch (e) { }
+  //   }
+  // });
 </script>
 

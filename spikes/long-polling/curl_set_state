@@ -1,0 +1,1 @@
+for i in `seq 999999`; do curl -X POST -d "{ \"omg\": \"$i\" }" http://localhost:4567/state; sleep 0.05; done
