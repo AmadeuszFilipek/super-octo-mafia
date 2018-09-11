@@ -1,48 +1,46 @@
 require 'bundler'
 Bundler.require
+require 'benchmark'
 
+require 'pstore'
 require 'yaml/store'
-class Store < DelegateClass(YAML::Store)
-  class << self
-    attr_accessor :pstore, :mutex
-  end
-
-  def initialize(path)
-    self.class.pstore ||= PStore.new(path)
-    self.class.mutex ||= Mutex.new
-
-    super self.class.pstore
-  end
-
-  def transaction(&block)
-    self.class.mutex.synchronize { super(&block) }
-  end
-end
-
 helpers do
+  def yaml_store
+    @yaml_store ||=
+      YAML::Store.new('yaml.store', true).tap do |store|
+        store.ultra_safe = true
+      end
+  end
+
+  def pstore
+    @pstore ||=
+      YAML::Store.new('pstore.store.', true).tap do |store|
+        store.ultra_safe = true
+      end
+  end
+
   def store
-    Store.new('test.store')
+    yaml_store
   end
 end
 
 use Rack::Logger
 
 get '/' do
-  send_file File.expand_path('index.html')
+  File.read File.expand_path('index.html')
 end
 
-get '/poll' do
-  sleep 1
+get '/state' do
+  sleep 0.3
 
   store.transaction do
-    request.logger.info store[:state]
-    store[:state]
-  end.to_json
+    state = store.fetch(:state, {})
+    request.logger.info state
+    state
+  end.merge(server_time: Time.now.to_i).to_json
 end
 
 post '/state' do
-  # sleep 5
-
   request.body.rewind
   json = JSON.parse(request.body.read)
 

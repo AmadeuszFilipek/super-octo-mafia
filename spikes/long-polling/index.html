@@ -1,56 +1,99 @@
+<style type="text/css">
+      tr { border-bottom: 1px solid black }
+</style>
+
+<table>
+  <tr>
+    <td colspan="2">
+      New state <input id="newState"/> <button id="setState">Set</button>
+    </td>
+  <tr>
+  <tr>
+    <td id="top" colspan="2"></td>
+  <tr>
+    <td id="left" style="border: 1px; width: 50%"></td>
+    <td id="right" style="border: 1px; width: 50%"></td>
+  </tr>
+    <tr>
+      <td id="bottom" colspan="2"></td>
+    <tr>
+</table>
+
 <script type="text/javascript">
-  let polls = [];
+  let logs = [];
   let states = [];
+  let responses = [];
 
-  // poll loop
-  setTimeout(async () => {
-    while (true) {
-      polls.push('request');
+  function timeout(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
+  setTimeout(async function() {
+    console.log('timeout');
+
+    while(true) {
+      console.time('loop');
       try {
-        let res = await fetch('/poll')
-        let json = await res.json();
-
-        polls.push(`response ${JSON.stringify(json)}<br/>`);
-      } catch (e) { }
+        await poll();
+        render();
+      } catch (e) {
+        console.error('e', e);
+        await timeout(1000);
+      }
+      console.timeEnd('loop');
+      console.log();
     }
   });
+
+  async function poll() {
+    logs.push('request');
+
+    res = await fetch('/state')
+    let json = await res.json();
+
+    responses.push(json);
+    logs.push(`response ${JSON.stringify(json)}<br/>`);
+  };
 
   async function sendState() {
     let $input = document.getElementById('newState');
     let $button = document.getElementById('sendState');
+    let body = JSON.stringify({ state: $input.value, setDate: (new Date).getTime() });
 
-    let body = JSON.stringify({ state: $input.value });
+    states.push(`----- new state ${body}`)
     let res = await fetch('/state', { method: 'POST', body: body });
-    return await res.json();
+    let state = await res.json();
+    states.push(`-------- ${JSON.stringify(state)}`)
+
+    render();
   }
 
   function render() {
-    let left = polls.join("<br/>");
-    let right = changes.join("<br/>");
-    let table = `<table><tr><td>${left}</td><td>${right}</td></tr></table>`;
-    let form = 'New state: <input id="newState"/><button onClick="sendState()" id="sendState">Set State</button>';
-    let html = `${form}<hr/>${table}`;
+    let json = responses[responses.length - 1];
 
-    document.clear();
-    document.write(html);
+    let left = `server_time: <strong>${json.server_time}</strong`;
+    let right = `set_at: <strong>${json.set_at}</strong`;
+    let top = `value: <strong>${json.value}</strong`;
+    let bottom = `<hr/><pre>${JSON.stringify(json, null, '  ')}</pre>`;
+    let $left = document.getElementById('left');
+    let $right = document.getElementById('right');
+    let $top = document.getElementById('top');
+    let $bottom = document.getElementById('bottom');
+
+    $left.innerHTML = left;
+    $right.innerHTML = right;
+    $top.innerHTML = top;
+    $bottom.innerHTML = bottom;
   }
+  // function render() {
+  //   let left = logs.slice(logs.length - 10, logs.length).join("<br/>");
+  //   let right = states.slice(states.length - 10, states.length).join("<br/>");
+  //   let $left = document.getElementById('left');
+  //   let $right = document.getElementById('right');
 
-  // change state loop
-  // setTimeout(async () => {
-  //   while (true) {
-  //     document.write('<br/>----- set state request<br/>');
+  //   $left.innerHTML = left;
+  //   $right.innerHTML = right;
+  // }
 
-  //     try {
-  //       stateCounter+= 1;
-  //       let body = JSON.stringify({ date: Date.new, counter: stateCounter });
-  //       let res = await fetch('/state', { method: 'POST', body: body })
-  //       let json = await res.json();
-  //       stateCounter = json['counter'];
-
-  //       document.write(`${JSON.stringify(json)}<br/>`);
-  //     } catch (e) { }
-  //   }
-  // });
+  document.getElementById('setState').addEventListener('click', sendState);
+  // render();
 </script>
 
