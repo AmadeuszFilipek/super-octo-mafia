@@ -7,9 +7,9 @@
   <body>
     <div id="app">
 
-      <div v-if="state.id === 'new_town_form'">
-        Town slug: <input v-model="townSlug" /> <br/>
-        Player name: <input v-model="playerName" /> <br/>
+      <div v-if="appState.state.id === 'new_town_form'">
+        Town slug: <input placeholder="input your town slug" v-model="townSlug" /> <br/>
+        Player name: <input placeholder="input your player name" v-model="playerName" /> <br/>
 
         <button v-on:click=createNewTown :disabled="townSlug.length === 0 || playerName.length === 0">
           Create town

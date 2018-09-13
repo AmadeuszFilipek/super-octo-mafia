@@ -5,8 +5,10 @@ function init() {
   let app = new Vue({
     el: '#app',
     data: {
-      state: {
-	id: 'new_town_form',
+      appState: {
+	state: {
+	  id: 'new_town_form',
+	}
       },
       townSlug: 'omg',
       playerName: 'jacek',
@@ -27,7 +29,7 @@ function init() {
 
 	console.log("load state = ", json);
 
-	this.state = json.state;
+	this.appState = json;
       },
 
       async createNewTown() {
@@ -46,9 +48,10 @@ function init() {
 	    'Content-Type': 'application/json'
 	  }
 	});
-	let json = await res.json();
+	let json = res.json();
+	console.log("json = ", json);
 
-	console.log('create town response', json);
+	this.appState = json;
       },
     },
   });
