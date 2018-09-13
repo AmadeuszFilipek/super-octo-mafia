@@ -48,10 +48,11 @@ function init() {
 	    'Content-Type': 'application/json'
 	  }
 	});
-	let json = res.json();
+	let json = await res.json();
 	console.log("json = ", json);
 
 	this.appState = json;
+	console.log("this.appState = ", this.appState);
       },
     },
   });

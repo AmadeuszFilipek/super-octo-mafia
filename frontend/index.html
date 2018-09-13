@@ -16,6 +16,17 @@
         </button>
       </div>
 
+      <div v-if="appState.state.id === 'waiting_for_players'">
+        Town name: {{ appState.slug }} <br/>
+        Players:
+
+        <ul>
+          <li v-for="player in appState.players">
+            {{player.name}} ({{player.id}})
+          </li>
+        </ul>
+      </div>
+
     </div>
   </body>
 

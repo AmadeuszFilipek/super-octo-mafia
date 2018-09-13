@@ -42,9 +42,7 @@
 
 ```json
 {
-  "town": {
-    "slug": "",
-  },
+  "slug": "",
   "state": {
     "id": "day_voting",
     "other": "attributes"
