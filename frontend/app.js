@@ -28,6 +28,7 @@ function init() {
       if (pathParts.length === 3 && pathParts[1] === 'towns') {
 	this.townSlug = pathParts[2];
 	await this.loadState();
+	setInterval(this.loadState.bind(this), 200);
       }
     },
 
@@ -65,6 +66,7 @@ function init() {
 
 	this.appState = json;
 	window.history.pushState({}, null, `/towns/${this.appState.slug}`);
+	setInterval(this.loadState.bind(this), 200);
       },
 
       async joinTown() {
