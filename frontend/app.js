@@ -16,20 +16,27 @@ function init() {
 
     created() {
       console.log('ready');
+      let pathParts = window.location.pathname.split('/');
 
-      // this.loadState();
+      if (pathParts.length === 3 && pathParts[1] === 'towns') {
+	this.townSlug = pathParts[2];
+	this.loadState();
+      }
 
       // setInterval(this.loadState.bind(this), 1000);
     },
 
     methods: {
       async loadState() {
-	let res = await fetch('state');
-	let json = await res.json();
+	try {
+	  let res = await fetch(`/api/towns/${this.townSlug}`);
+	  let json = await res.json();
 
-	console.log("load state = ", json);
-
-	this.appState = json;
+	  this.appState = json;
+	} catch(e) {
+	  console.error('error =', e);
+	  window.history.pushState({}, null, '/');
+	}
       },
 
       async createNewTown() {
@@ -41,7 +48,7 @@ function init() {
 
 	console.log("create town request = ", requestJSON);
 
-	let res = await fetch('/towns', {
+	let res = await fetch('/api/towns', {
 	  method: 'POST',
 	  body: requestJSON,
 	  headers: {
@@ -52,7 +59,7 @@ function init() {
 	console.log("json = ", json);
 
 	this.appState = json;
-	console.log("this.appState = ", this.appState);
+	window.history.pushState({}, null, `/towns/${this.appState.slug}`);
       },
     },
   });

@@ -7,10 +7,11 @@ from .town import *
 app = Flask(__name__)
 
 @app.route('/')
-def root():
+@app.route('/towns/<path>')
+def root(path = None):
 	return send_from_directory('../frontend/', 'index.html')
 
-@app.route('/towns', methods = ['POST'])
+@app.route('/api/towns', methods = ['POST'])
 def request_create_town():
 
 	# jak tworzymy pokoj to chcemy go dolozyc do tablicy pokoi
@@ -25,9 +26,12 @@ def request_create_town():
 	return jsonify(town)
 
 # debug purposes
-@app.route('/towns/<slug>')
+@app.route('/api/towns/<slug>')
 def show_town(slug):
 	town = find_town(slug)
+
+	if town is None:
+		raise "Exception"
 	return jsonify(town)
 
 @app.route('/<path>')
