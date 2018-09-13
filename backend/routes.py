@@ -2,7 +2,6 @@ from flask import Flask
 from flask import jsonify
 from flask import request
 from flask import send_from_directory
-from uuid import uuid4
 from .town import *
 
 app = Flask(__name__)
@@ -17,12 +16,12 @@ def request_create_town():
 	# jak tworzymy pokoj to chcemy go dolozyc do tablicy pokoi
 	town = find_town(request.json['town']['slug'])
 
-	print('ziemniak')
-
 	if not town:
 		town = create_town(request.json['town'])
+		app.logger.info('new town = ' + str(jsonify(town)));
 		add_player(town, request.json['player'])
 
+		print('town = ' + str(jsonify(town)));
 	return jsonify(town)
 
 # debug purposes

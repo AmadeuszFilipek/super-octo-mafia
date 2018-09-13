@@ -31,7 +31,10 @@ function init() {
       },
 
       async createNewTown() {
-	let requestBody = { town: { slug: this.townSlug } };
+	let requestBody = {
+	  town: { slug: this.townSlug },
+	  player: { name: this.playerName }
+	};
 	let requestJSON = JSON.stringify(requestBody);
 
 	console.log("create town request = ", requestJSON);

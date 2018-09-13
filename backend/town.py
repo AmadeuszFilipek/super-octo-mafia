@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 app_state = {}
 
 def find_town(slug):
