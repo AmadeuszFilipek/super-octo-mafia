@@ -2,6 +2,13 @@
 function init() {
   console.log('init');
 
+  Vue.component('test-component', {
+    data() {
+      return { value: 23 };
+    },
+    template: '<input type="number" value={{ count }} />'
+  });
+
   let app = new Vue({
     el: '#app',
     data: {
