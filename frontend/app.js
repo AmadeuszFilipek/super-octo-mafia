@@ -10,24 +10,32 @@ function init() {
 	  id: 'new_town_form',
 	}
       },
+
       townSlug: 'omg',
       playerName: 'jacek',
+
+      playerId: null,
+
+      get currentPlayer() {
+	return this.appState.players[this.playerId];
+      },
     },
 
-    created() {
-      console.log('ready');
-      let pathParts = window.location.pathname.split('/');
-
-      if (pathParts.length === 3 && pathParts[1] === 'towns') {
-	this.townSlug = pathParts[2];
-	this.loadState();
+    async mounted() {
+      if (localStorage.playerId) {
+	this.playerId = localStorage.playerId;
       }
 
-      // setInterval(this.loadState.bind(this), 1000);
+      let pathParts = window.location.pathname.split('/');
+      if (pathParts.length === 3 && pathParts[1] === 'towns') {
+	this.townSlug = pathParts[2];
+	await this.loadState();
+      }
     },
 
     methods: {
       async loadState() {
+	console.log('loadState');
 	try {
 	  let res = await fetch(`/api/towns/${this.townSlug}`);
 	  let json = await res.json();
@@ -45,7 +53,6 @@ function init() {
 	  player: { name: this.playerName }
 	};
 	let requestJSON = JSON.stringify(requestBody);
-
 	console.log("create town request = ", requestJSON);
 
 	let res = await fetch('/api/towns', {
@@ -59,9 +66,40 @@ function init() {
 	console.log("json = ", json);
 
 	this.appState = json;
+	this.playerId = Object.keys(json.players)[0];
+	window.history.pushState({}, null, `/towns/${this.appState.slug}`);
+      },
+
+      async joinTown() {
+	let requestBody = {
+	  player: { name: this.playerName }
+	};
+	let requestJSON = JSON.stringify(requestBody);
+	console.log("join town request = ", requestJSON);
+
+	let townSlug = this.appState.slug;
+	let res = await fetch(`/api/towns/${townSlug}/players`, {
+	  method: 'POST',
+	  body: requestJSON,
+	  headers: {
+	    'Content-Type': 'application/json'
+	  }
+	});
+	let json = await res.json();
+	console.log("json = ", json);
+
+	this.appState = json;
+	this.playerId = Object.keys(json.players)[0];
 	window.history.pushState({}, null, `/towns/${this.appState.slug}`);
       },
     },
+
+    watch: {
+      playerId(newId) {
+	console.log('playerId watcher', newId);
+	localStorage.playerId = newId;
+      }
+    }
   });
 }
 

@@ -47,19 +47,19 @@
     "id": "day_voting",
     "other": "attributes"
   },
-  "players": [
-    {
-      "id": "",
+  "players": {
+    "id1": {
+      "id": "id1",
       "name": "",
       "traits": ["host", "citizen"]
     },
-    {
-      "id": "",
+    "id2": {
+      "id": "id2",
       "name": "",
       "traits": ["citizen", "dead"]
     },
-    {
-      "id": "",
+    "id3": {
+      "id": "id3",
       "name": "",
       "traits": ["mafioso"]
     }
