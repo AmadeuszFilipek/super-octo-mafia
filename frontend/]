@@ -8,8 +8,7 @@ function init() {
       state: {
 	id: 'new_town_form',
       },
-      townSlug: 'omg',
-      playerName: 'jacek',
+      newTownSlug: 'omg',
     },
 
     created() {
@@ -31,19 +30,16 @@ function init() {
       },
 
       async createNewTown() {
-	let requestBody = { town: { slug: this.townSlug } };
+	let requestBody = { town: { slug: this.newTownSlug } };
 	let requestJSON = JSON.stringify(requestBody);
 
 	console.log("create town request = ", requestJSON);
 
 	let res = await fetch('/towns', {
 	  method: 'POST',
-	  body: requestJSON,
-	  headers: {
-	    'Content-Type': 'application/json'
-	  }
+	  body: requestJSON
 	});
-	let json = await res.json();
+	let json = await res.json():
 
 	console.log('create town response', json);
       },

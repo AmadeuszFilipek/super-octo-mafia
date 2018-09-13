@@ -6,10 +6,16 @@
 
   <body>
     <div id="app">
-      state.id = {{ state.id }} <br/>
-      state.server_time = {{state.server_time}}
 
-      <test-component></test-component>
+      <div v-if="state.id === 'new_town_form'">
+        Town slug: <input v-model="townSlug" /> <br/>
+        Player name: <input v-model="playerName" /> <br/>
+
+        <button v-on:click=createNewTown :disabled="townSlug.length === 0 || playerName.length === 0">
+          Create town
+        </button>
+      </div>
+
     </div>
   </body>
 
