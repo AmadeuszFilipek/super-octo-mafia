@@ -3,11 +3,9 @@ from flask import jsonify
 from flask import request
 from flask import send_from_directory
 from uuid import uuid4
-
-import town
+from .town import *
 
 app = Flask(__name__)
-app_state = {}
 
 @app.route('/')
 def root():

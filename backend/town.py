@@ -1,3 +1,4 @@
+app_state = {}
 
 def find_town(slug):
 	try:
