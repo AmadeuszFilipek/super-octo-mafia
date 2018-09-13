@@ -14,16 +14,14 @@ function init() {
       townSlug: 'omg',
       playerName: 'jacek',
 
-      playerId: null,
-
       get currentPlayer() {
-	return this.appState.players[this.playerId];
+	return this.appState.players[this.playerName];
       },
     },
 
     async mounted() {
-      if (localStorage.playerId) {
-	this.playerId = localStorage.playerId;
+      if (localStorage.playerName) {
+	this.playerName = localStorage.playerName;
       }
 
       let pathParts = window.location.pathname.split('/');
@@ -47,7 +45,7 @@ function init() {
 	}
       },
 
-      async createNewTown() {
+      async createTown() {
 	let requestBody = {
 	  town: { slug: this.townSlug },
 	  player: { name: this.playerName }
@@ -63,10 +61,9 @@ function init() {
 	  }
 	});
 	let json = await res.json();
-	console.log("json = ", json);
+	console.log("create town json = ", json);
 
 	this.appState = json;
-	this.playerId = Object.keys(json.players)[0];
 	window.history.pushState({}, null, `/towns/${this.appState.slug}`);
       },
 
@@ -86,18 +83,17 @@ function init() {
 	  }
 	});
 	let json = await res.json();
-	console.log("json = ", json);
+	console.log("join town json = ", json);
 
 	this.appState = json;
-	this.playerId = Object.keys(json.players)[0];
 	window.history.pushState({}, null, `/towns/${this.appState.slug}`);
       },
     },
 
     watch: {
-      playerId(newId) {
-	console.log('playerId watcher', newId);
-	localStorage.playerId = newId;
+      playerName(name) {
+	console.log('playerName watcher', name);
+	localStorage.playerName = name;
       }
     }
   });

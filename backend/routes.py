@@ -34,6 +34,15 @@ def show_town(slug):
 		raise "Exception"
 	return jsonify(town)
 
+@app.route('/api/towns/<slug>/players', methods = ['POST'])
+def join_town(slug):
+	town = find_town(slug)
+	player = request.json['player']
+
+	add_player(town, player)
+
+	return jsonify(town)
+
 @app.route('/<path>')
 def send_file(path):
 	return send_from_directory('../frontend/', path)

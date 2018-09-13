@@ -17,9 +17,8 @@ def create_town(town_data):
 	return app_state[town_data['slug']]
 
 def add_player(town, player_data):
-	new_id = str(uuid4())
-	town['players'][new_id] = player_data.copy()
-	town['players'][new_id]['id'] = new_id
+	player_name = player_data['name']
+	town['players'][player_name] = player_data.copy()
 
 
 
