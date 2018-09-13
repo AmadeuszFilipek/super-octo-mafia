@@ -11,7 +11,7 @@
         Town slug: <input placeholder="input your town slug" v-model="townSlug" /> <br/>
         Player name: <input placeholder="input your player name" v-model="playerName" /> <br/>
 
-        <button v-on:click=createTown :disabled="townSlug.length === 0 || playerName.length === 0">
+        <button v-on:click=createTown :disabled="!townSlug || !playerName">
           Create town
         </button>
       </div>
@@ -22,7 +22,7 @@
         </div>
         <div v-else>
           Player name: <input placeholder="input your player name" v-model="playerName" /> <br/>
-          <button v-on:click=joinTown :disabled="playerName.length === 0">Join town</button>
+          <button v-on:click=joinTown :disabled="!playerName">Join town</button>
         </div>
 
         Town name: {{ appState.slug }} <br/>

@@ -11,8 +11,8 @@ function init() {
 	}
       },
 
-      townSlug: 'omg',
-      playerName: 'jacek',
+      townSlug: null,
+      playerName: null,
 
       get currentPlayer() {
 	return this.appState.players[this.playerName];
