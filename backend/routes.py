@@ -6,15 +6,17 @@ from .town import *
 
 app = Flask(__name__)
 
+
+
 @app.route('/')
 @app.route('/towns/<path>')
-def root(path = None):
+def endpoint_index(path = None):
 	return send_from_directory('../frontend/', 'index.html')
 
-@app.route('/api/towns', methods = ['POST'])
-def request_create_town():
 
-	# jak tworzymy pokoj to chcemy go dolozyc do tablicy pokoi
+
+@app.route('/api/towns', methods = ['POST'])
+def endpoint_create_town():
 	town = find_town(request.json['town']['slug'])
 
 	if not town:
@@ -25,17 +27,21 @@ def request_create_town():
 		print('town = ' + str(jsonify(town)));
 	return jsonify(town)
 
+
+
 # debug purposes
 @app.route('/api/towns/<slug>')
-def show_town(slug):
+def endpoint_show_town(slug):
 	town = find_town(slug)
 
 	if town is None:
 		raise "Exception"
 	return jsonify(town)
 
+
+
 @app.route('/api/towns/<slug>/players', methods = ['POST'])
-def join_town(slug):
+def endpoint_join_town(slug):
 	town = find_town(slug)
 	player = request.json['player']
 
@@ -43,7 +49,11 @@ def join_town(slug):
 
 	return jsonify(town)
 
+
+
 @app.route('/<path>')
-def send_file(path):
+def static_files_handler(path):
 	return send_from_directory('../frontend/', path)
+
+
 

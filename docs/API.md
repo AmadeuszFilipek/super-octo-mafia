@@ -1,5 +1,32 @@
 # API
 
+## Town State Response
+
+```json
+{
+  "slug": "",
+  "state": {
+    "id": "day_voting",
+    "other": "attributes"
+  },
+  "players": {
+    "name1": {
+      "name": "name1",
+      "traits": ["host", "citizen"]
+    },
+    "name2": {
+      "name": "name2",
+      "traits": ["citizen", "dead"]
+    },
+    "name3": {
+      "name": "name3",
+      "traits": ["mafioso"]
+    }
+  ],
+}
+```
+
+
 ### States and attributes
 
 #### `day_voting`, `night_voting`, `waiting_for_players`
@@ -38,31 +65,3 @@
 }
 ```
 
-## State Response
-
-```json
-{
-  "slug": "",
-  "state": {
-    "id": "day_voting",
-    "other": "attributes"
-  },
-  "players": {
-    "id1": {
-      "id": "id1",
-      "name": "",
-      "traits": ["host", "citizen"]
-    },
-    "id2": {
-      "id": "id2",
-      "name": "",
-      "traits": ["citizen", "dead"]
-    },
-    "id3": {
-      "id": "id3",
-      "name": "",
-      "traits": ["mafioso"]
-    }
-  ],
-}
-```
