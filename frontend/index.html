@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <script type="text/javascript" src="/vue.js"></script>
+    <script type="text/javascript" src="/app.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+
+      <div v-if="appState.state.id === 'new_town_form'">
+        Town slug: <input placeholder="input your town slug" v-model="townSlug" /> <br/>
+        Player name: <input placeholder="input your player name" v-model="playerName" /> <br/>
+
+        <button v-on:click=createTown :disabled="!townSlug || !playerName">
+          Create town
+        </button>
+      </div>
+
+      <div v-if="appState.state.id === 'waiting_for_players'">
+        <div v-if="currentPlayer">
+          currentPlayer={{currentPlayer}}
+        </div>
+        <div v-else>
+          Player name: <input placeholder="input your player name" v-model="playerName" /> <br/>
+          <button v-on:click=joinTown :disabled="!playerName">Join town</button>
+        </div>
+
+        Town name: {{ appState.slug }} <br/>
+        Players:
+
+        <ul>
+          <li v-for="player in appState.players">
+            {{player.name}}
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </body>
+
+</html>
