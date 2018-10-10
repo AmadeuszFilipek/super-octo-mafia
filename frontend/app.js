@@ -55,6 +55,10 @@ function init() {
 	}
       },
 
+      votedOn(votee) {
+	return this.appState.votes[this.playerName] === votee.name;
+      },
+
       async loadState() {
 	console.log('loadState');
 	try {

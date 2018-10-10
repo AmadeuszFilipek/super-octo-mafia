@@ -2,6 +2,11 @@
   <head>
     <script type="text/javascript" src="/vue.js"></script>
     <script type="text/javascript" src="/app.js"></script>
+    <style>
+      .voted {
+        background-color: red;
+      }
+    </style>
   </head>
 
   <body>
@@ -39,7 +44,7 @@
 
       <div v-if="appState.state.id === 'day_voting'">
         <ul>
-          <li v-for="player in appState.players">
+          <li v-for="player in appState.players" v-bind:class="{ voted: votedOn(player) }">
             {{player.name}}
             <button v-if="currentPlayer !== player" v-on:click="vote(player)">Vote!</button>
           </li>
