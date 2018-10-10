@@ -25,7 +25,7 @@ function init() {
       if (pathParts.length === 3 && pathParts[1] === 'towns') {
 	this.townSlug = pathParts[2];
 	await this.loadState();
-	setInterval(this.loadState.bind(this), 200);
+	setInterval(this.loadState.bind(this), 1000);
       }
     },
 
@@ -33,6 +33,14 @@ function init() {
       currentPlayer() {
 	if (this.appState && this.appState.players) {
 	  return this.appState.players[this.playerName];
+	}
+
+	return false;
+      },
+
+      isHost() {
+	if (this.currentPlayer) {
+	  return this.currentPlayer.is_host;
 	}
 
 	return false;
