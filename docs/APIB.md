@@ -55,12 +55,37 @@ for every reqest and is same for every user.
 
 `votes` - an object of all votes in current state, where keys are voters names and values are votees names.
 
-## Create Town [POST /api/towns]
+# Group Town
 
-If it does not exists, creates new town in `waiting_for_players` state
-and makes current user a host.
+## Town Collection [/api/towns]
 
-If it already exists, just return state.
+### Create New Town [POST]
+
+Creates new town in `waiting_for_players` state if there is no town with given `slug` on the server.
+
+Otherwise just returns state object.
+
++ `town.slug` (string) - slug of new town
++ `player.name` (string) - name of new player
+
++ Request (application/json)
+
+    ```
+    {
+      "town": { "slug": "" },
+      "player": { "name": "" }
+    }
+    ```
+
++ Response 201 (application/json)
+
+    ```
+    {
+    }
+    ```
+
+
+
 
 
 
