@@ -16,9 +16,10 @@ def create_town(town_data):
 
 	return app_state[town_data['slug']]
 
-def add_player(town, player_data):
+def add_player(town, player_data, is_host = False):
 	player_name = player_data['name']
 	town['players'][player_name] = player_data.copy()
+	town['players'][player_name]['is_host'] = is_host
 
 
 

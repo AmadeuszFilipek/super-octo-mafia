@@ -13,10 +13,6 @@ function init() {
 
       townSlug: null,
       playerName: null,
-
-      get currentPlayer() {
-	return this.appState.players[this.playerName];
-      },
     },
 
     async mounted() {
@@ -32,14 +28,30 @@ function init() {
       }
     },
 
+    computed: {
+      currentPlayer() {
+	if (this.appState && this.appState.players) {
+	  return this.appState.players[this.playerName];
+	}
+
+	return false;
+      },
+    },
+
     methods: {
+      setState(newState) {
+	// if (newState && newState.version && newState.version > this.appState.version) {
+	  this.appState = newState;
+	// }
+      },
+
       async loadState() {
 	console.log('loadState');
 	try {
 	  let res = await fetch(`/api/towns/${this.townSlug}`);
 	  let json = await res.json();
 
-	  this.appState = json;
+	  this.setState(json);
 	} catch(e) {
 	  console.error('error =', e);
 	  window.history.pushState({}, null, '/');
@@ -64,9 +76,9 @@ function init() {
 	let json = await res.json();
 	console.log("create town json = ", json);
 
-	this.appState = json;
+	this.setState(json);
 	window.history.pushState({}, null, `/towns/${this.appState.slug}`);
-	setInterval(this.loadState.bind(this), 200);
+	setInterval(this.loadState.bind(this), 1000);
       },
 
       async joinTown() {
@@ -87,14 +99,13 @@ function init() {
 	let json = await res.json();
 	console.log("join town json = ", json);
 
-	this.appState = json;
+	this.setState(json);
 	window.history.pushState({}, null, `/towns/${this.appState.slug}`);
       },
     },
 
     watch: {
       playerName(name) {
-	console.log('playerName watcher', name);
 	localStorage.playerName = name;
       }
     }

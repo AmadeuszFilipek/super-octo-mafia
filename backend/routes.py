@@ -22,7 +22,7 @@ def endpoint_create_town():
 	if not town:
 		town = create_town(request.json['town'])
 		app.logger.info('new town = ' + str(jsonify(town)));
-		add_player(town, request.json['player'])
+		add_player(town, request.json['player'], True)
 
 		print('town = ' + str(jsonify(town)));
 	return jsonify(town)
@@ -35,7 +35,7 @@ def endpoint_show_town(slug):
 	town = find_town(slug)
 
 	if town is None:
-		raise "Exception"
+		raise Exception
 	return jsonify(town)
 
 

@@ -33,7 +33,17 @@
             {{player.name}}
           </li>
         </ul>
+
+        <button v-if="currentPlayer.is_host">Start game</button>
       </div>
+
+      <pre>
+        {{appState}}
+      </pre>
+
+      <pre>
+        {{currentPlayer}}
+      </pre>
 
     </div>
   </body>
