@@ -8,8 +8,8 @@
     <div id="app">
 
       <div v-if="appState.state.id === 'new_town_form'">
-        Town slug: <input placeholder="input your town slug" v-model="townSlug" /> <br/>
-        Player name: <input placeholder="input your player name" v-model="playerName" /> <br/>
+        Town slug: <input placeholder="input your town slug" v-model=townSlug /> <br/>
+        Player name: <input placeholder="input your player name" v-model=playerName /> <br/>
 
         <button v-on:click=createTown :disabled="!townSlug || !playerName">
           Create town
@@ -21,8 +21,8 @@
           currentPlayer={{currentPlayer}}
         </div>
         <div v-else>
-          Player name: <input placeholder="input your player name" v-model="playerName" /> <br/>
-          <button v-on:click=joinTown :disabled="!playerName">Join town</button>
+          Player name: <input placeholder="input your player name" v-model=playerName /> <br/>
+          <button v-on:click=joinTown :disabled=!playerName>Join town</button>
         </div>
 
         Town name: {{ appState.slug }} <br/>
@@ -34,7 +34,7 @@
           </li>
         </ul>
 
-        <button v-if="currentPlayer.is_host">Start game</button>
+        <button v-if=currentPlayer.is_host v-on:click=createTown>Start game</button>
       </div>
 
       <pre>
