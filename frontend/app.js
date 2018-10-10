@@ -40,9 +40,9 @@ function init() {
 
     methods: {
       setState(newState) {
-	// if (newState && newState.version && newState.version > this.appState.version) {
+	if (newState.version > this.appState.version) {
 	  this.appState = newState;
-	// }
+	}
       },
 
       async loadState() {
@@ -102,6 +102,28 @@ function init() {
 	this.setState(json);
 	window.history.pushState({}, null, `/towns/${this.appState.slug}`);
       },
+
+      async startGame() {
+	console.log("join town request");
+
+	// let townSlug = this.appState.slug;
+	// let res = await fetch(`/api/towns/${townSlug}/start`, {
+	//   method: 'POST',
+	//   // body: requestJSON,
+	//   headers: {
+	//     'Content-Type': 'application/json'
+	//   }
+	// });
+	// let json = await res.json();
+	// console.log("start game json = ", json);
+
+	this.appState.state.id = 'day_voting';
+
+	// let json = {
+	// }
+
+	// this.setState(json);
+      }
     },
 
     watch: {
