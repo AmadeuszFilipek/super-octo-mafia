@@ -24,9 +24,9 @@ def add_player(town, player_data, is_host = False):
 def start_game(town):
 	town['state']['id'] = 'day_voting'
 
-	
+def vote(town, vote):
+	town['votes'][vote['voterName']] = vote['voteeName']
 
-	
 
 
 

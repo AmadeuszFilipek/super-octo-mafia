@@ -5,10 +5,11 @@
 ```json
 {
   "slug": "",
-  "version": 1,
+  "version": timestamp,
   "state": {
     "id": "day_voting",
     "other": "attributes"
+	"started_at": timestamp,
   },
   "players": {
     "name1": {

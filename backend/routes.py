@@ -64,6 +64,14 @@ def endpoint_start_game(slug):
 	start_game(town)
 
 	return jversonify(town)
+
+@app.route('/api/towns/<slug>/votes', method = ['POST'])
+def endpoint_vote(slug):
+	town = find_town(slug)
+	
+	vote(town, request.json['vote'])
+	
+	return jversonify(town)
 	
 def jversonify(town):
 	town['version'] = datetime.now().timestamp()
