@@ -55,7 +55,15 @@ def endpoint_join_town(slug):
 @app.route('/<path>')
 def static_files_handler(path):
 	return send_from_directory('../frontend/', path)
+	
 
+@app.route('/api/towns/<slug>/start', methods = ['POST'])
+def endpoint_start_game(slug):
+	town = find_town(slug)
+
+	start_game(town)
+
+	return jversonify(town)
 	
 def jversonify(town):
 	town['version'] = datetime.now().timestamp()

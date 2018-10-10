@@ -20,6 +20,11 @@ def add_player(town, player_data, is_host = False):
 	player_name = player_data['name']
 	town['players'][player_name] = player_data.copy()
 	town['players'][player_name]['is_host'] = is_host
+	
+def start_game(town):
+	town['state']['id'] = 'day_voting'
+
+	
 
 	
 
