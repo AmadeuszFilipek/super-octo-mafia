@@ -11,6 +11,10 @@
     "other": "attributes"
 	"started_at": timestamp,
   },
+  "votes": {
+    "dziku": "dziku2",
+    "dziku3": "dziku4",
+  },
   "players": {
     "name1": {
       "name": "name1",

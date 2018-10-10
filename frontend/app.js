@@ -128,7 +128,31 @@ function init() {
 	console.log("start game json = ", json);
 
 	this.setState(json);
-      }
+      },
+
+      async vote(votee) {
+	let requestBody = {
+	  vote: {
+	    voteeName: votee.name,
+	    voterName: this.currentPlayer.name
+	  }
+	};
+	let requestJSON = JSON.stringify(requestBody);
+	console.log("vote on request = ", requestJSON);
+
+	let townSlug = this.appState.slug;
+	let res = await fetch(`/api/towns/${townSlug}/votes`, {
+	  method: 'POST',
+	  body: requestJSON,
+	  headers: {
+	    'Content-Type': 'application/json'
+	  }
+	});
+	let json = await res.json();
+	console.log("vote on json = ", json);
+
+	this.setState(json);
+      },
     },
 
     watch: {

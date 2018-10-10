@@ -37,6 +37,15 @@
         <button v-if=isHost v-on:click=startGame>Start game</button>
       </div>
 
+      <div v-if="appState.state.id === 'day_voting'">
+        <ul>
+          <li v-for="player in appState.players">
+            {{player.name}}
+            <button v-if="currentPlayer !== player" v-on:click="vote(player)">Vote!</button>
+          </li>
+        </ul>
+      </div>
+
       <pre>
         appState={{appState}}
         currentPlayer={{currentPlayer}}
