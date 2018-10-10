@@ -6,6 +6,7 @@ function init() {
     el: '#app',
     data: {
       appState: {
+	version: 0,
 	state: {
 	  id: 'new_town_form',
 	}
@@ -24,7 +25,7 @@ function init() {
       if (pathParts.length === 3 && pathParts[1] === 'towns') {
 	this.townSlug = pathParts[2];
 	await this.loadState();
-	setInterval(this.loadState.bind(this), 200);
+	setInterval(this.loadState.bind(this), 1000);
       }
     },
 
@@ -36,11 +37,20 @@ function init() {
 
 	return false;
       },
+
+      isHost() {
+	if (this.currentPlayer) {
+	  return this.currentPlayer.is_host;
+	}
+
+	return false;
+      },
     },
 
     methods: {
       setState(newState) {
 	if (newState.version > this.appState.version) {
+	  console.log("newState = ", newState);
 	  this.appState = newState;
 	}
       },
@@ -106,23 +116,18 @@ function init() {
       async startGame() {
 	console.log("join town request");
 
-	// let townSlug = this.appState.slug;
-	// let res = await fetch(`/api/towns/${townSlug}/start`, {
-	//   method: 'POST',
-	//   // body: requestJSON,
-	//   headers: {
-	//     'Content-Type': 'application/json'
-	//   }
-	// });
-	// let json = await res.json();
-	// console.log("start game json = ", json);
+	let townSlug = this.appState.slug;
+	let res = await fetch(`/api/towns/${townSlug}/start`, {
+	  method: 'POST',
+	  // body: requestJSON,
+	  headers: {
+	    'Content-Type': 'application/json'
+	  }
+	});
+	let json = await res.json();
+	console.log("start game json = ", json);
 
-	this.appState.state.id = 'day_voting';
-
-	// let json = {
-	// }
-
-	// this.setState(json);
+	this.setState(json);
       }
     },
 

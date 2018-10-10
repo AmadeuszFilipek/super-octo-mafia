@@ -34,16 +34,15 @@
           </li>
         </ul>
 
-        <button v-if=currentPlayer.is_host v-on:click=startGame>Start game</button>
+        <button v-if=isHost v-on:click=startGame>Start game</button>
       </div>
 
       <pre>
-        {{appState}}
+        appState={{appState}}
+        currentPlayer={{currentPlayer}}
+        isHost={{isHost}}
       </pre>
 
-      <pre>
-        {{currentPlayer}}
-      </pre>
 
     </div>
   </body>
