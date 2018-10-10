@@ -55,7 +55,7 @@ def endpoint_join_town(slug):
 @app.route('/<path>')
 def static_files_handler(path):
 	return send_from_directory('../frontend/', path)
-	
+
 
 @app.route('/api/towns/<slug>/start', methods = ['POST'])
 def endpoint_start_game(slug):
@@ -65,17 +65,17 @@ def endpoint_start_game(slug):
 
 	return jversonify(town)
 
-@app.route('/api/towns/<slug>/votes', method = ['POST'])
+@app.route('/api/towns/<slug>/votes', methods = ['POST'])
 def endpoint_vote(slug):
 	town = find_town(slug)
-	
+
 	vote(town, request.json['vote'])
-	
+
 	return jversonify(town)
-	
+
 def jversonify(town):
 	town['version'] = datetime.now().timestamp()
-	
+
 	return jsonify(town)
-	
+
 
