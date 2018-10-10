@@ -3,6 +3,7 @@ from flask import jsonify
 from flask import request
 from flask import send_from_directory
 from .town import *
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -57,7 +58,7 @@ def static_files_handler(path):
 
 	
 def jversonify(town):
-	town['version'] += 1
+	town['version'] = datetime.now().timestamp()
 	
 	return jsonify(town)
 	
