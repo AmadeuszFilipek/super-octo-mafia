@@ -25,7 +25,7 @@ def endpoint_create_town():
 		add_player(town, request.json['player'], True)
 
 		print('town = ' + str(jsonify(town)));
-	return jsonify(town)
+	return jversonify(town)
 
 
 
@@ -36,7 +36,7 @@ def endpoint_show_town(slug):
 
 	if town is None:
 		raise Exception
-	return jsonify(town)
+	return jversonify(town)
 
 
 
@@ -47,7 +47,7 @@ def endpoint_join_town(slug):
 
 	add_player(town, player)
 
-	return jsonify(town)
+	return jversonify(town)
 
 
 
@@ -55,5 +55,10 @@ def endpoint_join_town(slug):
 def static_files_handler(path):
 	return send_from_directory('../frontend/', path)
 
-
+	
+def jversonify(town):
+	town['version'] += 1
+	
+	return jsonify(town)
+	
 

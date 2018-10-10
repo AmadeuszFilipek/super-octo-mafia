@@ -5,6 +5,7 @@
 ```json
 {
   "slug": "",
+  "version": 1,
   "state": {
     "id": "day_voting",
     "other": "attributes"
@@ -12,6 +13,7 @@
   "players": {
     "name1": {
       "name": "name1",
+	  "is_host": false,
       "traits": ["host", "citizen"]
     },
     "name2": {
