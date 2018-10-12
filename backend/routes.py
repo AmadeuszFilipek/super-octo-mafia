@@ -43,7 +43,7 @@ def endpoint_show_town(slug):
 @app.route('/api/towns/<slug>', methods = ['DELETE'])
 def endpoint_delete_town(slug):
     delete_town(slug)
-    return ""
+    return "{}"
 
 
 

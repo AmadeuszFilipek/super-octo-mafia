@@ -10,7 +10,7 @@ for step_filename in steps/*; do
   step_name=`basename $step_filename`
   step_name=${step_name#step_}
   step_name=${step_name%.sh}
-  response_path="responses/response_$step_name"
+  response_path="responses/$step_name"
 
   echo
   echo -n "--- $step_name"
@@ -19,11 +19,9 @@ for step_filename in steps/*; do
     ./$step_filename "$old_api" 2>/dev/null > $response_path
   fi
 
-  diff --color=always <(cat $response_path | sed '/"version":/d') <(
-    ./$step_filename "$new_api" 2>/dev/null | sed '/"version":/d'
+  diff --color=always <(cat $response_path  | python -mjson.tool| sed '/"version":/d') <(
+    ./$step_filename "$new_api" 2>/dev/null | python -mjson.tool | sed '/"version":/d'
   ) | sed 's/^/    /'
 
-  if [ 0 = "$?" ]; then
-    echo ': ok'
-  fi
+  echo
 done
