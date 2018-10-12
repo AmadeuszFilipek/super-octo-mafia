@@ -1,0 +1,14 @@
+{
+    "players": {
+        "Dziku": {
+            "is_host": true,
+            "name": "Dziku"
+        }
+    },
+    "slug": "Swiebodzin",
+    "state": {
+        "id": "waiting_for_players"
+    },
+    "version": 1539381570.811947,
+    "votes": {}
+}
