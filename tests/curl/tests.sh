@@ -15,17 +15,17 @@ for request_filename in $requests; do
   response_filename="response_$request_name"
 
   echo
-  echo "--- $request_name"
+  echo -n "--- $request_name"
 
   if [ ! -f $response_filename ]; then
-    echo -n "  > no response found, quering old api..."
-    ./$request_filename "$old_api" 2>/dev/null | python -mjson.tool > $response_filename
-    echo " cached"
-  else
-    echo "  > reusing cache"
+    ./$request_filename "$old_api" 2>/dev/null | python -mjson.tool | sed '/"version":/d' > $response_filename
   fi
 
   diff --color=always $response_filename <(
-    ./$request_filename "$new_api" 2>/dev/null | python -mjson.tool
+    ./$request_filename "$new_api" 2>/dev/null | python -mjson.tool | sed '/"version":/d'
   ) | sed 's/^/    /'
+
+  if [ 0 = "$?" ]; then
+    echo ': ok'
+  fi
 done
