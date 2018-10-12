@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo
-
 requests=$1
 [ -z $requests ] && requests=request_*.sh
 
@@ -13,6 +11,7 @@ for request_filename in $requests; do
   request_name=${request_name%.sh}
   response_filename="response_$request_name"
 
+  echo
   echo "--- $request_name"
 
   if [ ! -f $response_filename ]; then
@@ -22,8 +21,6 @@ for request_filename in $requests; do
   else
     echo "  > reusing cache"
   fi
-
-  echo
 
   diff --color=always $response_filename <(./$request_filename "$new_api") | sed 's/^/    /'
 done
