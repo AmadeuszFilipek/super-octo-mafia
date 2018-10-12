@@ -16,11 +16,13 @@ for request_filename in $requests; do
 
   if [ ! -f $response_filename ]; then
     echo -n "  > no response found, quering old api..."
-    ./$request_filename "$old_api" > $response_filename
+    ./$request_filename "$old_api" 2>/dev/null | python -mjson.tool > $response_filename
     echo " cached"
   else
     echo "  > reusing cache"
   fi
 
-  diff --color=always $response_filename <(./$request_filename "$new_api") | sed 's/^/    /'
+  diff --color=always $response_filename <(
+    ./$request_filename "$new_api" 2>/dev/null | python -mjson.tool
+  ) | sed 's/^/    /'
 done

@@ -1,4 +1,3 @@
-http://localhost:5000
 {
     "players": {
         "Dziku": {
@@ -10,6 +9,6 @@ http://localhost:5000
     "state": {
         "id": "waiting_for_players"
     },
-    "version": 1539382291.130989,
+    "version": 1539382574.613896,
     "votes": {}
 }
