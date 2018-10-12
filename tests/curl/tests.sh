@@ -3,8 +3,11 @@
 requests=$1
 [ -z $requests ] && requests=request_*.sh
 
-old_api="http://localhost:5000"
-new_api="http://localhost:5000"
+old_api="$OLD_API_URL"
+[ -z $old_api ] && old_api="http://localhost:5000"
+
+new_api="$NEW_API_URL"
+[ -z $new_api ] && new_api="http://localhost:5000"
 
 for request_filename in $requests; do
   request_name=${request_filename#request_}
