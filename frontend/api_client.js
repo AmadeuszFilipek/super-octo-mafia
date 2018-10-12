@@ -6,55 +6,37 @@ class ApiClient {
   }
 
   async createTown({ townSlug, playerName }) {
-    let requestBody = {
+    return await this.post('/api/towns', {
       town: { slug: townSlug },
       player: { name: playerName }
-    };
-    let res = await fetch('/api/towns', {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-	'Content-Type': 'application/json'
-      }
     });
-    return await res.json();
   }
 
   async joinTown({ playerName, townSlug }) {
-    let requestBody = {
+    return await this.post(`/api/towns/${townSlug}/players`, {
       player: { name: playerName }
-    };
-
-    let res = await fetch(`/api/towns/${townSlug}/players`, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-	'Content-Type': 'application/json'
-      }
     });
-    return await res.json();
   }
 
   async startGame({ townSlug }) {
-    let res = await fetch(`/api/towns/${townSlug}/start`, {
-      method: 'POST',
-      headers: {
-	'Content-Type': 'application/json'
-      }
-    });
-    return await res.json();
+    return await this.post(`/api/towns/${townSlug}/start`);
   }
 
   async createVote({ townSlug, voteeName, voterName }) {
-    let requestBody = {
+    return await this.post(`/api/towns/${townSlug}/votes`, {
       vote: {
 	voteeName: voteeName,
 	voterName: voterName
       }
-    };
-    let res = await fetch(`/api/towns/${townSlug}/votes`, {
+    })
+  }
+
+  // helper method performing POST requests with jsonified data
+  // returns parsed json response
+  async post(url, data = null) {
+    let res = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(requestBody),
+      body: JSON.stringify(data),
       headers: {
 	'Content-Type': 'application/json'
       }
