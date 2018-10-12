@@ -22,10 +22,10 @@ def endpoint_create_town():
 
 	if not town:
 		town = create_town(request.json['town'])
-		app.logger.info('new town = ' + str(jsonify(town)));
+		app.logger.info('new town = ' + str(jsonify(town)))
 		add_player(town, request.json['player'], True)
 
-		print('town = ' + str(jsonify(town)));
+		print('town = ' + str(jsonify(town)))
 	return jversonify(town)
 
 
@@ -57,6 +57,7 @@ def static_files_handler(path):
 	return send_from_directory('../frontend/', path)
 
 
+
 @app.route('/api/towns/<slug>/start', methods = ['POST'])
 def endpoint_start_game(slug):
 	town = find_town(slug)
@@ -65,6 +66,8 @@ def endpoint_start_game(slug):
 
 	return jversonify(town)
 
+
+
 @app.route('/api/towns/<slug>/votes', methods = ['POST'])
 def endpoint_vote(slug):
 	town = find_town(slug)
@@ -72,6 +75,22 @@ def endpoint_vote(slug):
 	vote(town, request.json['vote'])
 
 	return jversonify(town)
+
+
+
+#backdoor state inject
+@app.route('/api/towns/<slug>', methods = ['PUT'])
+def endpoint_backdoor(slug):
+
+	
+	town = find_town(request.json['town']['slug'])
+
+	if town:
+		town = request.json['town']
+	else:
+		town = create_town(request.json['town'])
+		town = request.json['town']
+
 
 def jversonify(town):
 	town['version'] = datetime.now().timestamp()
