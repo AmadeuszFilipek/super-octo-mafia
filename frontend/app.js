@@ -1,3 +1,4 @@
+import ApiClient from '/api_client.js';
 
 function init() {
   console.log('init');
@@ -11,8 +12,6 @@ function init() {
 	  id: 'new_town_form',
 	}
       },
-
-      townSlug: null,
       playerName: null,
     },
 
@@ -23,9 +22,9 @@ function init() {
 
       let pathParts = window.location.pathname.split('/');
       if (pathParts.length === 3 && pathParts[1] === 'towns') {
-	this.townSlug = pathParts[2];
+	this.appState.slug = pathParts[2];
 	await this.loadState();
-	setInterval(this.loadState.bind(this), 1000);
+	this.startPolling();
       }
     },
 
@@ -45,25 +44,32 @@ function init() {
 
 	return false;
       },
+
+      api() {
+	return new ApiClient;
+      },
     },
 
     methods: {
       setState(newState) {
 	if (newState.version > this.appState.version) {
-	  console.log("newState = ", newState);
+	  // console.log("setting new state", newState);
 	  this.appState = newState;
+	  // console.log("this.appState = ", this.appState);
 	}
       },
 
-      votedOn(votee) {
+      hasVotedOn(votee) {
 	return this.appState.votes[this.playerName] === votee.name;
       },
 
+      startPolling() {
+	setInterval(this.loadState.bind(this), 1000);
+      },
+
       async loadState() {
-	console.log('loadState');
 	try {
-	  let res = await fetch(`/api/towns/${this.townSlug}`);
-	  let json = await res.json();
+	  let json = await this.api.getTown({ townSlug: this.appState.slug });
 
 	  this.setState(json);
 	} catch(e) {
@@ -73,87 +79,39 @@ function init() {
       },
 
       async createTown() {
-	let requestBody = {
-	  town: { slug: this.townSlug },
-	  player: { name: this.playerName }
-	};
-	let requestJSON = JSON.stringify(requestBody);
-	console.log("create town request = ", requestJSON);
-
-	let res = await fetch('/api/towns', {
-	  method: 'POST',
-	  body: requestJSON,
-	  headers: {
-	    'Content-Type': 'application/json'
-	  }
+	let json = await this.api.createTown({
+	  townSlug: this.appState.slug,
+	  playerName: this.playerName
 	});
-	let json = await res.json();
-	console.log("create town json = ", json);
+	console.log("json = ", json);
 
 	this.setState(json);
 	window.history.pushState({}, null, `/towns/${this.appState.slug}`);
-	setInterval(this.loadState.bind(this), 1000);
+	this.startPolling();
       },
 
       async joinTown() {
-	let requestBody = {
-	  player: { name: this.playerName }
-	};
-	let requestJSON = JSON.stringify(requestBody);
-	console.log("join town request = ", requestJSON);
-
-	let townSlug = this.appState.slug;
-	let res = await fetch(`/api/towns/${townSlug}/players`, {
-	  method: 'POST',
-	  body: requestJSON,
-	  headers: {
-	    'Content-Type': 'application/json'
-	  }
+	let json = await this.api.joinTown({
+	  playerName: this.playerName,
+	  townSlug: this.appState.slug
 	});
-	let json = await res.json();
-	console.log("join town json = ", json);
 
 	this.setState(json);
 	window.history.pushState({}, null, `/towns/${this.appState.slug}`);
       },
 
       async startGame() {
-	console.log("join town request");
-
-	let townSlug = this.appState.slug;
-	let res = await fetch(`/api/towns/${townSlug}/start`, {
-	  method: 'POST',
-	  // body: requestJSON,
-	  headers: {
-	    'Content-Type': 'application/json'
-	  }
-	});
-	let json = await res.json();
-	console.log("start game json = ", json);
+	let json = await this.api.startGame({ townSlug: this.appState.slug });
 
 	this.setState(json);
       },
 
       async vote(votee) {
-	let requestBody = {
-	  vote: {
-	    voteeName: votee.name,
-	    voterName: this.currentPlayer.name
-	  }
-	};
-	let requestJSON = JSON.stringify(requestBody);
-	console.log("vote on request = ", requestJSON);
-
-	let townSlug = this.appState.slug;
-	let res = await fetch(`/api/towns/${townSlug}/votes`, {
-	  method: 'POST',
-	  body: requestJSON,
-	  headers: {
-	    'Content-Type': 'application/json'
-	  }
+	let json = await this.api.createVote({
+	  townSlug: this.appState.slug,
+	  voteeName: votee.name,
+	  voterName: this.currentPlayer.name
 	});
-	let json = await res.json();
-	console.log("vote on json = ", json);
 
 	this.setState(json);
       },
@@ -168,3 +126,5 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+export default app;
