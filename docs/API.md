@@ -18,7 +18,7 @@
   "players": {
     "name1": {
       "name": "name1",
-	  "is_host": false,
+      "is_host": false,
       "traits": ["host", "citizen"]
     },
     "name2": {
