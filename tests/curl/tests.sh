@@ -18,10 +18,10 @@ for request_filename in $requests; do
   echo -n "--- $request_name"
 
   if [ ! -f $response_filename ]; then
-    ./$request_filename "$old_api" 2>/dev/null | python -mjson.tool | sed '/"version":/d' > $response_filename
+    ./$request_filename "$old_api" 2>/dev/null | python -mjson.tool > $response_filename
   fi
 
-  diff --color=always $response_filename <(
+  diff --color=always <(cat $response_filename | sed '/"version":/d') <(
     ./$request_filename "$new_api" 2>/dev/null | python -mjson.tool | sed '/"version":/d'
   ) | sed 's/^/    /'
 
