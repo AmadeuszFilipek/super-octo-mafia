@@ -3,6 +3,7 @@ from flask import jsonify
 from flask import request
 from flask import send_from_directory
 from .town import *
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -22,10 +23,10 @@ def endpoint_create_town():
 	if not town:
 		town = create_town(request.json['town'])
 		app.logger.info('new town = ' + str(jsonify(town)));
-		add_player(town, request.json['player'])
+		add_player(town, request.json['player'], True)
 
 		print('town = ' + str(jsonify(town)));
-	return jsonify(town)
+	return jversonify(town)
 
 
 
@@ -35,8 +36,8 @@ def endpoint_show_town(slug):
 	town = find_town(slug)
 
 	if town is None:
-		raise "Exception"
-	return jsonify(town)
+		raise Exception
+	return jversonify(town)
 
 
 
@@ -47,7 +48,7 @@ def endpoint_join_town(slug):
 
 	add_player(town, player)
 
-	return jsonify(town)
+	return jversonify(town)
 
 
 
@@ -55,5 +56,26 @@ def endpoint_join_town(slug):
 def static_files_handler(path):
 	return send_from_directory('../frontend/', path)
 
+
+@app.route('/api/towns/<slug>/start', methods = ['POST'])
+def endpoint_start_game(slug):
+	town = find_town(slug)
+
+	start_game(town)
+
+	return jversonify(town)
+
+@app.route('/api/towns/<slug>/votes', methods = ['POST'])
+def endpoint_vote(slug):
+	town = find_town(slug)
+
+	vote(town, request.json['vote'])
+
+	return jversonify(town)
+
+def jversonify(town):
+	town['version'] = datetime.now().timestamp()
+
+	return jsonify(town)
 
 

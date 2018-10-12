@@ -2,14 +2,19 @@
   <head>
     <script type="text/javascript" src="/vue.js"></script>
     <script type="text/javascript" src="/app.js"></script>
+    <style>
+      .voted {
+        background-color: red;
+      }
+    </style>
   </head>
 
   <body>
     <div id="app">
 
       <div v-if="appState.state.id === 'new_town_form'">
-        Town slug: <input placeholder="input your town slug" v-model="townSlug" /> <br/>
-        Player name: <input placeholder="input your player name" v-model="playerName" /> <br/>
+        Town slug: <input placeholder="input your town slug" v-model=townSlug /> <br/>
+        Player name: <input placeholder="input your player name" v-model=playerName /> <br/>
 
         <button v-on:click=createTown :disabled="!townSlug || !playerName">
           Create town
@@ -21,8 +26,8 @@
           currentPlayer={{currentPlayer}}
         </div>
         <div v-else>
-          Player name: <input placeholder="input your player name" v-model="playerName" /> <br/>
-          <button v-on:click=joinTown :disabled="!playerName">Join town</button>
+          Player name: <input placeholder="input your player name" v-model=playerName /> <br/>
+          <button v-on:click=joinTown :disabled=!playerName>Join town</button>
         </div>
 
         Town name: {{ appState.slug }} <br/>
@@ -33,7 +38,25 @@
             {{player.name}}
           </li>
         </ul>
+
+        <button v-if=isHost v-on:click=startGame>Start game</button>
       </div>
+
+      <div v-if="appState.state.id === 'day_voting'">
+        <ul>
+          <li v-for="player in appState.players" v-bind:class="{ voted: votedOn(player) }">
+            {{player.name}}
+            <button v-if="currentPlayer !== player" v-on:click="vote(player)">Vote!</button>
+          </li>
+        </ul>
+      </div>
+
+      <pre>
+        appState={{appState}}
+        currentPlayer={{currentPlayer}}
+        isHost={{isHost}}
+      </pre>
+
 
     </div>
   </body>

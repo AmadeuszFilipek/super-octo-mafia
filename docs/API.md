@@ -5,13 +5,20 @@
 ```json
 {
   "slug": "",
+  "version": timestamp,
   "state": {
     "id": "day_voting",
     "other": "attributes"
+	"started_at": timestamp,
+  },
+  "votes": {
+    "dziku": "dziku2",
+    "dziku3": "dziku4",
   },
   "players": {
     "name1": {
       "name": "name1",
+      "is_host": false,
       "traits": ["host", "citizen"]
     },
     "name2": {
