@@ -1,7 +1,7 @@
 #!/bin/bash
 
-requests=$1
-[ -z $requests ] && requests=request_*.sh
+tests=$1
+[ -z $tests ] && tests=test_*.sh
 
 old_api="$OLD_API_URL"
 [ -z $old_api ] && old_api="http://localhost:5000"
@@ -9,20 +9,22 @@ old_api="$OLD_API_URL"
 new_api="$NEW_API_URL"
 [ -z $new_api ] && new_api="http://localhost:5000"
 
-for request_filename in $requests; do
-  request_name=${request_filename#request_}
-  request_name=${request_name%.sh}
-  response_filename="response_$request_name"
+for test_filename in $tests; do
+  test_name=${test_filename#test_}
+  test_name=${test_name%.sh}
+  response_filename="response_$test_name"
 
   echo
-  echo -n "--- $request_name"
+  echo -n "--- $test_name"
+
+  ./setup.sh
 
   if [ ! -f $response_filename ]; then
-    ./$request_filename "$old_api" 2>/dev/null | python -mjson.tool > $response_filename
+    ./$test_filename "$old_api" 2>/dev/null > $response_filename
   fi
 
   diff --color=always <(cat $response_filename | sed '/"version":/d') <(
-    ./$request_filename "$new_api" 2>/dev/null | python -mjson.tool | sed '/"version":/d'
+    ./$test_filename "$new_api" 2>/dev/null | sed '/"version":/d'
   ) | sed 's/^/    /'
 
   if [ 0 = "$?" ]; then
