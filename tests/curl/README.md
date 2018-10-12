@@ -14,7 +14,7 @@ cd tests/curl
 ./tests.sh
 ```
 
-The idea is to compare current responses with valid, cached ones in order
+The idea is to use `diff` to compare current responses with valid, cached ones in order
 to check if app still behaves properly.
 
 Testsuite is composed from steps, that live in `steps/*.sh`.
