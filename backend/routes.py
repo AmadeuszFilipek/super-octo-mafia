@@ -30,7 +30,6 @@ def endpoint_create_town():
 
 
 
-# debug purposes
 @app.route('/api/towns/<slug>')
 def endpoint_show_town(slug):
 	town = find_town(slug)
@@ -38,6 +37,14 @@ def endpoint_show_town(slug):
 	if town is None:
 		raise Exception
 	return jversonify(town)
+
+
+# needed for curl tests, to not restart server every test
+@app.route('/api/towns/<slug>', methods = ['DELETE'])
+def endpoint_delete_town(slug):
+    delete_town(slug)
+    return ""
+
 
 
 
