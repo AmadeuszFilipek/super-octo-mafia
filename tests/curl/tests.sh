@@ -6,7 +6,7 @@ requests=$1
 [ -z $requests ] && requests=request_*.sh
 
 old_api="http://localhost:5000"
-# new_api="$old_api"
+new_api="http://localhost:5000"
 
 for request_filename in $requests; do
   request_name=${request_filename#request_}
@@ -25,5 +25,5 @@ for request_filename in $requests; do
 
   echo
 
-  diff --color=always $response_filename <(./$request_filename) | sed 's/^/    /'
+  diff --color=always $response_filename <(./$request_filename "$new_api") | sed 's/^/    /'
 done
