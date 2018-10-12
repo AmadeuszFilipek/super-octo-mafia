@@ -14,10 +14,10 @@
   <body>
     <div id="app">
       <div v-if="appState.state.id === 'new_town_form'">
-        Town slug: <input placeholder="input your town slug" v-model=appState.slug /> <br/>
-        Player name: <input placeholder="input your player name" v-model=playerName /> <br/>
+        Town slug: <input id="town_slug" placeholder="input your town slug" v-model=appState.slug /> <br/>
+        Player name: <input id="player_name" placeholder="input your player name" v-model=playerName /> <br/>
 
-        <button v-on:click=createTown :disabled="!appState.slug || !playerName">
+        <button id="create_town" v-on:click=createTown :disabled="!appState.slug || !playerName">
           Create town
         </button>
       </div>
