@@ -1,5 +1,0 @@
-curl http://localhost:5000/api/towns/Swiebodzin > api_towns_swiebodzin
-curl http://localhost:5000/api2/towns/Swiebodzin > api2_towns_swiebodzin
-diff api_towns_swiebodzin api2_towns_swiebodzin
-
-ls backend/* | entr -r ./run_diff_tests
