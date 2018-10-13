@@ -68,3 +68,5 @@ for step_filename in steps/*; do
     exit 1
   fi
 done
+
+echo
