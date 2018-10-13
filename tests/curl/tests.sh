@@ -48,7 +48,7 @@ for step_filename in $steps; do
   step_name=`basename $step_filename`
   step_name=${step_name#step_}
   step_name=${step_name%.sh}
-  response_path="responses/$step_name"
+  response_path="responses/${step_name}.json"
 
   echo -n "--- $step_name"
 
