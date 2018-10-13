@@ -17,6 +17,9 @@ def create_town(town_data):
 
 	return app_state[town_data['slug']]
 
+def delete_town(slug):
+    app_state.pop(slug, None)
+
 def add_player(town, player_data, is_host = False):
 	player_name = player_data['name']
 	town['players'][player_name] = player_data.copy()

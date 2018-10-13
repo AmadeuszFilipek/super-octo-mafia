@@ -1,0 +1,20 @@
+{
+    "players": {
+        "Andrzej": {
+            "is_host": false,
+            "name": "Andrzej"
+        },
+        "Krzysztof": {
+            "is_host": true,
+            "name": "Krzysztof"
+        }
+    },
+    "slug": "Swiebodzin",
+    "state": {
+        "id": "day_voting"
+    },
+    "votes": {
+        "Andrzej": "Krzysztof",
+        "Krzysztof": "Andrzej"
+    }
+}
