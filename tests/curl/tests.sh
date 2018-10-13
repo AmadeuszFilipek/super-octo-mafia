@@ -45,7 +45,7 @@ function run_step() {
     exit 1
   fi
 
-  # remove "version" line of response json to not trigger git diff with
+  # remove any timestamps from response json to not trigger git diff with
   # constntly changing version, based on current time
   echo -e "$json" | sed '/"version":/d' | sed '/"started_at":/d'
 }
