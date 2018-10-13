@@ -29,7 +29,7 @@ function run_step() {
     exit 1
   fi
 
-  local json=$(echo -e $response | python -mjson.tool)
+  local json=$(echo -e $response | python -mjson.tool 2>/dev/null)
 
   if [ $? != 0 ]; then
     echo -e ": ${c_red}FAILED${c_reset}"
