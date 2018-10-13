@@ -1,0 +1,13 @@
+{
+    "players": {
+        "Krzysztof": {
+            "is_host": true,
+            "name": "Krzysztof"
+        }
+    },
+    "slug": "Swiebodzin",
+    "state": {
+        "id": "waiting_for_players"
+    },
+    "votes": {}
+}
