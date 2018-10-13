@@ -13,7 +13,7 @@ c_green="\e[32m"
 function run_step() {
   local api_url=$1
   local step_filename=$2
-  local response=$(./$step_filename "$api_url" 2>1)
+  local response=$(./$step_filename "$api_url" 2>&1)
 
   if [ $? != 0 ]; then
     echo -e ": ${c_red}FAILED${c_reset}"
