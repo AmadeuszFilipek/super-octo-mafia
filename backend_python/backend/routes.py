@@ -1,7 +1,7 @@
 from flask import request
 from flask import send_from_directory
-from mafia.backend.town import Town, TownDoesNotExistException
-from mafia import app, app_state
+from backend_python.backend.town import Town, TownDoesNotExistException
+from backend_python import app, app_state
 
 def find_town(slug):
 	try:
@@ -12,7 +12,7 @@ def find_town(slug):
 @app.route('/')
 @app.route('/towns/<path>')
 def endpoint_index(path = None):
-	return send_from_directory('../mafia/frontend/', 'index.html')
+	return send_from_directory('../frontend/', 'index.html')
 
 
 
@@ -43,6 +43,14 @@ def endpoint_show_town(slug):
 
 
 
+# debug purposes
+@app.route('/api/towns/<slug>', methods = ['DELETE'])
+def endpoint_delete_town(slug):
+    app_state.pop(slug, None)
+    return "{}"
+
+
+
 @app.route('/api/towns/<slug>/players', methods = ['POST'])
 def endpoint_join_town(slug):
 	town = find_town(slug)
@@ -55,7 +63,7 @@ def endpoint_join_town(slug):
 
 @app.route('/<path>')
 def static_files_handler(path):
-	return send_from_directory('../mafia/frontend/', path)
+	return send_from_directory('../frontend/', path)
 
 
 
@@ -79,11 +87,11 @@ def endpoint_vote(slug):
 
 
 
-#backdoor state inject, 
+#backdoor state inject,
 # @app.route('/api/towns/<slug>', methods = ['PUT'])
 # def endpoint_backdoor(slug):
 
-	
+
 # 	town = find_town(request.json['town']['slug'])
 
 # 	if town:

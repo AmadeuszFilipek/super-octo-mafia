@@ -39,11 +39,11 @@ def endpoint_show_town(slug):
 	return jversonify(town)
 
 
-# needed for curl tests, to not restart server every test
-@app.route('/api/towns/<slug>', methods = ['DELETE'])
-def endpoint_delete_town(slug):
-    delete_town(slug)
-    return "{}"
+# # needed for curl tests, to not restart server every test
+# @app.route('/api/towns/<slug>', methods = ['DELETE'])
+# def endpoint_delete_town(slug):
+#     delete_town(slug)
+#     return "{}"
 
 
 
@@ -89,7 +89,7 @@ def endpoint_vote(slug):
 @app.route('/api/towns/<slug>', methods = ['PUT'])
 def endpoint_backdoor(slug):
 
-	
+
 	town = find_town(request.json['town']['slug'])
 
 	if town:

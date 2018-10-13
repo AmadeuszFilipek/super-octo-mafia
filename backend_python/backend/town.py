@@ -1,4 +1,4 @@
-from mafia.backend.player import Player
+from backend_python.backend.player import Player
 from flask import jsonify
 from datetime import datetime
 
@@ -14,7 +14,7 @@ class Town(object):
 
 	def to_dict(self):
 		dictionary = self.__dict__.copy()
-		dictionary['players'] = {} 
+		dictionary['players'] = {}
 
 		for player in self.players.keys():
 			dictionary['players'][player] = self.players[player].to_dict()
@@ -24,7 +24,7 @@ class Town(object):
 
 	def add_player(self, name, is_host = False):
 		self.players[name] = Player(name, is_host)
-		
+
 
 	def start_game(self):
 		for player in self.players.values():
@@ -52,8 +52,8 @@ class Town(object):
 
 	def jversonify(self):
 		self.version = datetime.now().timestamp()
-		
-		return(jsonify(self.to_dict()))	
+
+		return(jsonify(self.to_dict()))
 
 
 	def check_if_game_ended(self):

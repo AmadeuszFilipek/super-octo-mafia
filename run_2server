@@ -1,3 +1,0 @@
-export FLASK_APP=mafia
-export FLASK_DEBUG=true
-flask run --debugger -h 0.0.0.0 --reload
