@@ -1,5 +1,7 @@
 # CURL tests
 
+## Test mode
+
 Setup old api url (needed only to record new responses):
 
 ```
@@ -24,3 +26,12 @@ that will be prepended to paths (`{prefix}/api/towns` etc).
 
 Each do one request with `curl` (important!).
 
+## Record mode
+
+If you want to record all steps or given step only and do not perform
+request to new api, set proper env var:
+
+```
+RECORD_MODE=true ./tests.sh
+RECORD_MODE=true ./tests.sh steps/02_create_town.sh
+```

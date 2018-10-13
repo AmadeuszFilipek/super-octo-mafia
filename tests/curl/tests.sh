@@ -16,6 +16,7 @@ new_api="$NEW_API_URL"
 c_reset="\e[0m"
 c_red="\e[31m"
 c_green="\e[32m"
+c_yellow="\e[33m"
 
 # (api_url, step_filename)
 # outputs response json or error messages
@@ -73,26 +74,30 @@ for step_filename in $steps; do
   echo -n "--- $step_name"
 
   # Use cached or cache step response
-  if [ -f $response_path ]; then
+  if [ "$RECORD_MODE" != "true" ] && [ -f $response_path ]; then
     old_api_json=$(cat $response_path)
   else
     old_api_json=$(run_step $old_api $step_filename | tee $response_path)
   fi
 
-  # Fetch actual response
-  new_api_json=$(run_step $new_api $step_filename)
+  if [ "$RECORD_MODE" != "true" ]; then
+    # Fetch actual response
+    new_api_json=$(run_step $new_api $step_filename)
 
-  diff_output=$(
-    diff --unified --color=always <(echo -e "$old_api_json") <(echo -e "$new_api_json")
-  )
+    diff_output=$(
+      diff --unified --color=always <(echo -e "$old_api_json") <(echo -e "$new_api_json")
+    )
 
-  if [ $? = 0 ]; then
-    echo -e ": ${c_green}OK${c_reset}"
+    if [ $? = 0 ]; then
+      echo -e ": ${c_green}OK${c_reset}"
+    else
+      echo -e ": ${c_red}FAILED${c_reset}"
+      echo
+      echo -e "$diff_output" | sed 's/^/    /'
+      exit 1
+    fi
   else
-    echo -e ": ${c_red}FAILED${c_reset}"
-    echo
-    echo -e "$diff_output" | sed 's/^/    /'
-    exit 1
+    echo -e ": ${c_yellow}CACHED${c_reset}"
   fi
 done
 
