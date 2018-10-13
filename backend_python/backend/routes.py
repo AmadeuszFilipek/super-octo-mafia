@@ -71,7 +71,7 @@ def static_files_handler(path):
 def endpoint_start_game(slug):
 	town = find_town(slug)
 
-	town.start_game()
+	town.start_game(request.json)
 
 	return town.jversonify()
 

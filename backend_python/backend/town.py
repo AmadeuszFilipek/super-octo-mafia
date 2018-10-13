@@ -26,10 +26,13 @@ class Town(object):
 		self.players[name] = Player(name, is_host)
 
 
-	def start_game(self):
+	def start_game(self, backdoor_players = {}):
 		for player in self.players.values():
-			player.generate_character()
-
+			try:
+				player.character = backdoor_players[player.name]
+			except KeyError:
+				player.generate_character()
+			
 		self.state['id'] = 'day_voting'
 
 
