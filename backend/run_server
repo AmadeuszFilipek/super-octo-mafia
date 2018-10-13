@@ -1,2 +1,0 @@
-FLASK_APP=mafia.py flask run --debugger -h 0.0.0.0 --reload
-

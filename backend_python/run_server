@@ -1,0 +1,3 @@
+export FLASK_APP=.
+export FLASK_DEBUG=true
+flask run --debugger --reload -h 0.0.0.0 --reload --port 5000
