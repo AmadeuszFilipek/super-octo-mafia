@@ -1,5 +1,10 @@
 #!/bin/bash
 
+steps="$@"
+if [ -z "$steps" ]; then
+  steps="steps/*"
+fi
+
 old_api="$OLD_API_URL"
 [ -z $old_api ] && old_api="http://localhost:5000"
 
@@ -39,7 +44,7 @@ function run_step() {
   echo -e "$json" | sed '/"version":/d'
 }
 
-for step_filename in steps/*; do
+for step_filename in $steps; do
   step_name=`basename $step_filename`
   step_name=${step_name#step_}
   step_name=${step_name%.sh}
