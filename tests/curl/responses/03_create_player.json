@@ -1,10 +1,12 @@
 {
     "players": {
         "Andrzej": {
+            "is_alive": true,
             "is_host": false,
             "name": "Andrzej"
         },
         "Krzysztof": {
+            "is_alive": true,
             "is_host": true,
             "name": "Krzysztof"
         }
