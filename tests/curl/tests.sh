@@ -61,7 +61,7 @@ for step_filename in $steps; do
   new_api_json=$(run_step $new_api $step_filename)
 
   diff_output=$(
-    diff --color=always <(echo -e "$old_api_json") <(echo -e "$new_api_json")
+    diff --unified --color=always <(echo -e "$old_api_json") <(echo -e "$new_api_json")
   )
 
   if [ $? = 0 ]; then
