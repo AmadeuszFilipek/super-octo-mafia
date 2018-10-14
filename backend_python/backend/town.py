@@ -26,11 +26,11 @@ class Town(object):
 		self.players[name] = Player(name, is_host)
 
 
-	def start_game(self, backdoor_players = {}):
+	def start_game(self, backdoor_players = None):
 		for player in self.players.values():
-			try:
+			if backdoor_players and player.name in backdoor_players.keys():
 				player.character = backdoor_players[player.name]
-			except KeyError:
+			else:
 				player.generate_character()
 			
 		self.state['id'] = 'day_voting'
@@ -61,7 +61,33 @@ class Town(object):
 
 	def check_if_game_ended(self):
 		raise NotImplementedError
+		
+		alive_mafia = 0
+		alive_civils = 0
+		
+		for player in self.players.values():
+			if player.is_alive:
+				if player.character == 'mafia':
+					alive_mafia += 1
+				else:
+					allive_civils += 1
+		
+		is_game_ended = False
+		
+		if alive_mafia == 0:
+			is_game_ended = True
+			game_won = 'civils'
+		elif alive_civils < alive_mafia:
+			is_game_ended = True
+			game_won = 'mafia'
+		elif alive_mafia == 1 and alive_mafia == alive_civils:
+			is_game_ended = True
+			game_won = 'mafia' 		
 
+		if is_game_ended:
+			self.state = {'id': 'game_ended'}
+		
+		return game_won
 
 class TownDoesNotExistException(Exception):
 	pass

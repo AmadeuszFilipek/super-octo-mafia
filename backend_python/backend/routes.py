@@ -70,7 +70,7 @@ def static_files_handler(path):
 @app.route('/api/towns/<slug>/start', methods = ['POST'])
 def endpoint_start_game(slug):
 	town = find_town(slug)
-
+	
 	town.start_game(request.json)
 
 	return town.jversonify()
