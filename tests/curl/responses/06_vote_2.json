@@ -1,0 +1,24 @@
+{
+    "players": {
+        "Andrzej": {
+            "character": "mafia",
+            "is_alive": true,
+            "is_host": false,
+            "name": "Andrzej"
+        },
+        "Krzysztof": {
+            "character": "civil",
+            "is_alive": true,
+            "is_host": true,
+            "name": "Krzysztof"
+        }
+    },
+    "slug": "Swiebodzin",
+    "state": {
+        "id": "day_voting"
+    },
+    "votes": {
+        "Andrzej": "Krzysztof",
+        "Krzysztof": "Andrzej"
+    }
+}

@@ -1,32 +1,51 @@
-
 class ApiClient {
-  async getTown({ townSlug }) {
+  async getTown({
+    townSlug
+  }) {
     let res = await fetch(`/api/towns/${townSlug}`);
     return await res.json();
   }
 
-  async createTown({ townSlug, playerName }) {
+  async createTown({
+    townSlug,
+    playerName
+  }) {
     return await this.post('/api/towns', {
-      town: { slug: townSlug },
-      player: { name: playerName }
+      town: {
+        slug: townSlug
+      },
+      player: {
+        name: playerName
+      }
     });
   }
 
-  async joinTown({ playerName, townSlug }) {
+  async joinTown({
+    playerName,
+    townSlug
+  }) {
     return await this.post(`/api/towns/${townSlug}/players`, {
-      player: { name: playerName }
+      player: {
+        name: playerName
+      }
     });
   }
 
-  async startGame({ townSlug }) {
+  async startGame({
+    townSlug
+  }) {
     return await this.post(`/api/towns/${townSlug}/start`);
   }
 
-  async createVote({ townSlug, voteeName, voterName }) {
+  async createVote({
+    townSlug,
+    voteeName,
+    voterName
+  }) {
     return await this.post(`/api/towns/${townSlug}/votes`, {
       vote: {
-	voteeName: voteeName,
-	voterName: voterName
+        voteeName: voteeName,
+        voterName: voterName
       }
     })
   }
@@ -38,7 +57,7 @@ class ApiClient {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
-	'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       }
     });
     return await res.json();
