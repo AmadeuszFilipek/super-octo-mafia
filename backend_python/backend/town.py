@@ -1,6 +1,8 @@
 from backend_python.backend.player import Player
 from flask import jsonify
 from datetime import datetime
+from random import sample
+from math import floor, ceil
 
 class Town(object):
 
@@ -10,7 +12,7 @@ class Town(object):
 		self.votes = {}
 		self.state = {'id': 'waiting_for_players'}
 		self.started_at = datetime.now().timestamp()
-
+		self.is_ready_to_start = False
 
 	def to_dict(self):
 		dictionary = self.__dict__.copy()
@@ -27,18 +29,20 @@ class Town(object):
 
 
 	def start_game(self, backdoor_players = None):
+		
 		for player in self.players.values():
 			if backdoor_players and player.name in backdoor_players.keys():
 				player.character = backdoor_players[player.name]
 			else:
-				player.generate_character()
-
-
-
-		self.state['id'] = 'day_voting'
-	
+				number_of_mafia = floor(len(self.players.keys()) * 0.25)
+			
+				for player in sample(self.players.values(), number_of_mafia):
+					player.set_character('mafia')
 		
+		self.is_ready_to_start = True
+		self.state['id'] = 'day_voting'
 
+		return self.is_ready_to_start
 
 
 	def vote(self, vote):
@@ -65,8 +69,7 @@ class Town(object):
 
 
 	def check_if_game_ended(self):
-		raise NotImplementedError
-		
+
 		alive_mafia = 0
 		alive_civils = 0
 		
