@@ -45,6 +45,10 @@ function init() {
         return false;
       },
 
+      canShowStartButton() {
+        return this.isHost && this.appState.is_read_to_start;
+      },
+
       api() {
         return new ApiClient;
       },

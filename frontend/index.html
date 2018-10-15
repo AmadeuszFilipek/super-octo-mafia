@@ -40,7 +40,7 @@
           </li>
         </ul>
 
-        <button v-if=isHost v-on:click=startGame>Start game</button>
+        <button v-if=canShowStartButton v-on:click=startGame>Start game</button>
       </div>
 
       <div v-if="appState.state.id === 'day_voting'">
@@ -54,8 +54,6 @@
 
       <pre>
         appState={{appState}}
-        currentPlayer={{currentPlayer}}
-        isHost={{isHost}}
       </pre>
 
 
