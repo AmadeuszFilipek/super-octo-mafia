@@ -40,7 +40,7 @@
           </li>
         </ul>
 
-        <button v-if=isHost v-on:click=startGame>Start game</button>
+        <button  id='start_game' v-if=isHost v-on:click=startGame>Start game</button>
       </div>
 
       <div id="day_voting" v-if="appState.state.id === 'day_voting'">

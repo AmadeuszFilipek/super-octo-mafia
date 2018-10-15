@@ -1,11 +1,15 @@
 // const puppeteer = require('puppeteer');
-import puppeteer from 'puppeteer';
+const puppeteer = require('puppeteer')
+const fetch = require('node-fetch')
 
-let is_headless = true;
+let is_headless = false;
+global.fetch = fetch;
 
 (async () => {
-  const b1 = await puppeteer.launch({ context: 'default', headless: is_headless });
-  const b2 = await puppeteer.launch({ context: 'joe', headless: is_headless });
+  fetch('http://localhost:5000/towns/Swiebodzin')
+
+  const b1 = await puppeteer.launch({ context: 'default', headless: is_headless, args: ['--no-sandbox', '--disable-setuid-sandbox'], });
+  const b2 = await puppeteer.launch({ context: 'joe', headless: is_headless, args: ['--no-sandbox', '--disable-setuid-sandbox'], });
   const p1 = await b1.newPage();
   const p2 = await b2.newPage();
 
@@ -18,6 +22,7 @@ let is_headless = true;
   await p2.goto(`http://localhost:5000/towns/Swiebodzin`);
   await p1.waitForSelector('#waiting_for_players');
   await p2.type('#player_name', 'Przemo');
+  await p2.waitForSelector('#join_town')
   await p2.click('#join_town');
   await p2.waitForSelector('#players');
 
