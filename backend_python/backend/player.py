@@ -1,6 +1,6 @@
 class Player(object):
 
-    
+
     CHARACTERS = ['mafia', 'civil']
 
     def __init__(self, name, is_host = False):
@@ -8,7 +8,7 @@ class Player(object):
         self.is_host = is_host
         self.is_alive = True
         self.character = 'civil'
-        
+
     def to_dict(self):
         return self.__dict__
 
