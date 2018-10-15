@@ -8,7 +8,7 @@ class Player(object):
         self.name = name
         self.is_host = is_host
         self.is_alive = True
-        
+
     def to_dict(self):
         return self.__dict__
 
