@@ -1,4 +1,5 @@
 POST /api/towns/Swiebodzin/votes
+Content-Type: applictation/json
 
 {
   "vote": {

@@ -1,4 +1,5 @@
 POST /api/towns/Swiebodzin/players
+Content-Type: applictation/json
 
 {
   "player": { "name": "Andrzej" }
