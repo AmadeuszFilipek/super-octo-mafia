@@ -1,7 +1,7 @@
 require 'pp'
 require 'pry'
 
-class Request
+class RequestReader
   def initialize(path)
     @path = path
   end
@@ -41,6 +41,4 @@ class Request
   end
 end
 
-req = Request.new('./steps/03_create_player')
-
-pp req.to_h
+req = RequestReader.new('./steps/03_create_player')
