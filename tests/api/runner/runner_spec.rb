@@ -3,7 +3,7 @@ require './request_parser.rb'
 require './response_parser.rb'
 
 shared_examples_for 'parsing body and headers' do
-  it 'parses body and headers' do
+  it 'returns body and headers' do
     expect(parser.headers).to eq(
       'Header-One' => 'Value One',
       'Header-Two' => 'Value Two',
@@ -13,18 +13,25 @@ shared_examples_for 'parsing body and headers' do
 end
 
 shared_examples_for 'parsing body' do
-  it 'parses body and headers when headers are missing' do
+  it 'returns body and empty headers' do
     expect(parser.headers).to eq({})
     expect(parser.body).to eq 'some body'
   end
 end
 
 shared_examples_for 'parsing headers' do
-  it 'parses body and headers when body is missing' do
+  it 'returns headers and empty body' do
     expect(parser.headers).to eq(
       'Header-One' => 'Value One',
       'Header-Two' => 'Value Two',
     )
+    expect(parser.body).to eq ''
+  end
+end
+
+shared_examples_for 'parsing empty headers and empty body' do
+  it 'returns empty body and empty headers' do
+    expect(parser.headers).to eq({})
     expect(parser.body).to eq ''
   end
 end
@@ -79,6 +86,22 @@ describe ResponseParser do
     end
 
     it_behaves_like 'parsing headers'
+
+    specify do
+      expect(parser.http_version).to eq 'HTTP/1.0'
+      expect(parser.status_code).to eq 500
+      expect(parser.status_name).to eq 'INTERNAL SERVER ERROR'
+    end
+  end
+
+  context "when body and headers are missing" do
+    let(:parser) do
+      ResponseParser.new(<<~CONTENT)
+        HTTP/1.0 500 INTERNAL SERVER ERROR
+      CONTENT
+    end
+
+    it_behaves_like 'parsing empty headers and empty body'
 
     specify do
       expect(parser.http_version).to eq 'HTTP/1.0'
@@ -142,14 +165,18 @@ describe RequestParser do
     end
   end
 
-  # it 'parses content without body and headers' do
-  #   parser = RequestParser.new(<<~CONTENT)
-  #     DELETE /api/path/to/delete
-  #   CONTENT
+  context 'when body and headers are missing' do
+    let(:parser) do
+      RequestParser.new(<<~CONTENT)
+        DELETE /api/path/to/delete
+      CONTENT
+    end
 
-  #   expect(parser.verb).to eq 'DELETE'
-  #   expect(parser.uri).to eq '/api/path/to/delete'
-  #   expect(parser.headers).to eq({})
-  #   expect(parser.body).to eq ''
-  # end
+    it_behaves_like 'parsing empty headers and empty body'
+
+    it 'parses content without body and headers' do
+      expect(parser.verb).to eq 'DELETE'
+      expect(parser.uri).to eq '/api/path/to/delete'
+    end
+  end
 end
