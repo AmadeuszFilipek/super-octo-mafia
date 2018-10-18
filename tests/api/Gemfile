@@ -8,3 +8,4 @@ gem "rspec"
 gem 'http'
 gem 'diffy'
 gem 'paint'
+gem 'tty-reader'

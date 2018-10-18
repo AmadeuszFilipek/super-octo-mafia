@@ -31,9 +31,16 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.0)
+    tty-cursor (0.6.0)
+    tty-reader (0.4.0)
+      tty-cursor (~> 0.6.0)
+      tty-screen (~> 0.6.4)
+      wisper (~> 2.0.0)
+    tty-screen (0.6.5)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
+    wisper (2.0.0)
 
 PLATFORMS
   ruby
@@ -43,6 +50,7 @@ DEPENDENCIES
   http
   paint
   rspec
+  tty-reader
 
 BUNDLED WITH
    1.16.6

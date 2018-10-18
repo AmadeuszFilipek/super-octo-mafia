@@ -3,6 +3,7 @@ require 'http'
 require 'json'
 require 'diffy'
 require 'paint'
+require 'tty-reader'
 require './runner/request_dumper.rb'
 require './runner/request_parser.rb'
 require './runner/response_dumper.rb'
@@ -26,13 +27,19 @@ end
 
 HEADERS_TO_IGNORE = ['Date', 'Server', 'Content-Length']
 BodyTransformer = ->(body) {
-  json = JSON.parse(body)
-  json.delete('version')
-  json['state']&.delete('started_at')
-  JSON.dump(json)
+  begin
+    json = JSON.parse(body)
+    json.delete('version')
+    json['state']&.delete('started_at')
+    JSON.dump(json)
+  rescue
+    body
+  end
 }
 
-Dir['./steps/*'].sort.take(1).each do |step|
+tty_reader = TTY::Reader.new
+
+Dir['./steps/*'].sort.each do |step|
   step_name = File.basename(step)
   cached_response_path = "./responses_v2/#{step_name}"
   cached_response_string = if File.exists?(cached_response_path)
@@ -61,5 +68,13 @@ Dir['./steps/*'].sort.take(1).each do |step|
     puts Paint["FAILED", :red]
     puts
     puts diff.to_s(:color)
+    puts
+    print Paint["----- cache response? ", :yellow]
+
+    if tty_reader.read_char.downcase == 'y'
+      File.open(cached_response_path, 'wb') { |f| f.write(actual_response_string) }
+      puts Paint["---> cached", :green]
+    end
+    puts
   end
 end
