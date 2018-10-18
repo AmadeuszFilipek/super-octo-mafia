@@ -1,5 +1,8 @@
 require 'pry'
 require 'http'
+require 'json'
+require 'diffy'
+require 'paint'
 require './runner/request_dumper.rb'
 require './runner/request_parser.rb'
 require './runner/response_dumper.rb'
@@ -12,7 +15,6 @@ class RequestExecutor
 
   def call
     uri = "http://localhost:5000#{request[:uri]}"
-    puts "#{request[:verb]} #{uri}"
 
     HTTP.send(request[:verb].downcase, uri)
   end
@@ -23,9 +25,16 @@ class RequestExecutor
 end
 
 HEADERS_TO_IGNORE = ['Date', 'Server', 'Content-Length']
+BodyTransformer = ->(body) {
+  json = JSON.parse(body)
+  json.delete('version')
+  json['state']&.delete('started_at')
+  JSON.dump(json)
+}
 
 Dir['./steps/*'].sort.take(1).each do |step|
-  cached_response_path = "./responses_v2/#{File.basename(step)}"
+  step_name = File.basename(step)
+  cached_response_path = "./responses_v2/#{step_name}"
   cached_response_string = if File.exists?(cached_response_path)
                              File.read(cached_response_path)
                            else
@@ -41,7 +50,16 @@ Dir['./steps/*'].sort.take(1).each do |step|
     transform_body: BodyTransformer
   )
   actual_response_string = dumper.to_s
-  binding.pry
 
-  `diff <(echo '#{cached_response_string}') <(echo '#{actual_response_string}')`
+  diff = Diffy::Diff.new(cached_response_string, actual_response_string)
+
+  print "--- #{step_name}: "
+
+  if diff.none?
+    puts Paint["OK", :green]
+  else
+    puts Paint["FAILED", :red]
+    puts
+    puts diff.to_s(:color)
+  end
 end

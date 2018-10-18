@@ -13,7 +13,7 @@ class ResponseDumper
   end
 
   def initialize(http_version:, status:, headers:, body:)
-
+    @http_version = http_version
     @status = status
     @headers = headers
     @body = body
