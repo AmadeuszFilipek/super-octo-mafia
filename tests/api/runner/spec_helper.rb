@@ -1,3 +1,4 @@
+require 'pry'
 
 shared_examples_for 'parsing body and headers' do
   it 'returns body and headers' do

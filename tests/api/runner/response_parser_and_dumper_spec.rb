@@ -6,8 +6,7 @@ describe ResponseParser do
   specify do
     attributes =  {
       http_version: 'HTTP/1.0',
-      status_code: 304,
-      status_name: 'Moved Permanently',
+      status: 304,
       headers: {
         'Header-One' => 'Value One',
         'Header-Two' => 'Value Two',

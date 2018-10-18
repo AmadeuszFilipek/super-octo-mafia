@@ -1,4 +1,4 @@
-require './base_parser.rb'
+require_relative './base_parser.rb'
 
 class RequestParser < BaseParser
   def verb

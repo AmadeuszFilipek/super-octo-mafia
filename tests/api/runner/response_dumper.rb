@@ -1,16 +1,24 @@
 
 class ResponseDumper
-  def initialize(http_version:, status_code:, status_name:, headers:, body:)
+  def self.from_http_response(response)
+    new(
+      http_version: "HTTP/#{response.version}",
+      status: response.status,
+      headers: response.headers.to_h,
+      body: response.body.to_s
+    )
+  end
+
+  def initialize(http_version:, status:, headers:, body:)
     @http_version = http_version
-    @status_name = status_name
-    @status_code = status_code
+    @status = status
     @headers = headers
     @body = body
   end
 
   def to_s
     [
-      "#{http_version} #{status_code} #{status_name}",
+      "#{http_version} #{status}",
       headers.map {|k,v| "#{k}: #{v}"},
       "",
       body,
@@ -20,5 +28,5 @@ class ResponseDumper
 
   private
 
-  attr_reader :http_version, :status_code, :status_name, :headers, :body
+  attr_reader :http_version, :status, :headers, :body
 end
