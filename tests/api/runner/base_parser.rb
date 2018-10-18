@@ -15,6 +15,10 @@ class BaseParser
     parts[1][1..-1].join
   end
 
+  def to_h
+    { body: body, headers: headers }
+  end
+
   private
 
   attr_reader :content

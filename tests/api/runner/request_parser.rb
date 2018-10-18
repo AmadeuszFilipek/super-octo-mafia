@@ -8,4 +8,11 @@ class RequestParser < BaseParser
   def uri
     first_line.split(/\s+/).last
   end
+
+  def to_h
+    super.merge(
+      verb: verb,
+      uri: uri,
+    )
+  end
 end

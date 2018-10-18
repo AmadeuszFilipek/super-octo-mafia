@@ -13,6 +13,14 @@ class ResponseParser < BaseParser
     first_line_parts[2]
   end
 
+  def to_h
+    super.merge(
+      http_version: http_version,
+      status_code: status_code,
+      status_name: status_name,
+    )
+  end
+
   private
 
   def first_line_parts
