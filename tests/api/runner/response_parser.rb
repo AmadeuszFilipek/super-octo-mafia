@@ -1,5 +1,6 @@
+require './base_parser.rb'
 
-class ResponseParser < RequestParser
+class ResponseParser < BaseParser
   def http_version
     first_line_parts[0]
   end
