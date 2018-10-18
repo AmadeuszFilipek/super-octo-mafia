@@ -2,8 +2,8 @@ require 'pp'
 require 'pry'
 
 class RequestParser
-  def initialize(path)
-    @path = path
+  def initialize(content)
+    @content = content
   end
 
   def verb
@@ -21,7 +21,9 @@ class RequestParser
   end
 
   def body
-    parts.last[1..-1].join
+    return '' if parts.length == 1
+
+    parts[1][1..-1].join
   end
 
   def to_h
@@ -30,18 +32,18 @@ class RequestParser
 
   private
 
-  attr_reader :path
+  attr_reader :content
 
   def parts
-    lines.slice_before(/\A\s+\z/).to_a
+    lines.slice_before(/\A\s*\z/).to_a
   end
 
   def lines
-    @lines ||= File.readlines(path)
+    @lines ||= content.split("\n")
   end
 
   def first_line
-    lines.first
+    lines[0]
   end
 end
 
@@ -67,10 +69,10 @@ class RequestDumper
   attr_reader :verb, :uri, :headers, :body
 end
 
-parser = RequestParser.new('./steps/03_create_player')
-dumper = RequestDumper.new(parser.to_h)
-File.open('./output', 'wb') { |f| f.write(dumper.to_s) }
+# parser = RequestParser.new('./steps/03_create_player')
+# dumper = RequestDumper.new(parser.to_h)
+# File.open('./output', 'wb') { |f| f.write(dumper.to_s) }
 
-if File.read('./steps/03_create_player') != dumper.to_s
-  raise "Files are different, run diff on them!"
-end
+# if File.read('./steps/03_create_player') != dumper.to_s
+#   raise "Files are different, run diff on them!"
+# end
