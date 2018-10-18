@@ -35,7 +35,11 @@ Dir['./steps/*'].sort.take(1).each do |step|
   request = RequestParser.new(File.read(step)).to_h
   response = RequestExecutor.new(request).call
 
-  dumper = ResponseDumper.from_http_response(response, ignore_headers: HEADERS_TO_IGNORE)
+  dumper = ResponseDumper.from_http_response(
+    response,
+    ignore_headers: HEADERS_TO_IGNORE,
+    transform_body: BodyTransformer
+  )
   actual_response_string = dumper.to_s
   binding.pry
 
