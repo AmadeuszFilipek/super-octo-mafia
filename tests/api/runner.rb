@@ -22,6 +22,8 @@ class RequestExecutor
   attr_reader :request
 end
 
+HEADERS_TO_IGNORE = ['Date', 'Server', 'Content-Length']
+
 Dir['./steps/*'].sort.take(1).each do |step|
   cached_response_path = "./responses_v2/#{File.basename(step)}"
   cached_response_string = if File.exists?(cached_response_path)
@@ -33,7 +35,7 @@ Dir['./steps/*'].sort.take(1).each do |step|
   request = RequestParser.new(File.read(step)).to_h
   response = RequestExecutor.new(request).call
 
-  dumper = ResponseDumper.from_http_response(response)
+  dumper = ResponseDumper.from_http_response(response, ignore_headers: HEADERS_TO_IGNORE)
   actual_response_string = dumper.to_s
   binding.pry
 
