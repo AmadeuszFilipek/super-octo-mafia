@@ -69,6 +69,7 @@ Dir['./steps/*'].sort.each do |step|
     puts
     puts diff.to_s(:color)
     puts
+    puts '--- ' + Paint[request[:verb], :red] + ' ' + request[:uri] + ' -> ' + response.status.to_s
     print Paint["----- cache response? ", :yellow]
 
     if tty_reader.read_char.downcase == 'y'
