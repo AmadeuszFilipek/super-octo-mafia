@@ -9,3 +9,5 @@ gem 'http'
 gem 'diffy'
 gem 'paint'
 gem 'tty-reader'
+
+gem "rake", "~> 12.3"

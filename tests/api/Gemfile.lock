@@ -18,6 +18,7 @@ GEM
     http_parser.rb (0.6.0)
     paint (2.0.1)
     public_suffix (3.0.3)
+    rake (12.3.1)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -49,6 +50,7 @@ DEPENDENCIES
   diffy
   http
   paint
+  rake (~> 12.3)
   rspec
   tty-reader
 
