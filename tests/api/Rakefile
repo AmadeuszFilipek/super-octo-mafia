@@ -6,11 +6,11 @@ task :default do
   require 'diffy'
   require 'paint'
   require 'tty-reader'
-  require './runner/request_dumper.rb'
-  require './runner/request_parser.rb'
-  require './runner/response_dumper.rb'
-  require './runner/response_parser.rb'
-  require './runner/request_executor.rb'
+  require './lib/request_dumper.rb'
+  require './lib/request_parser.rb'
+  require './lib/response_dumper.rb'
+  require './lib/response_parser.rb'
+  require './lib/request_executor.rb'
 
   HEADERS_TO_IGNORE = ['Date', 'Server', 'Content-Length']
   BodyTransformer = ->(body) {
