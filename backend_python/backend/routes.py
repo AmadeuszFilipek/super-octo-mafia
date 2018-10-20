@@ -9,6 +9,8 @@ def find_town(slug):
 	except KeyError:
 		return None
 
+
+
 @app.route('/')
 @app.route('/towns/<path>')
 def endpoint_index(path = None):
@@ -39,6 +41,9 @@ def endpoint_show_town(slug):
 
 	if town is None:
 		raise TownDoesNotExistException
+
+	town.next_state_maybe()
+
 	return town.jversonify()
 
 
@@ -70,7 +75,6 @@ def static_files_handler(path):
 @app.route('/api/towns/<slug>/start', methods = ['POST'])
 def endpoint_start_game(slug):
 	town = find_town(slug)
-
 	town.start_game(request.json)
 
 	return town.jversonify()
@@ -84,18 +88,3 @@ def endpoint_vote(slug):
 	town.vote(request.json['vote'])
 
 	return town.jversonify()
-
-
-
-#backdoor state inject,
-# @app.route('/api/towns/<slug>', methods = ['PUT'])
-# def endpoint_backdoor(slug):
-
-
-# 	town = find_town(request.json['town']['slug'])
-
-# 	if town:
-# 		town = request.json['town']
-# 	else:
-# 		town = create_town(request.json['town'])
-# 		town = request.json['town']

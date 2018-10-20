@@ -1,4 +1,5 @@
 {
+    "is_ready_to_start": true,
     "players": {
         "Andrzej": {
             "character": "mafia",
@@ -15,7 +16,7 @@
     },
     "slug": "Swiebodzin",
     "state": {
-        "id": "day_voting"
+        "id": "day_voting",
     },
     "votes": {
         "Andrzej": "Krzysztof",

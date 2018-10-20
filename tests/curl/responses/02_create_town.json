@@ -1,6 +1,8 @@
 {
+    "is_ready_to_start": false,
     "players": {
         "Krzysztof": {
+            "character": "civil",
             "is_alive": true,
             "is_host": true,
             "name": "Krzysztof"
