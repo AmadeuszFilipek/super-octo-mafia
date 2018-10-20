@@ -11,7 +11,6 @@ def find_town(slug):
 
 
 
-
 @app.route('/')
 @app.route('/towns/<path>')
 def endpoint_index(path = None):
@@ -42,6 +41,9 @@ def endpoint_show_town(slug):
 
 	if town is None:
 		raise TownDoesNotExistException
+
+	town.next_state_maybe()
+
 	return town.jversonify()
 
 
