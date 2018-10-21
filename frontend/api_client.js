@@ -1,10 +1,6 @@
 class ApiClient {
-  constructor({ pathPrefix }) {
-    this.pathPrefix = pathPrefix;
-  }
-
   async getTown({ townSlug }) {
-    let res = await fetch(`${this.pathPrefix}/api/towns/${townSlug}`);
+    let res = await fetch(`/api/towns/${townSlug}`);
     return await res.json();
   }
 
@@ -19,16 +15,9 @@ class ApiClient {
     });
   }
 
-  async deleteTown({ townSlug }) {
-    let res = await fetch(`${this.pathPrefix}/api/towns/${townSlug}`, { method: 'DELETE' });
-    return await res.json();
-  }
-
   async joinTown({ playerName, townSlug }) {
     return await this.post(`/api/towns/${townSlug}/players`, {
-      player: {
-        name: playerName
-      }
+      player: { name: playerName }
     });
   }
 
@@ -42,17 +31,14 @@ class ApiClient {
     voterName
   }) {
     return await this.post(`/api/towns/${townSlug}/votes`, {
-      vote: {
-        voteeName: voteeName,
-        voterName: voterName
-      }
+      vote: { voteeName, voterName }
     })
   }
 
   // helper method performing POST requests with jsonified data
   // returns parsed json response
   async post(url, data = null) {
-    let res = await fetch(`${this.pathPrefix}${url}`, {
+    let res = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
