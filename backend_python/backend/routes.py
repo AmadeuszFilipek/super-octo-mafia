@@ -9,6 +9,9 @@ def find_town(slug):
 	except KeyError:
 		return None
 
+
+
+
 @app.route('/')
 @app.route('/towns/<path>')
 def endpoint_index(path = None):
@@ -83,18 +86,3 @@ def endpoint_vote(slug):
 	town.vote(request.json['vote'])
 
 	return town.jversonify()
-
-
-
-#backdoor state inject,
-# @app.route('/api/towns/<slug>', methods = ['PUT'])
-# def endpoint_backdoor(slug):
-
-
-# 	town = find_town(request.json['town']['slug'])
-
-# 	if town:
-# 		town = request.json['town']
-# 	else:
-# 		town = create_town(request.json['town'])
-# 		town = request.json['town']
