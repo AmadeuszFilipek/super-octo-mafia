@@ -6,12 +6,8 @@ class ApiClient {
 
   async createTown({ townSlug, playerName }) {
     return await this.post('/api/towns', {
-      town: {
-        slug: townSlug
-      },
-      player: {
-        name: playerName
-      }
+      town: { slug: townSlug },
+      player: { name: playerName }
     });
   }
 
@@ -25,11 +21,7 @@ class ApiClient {
     return await this.post(`/api/towns/${townSlug}/start`);
   }
 
-  async createVote({
-    townSlug,
-    voteeName,
-    voterName
-  }) {
+  async createVote({ townSlug, voteeName, voterName }) {
     return await this.post(`/api/towns/${townSlug}/votes`, {
       vote: { voteeName, voterName }
     })
