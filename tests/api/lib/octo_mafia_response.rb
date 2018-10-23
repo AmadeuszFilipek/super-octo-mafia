@@ -7,8 +7,8 @@ class OctoMafiaResponse < SimpleDelegator
     json.delete('version')
     json['state']&.delete('started_at')
     JSON.dump(json)
-  rescue JSON::ParseError
-    body
+  rescue JSON::ParserError
+    super
   end
 
   def headers
