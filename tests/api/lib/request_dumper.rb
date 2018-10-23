@@ -1,24 +1,21 @@
 
 class RequestDumper
-  def initialize(verb:, uri:, headers:, body:)
-    @verb = verb
-    @uri = uri
-    @headers = headers
-    @body = body
+  def initialize(request)
+    @request = request
   end
 
   def to_s
     [
-      "#{verb} #{uri}",
-      headers.map {|k,v| "#{k}: #{v}"},
+      "#{request.verb} #{request.uri}",
+      request.headers.map {|k,v| "#{k}: #{v}"},
       "",
-      body,
+      request.body,
       ""
     ].flatten.join("\n")
   end
 
   private
 
-  attr_reader :verb, :uri, :headers, :body
+  attr_reader :request
 end
 
