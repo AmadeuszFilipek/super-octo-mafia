@@ -8,19 +8,7 @@ require './lib/request_parser.rb'
 require './lib/response_dumper.rb'
 require './lib/response_parser.rb'
 require './lib/request_executor.rb'
-
-HEADERS_TO_IGNORE = ['Date', 'Server', 'Content-Length']
-BodyTransformer = ->(body) {
-  begin
-    json = JSON.parse(body)
-    json.delete('version')
-    json['state']&.delete('started_at')
-    JSON.dump(json)
-  rescue
-    body
-  end
-}
-
+require './lib/octo_mafia_response.rb'
 
 class StepRunner
   def initialize(step_path)
@@ -39,12 +27,11 @@ class StepRunner
     request = RequestParser.new(File.read(step_path)).to_h
     response = RequestExecutor.new(request).call
 
-    dumper = ResponseDumper.from_http_response(
-      response,
+    dumper = ResponseDumper.new(OctoMafiaResponse.new response)
+    actual_response_string = dumper.to_s(
       ignore_headers: HEADERS_TO_IGNORE,
       transform_body: BodyTransformer
     )
-    actual_response_string = dumper.to_s
 
     diff = Diffy::Diff.new(cached_response_string, actual_response_string)
 
