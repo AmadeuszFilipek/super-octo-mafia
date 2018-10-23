@@ -1,4 +1,5 @@
-require_relative './base_parser.rb'
+require_relative 'request'
+require_relative 'base_parser'
 
 class RequestParser < BaseParser
   def verb
@@ -14,5 +15,9 @@ class RequestParser < BaseParser
       verb: verb,
       uri: uri,
     )
+  end
+
+  def parse
+    Request.new(verb, uri, headers, body)
   end
 end

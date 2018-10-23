@@ -1,0 +1,5 @@
+DELETE /some/api/path
+Header-One: Value One
+Header-Two: Value Two
+
+some body
