@@ -2,8 +2,6 @@ require_relative 'request'
 require_relative 'base_parser'
 
 class RequestParser < BaseParser
-  ParseError = Class.new(ArgumentError)
-
   def verb
     first_line.split(/\s+/).first
   end
