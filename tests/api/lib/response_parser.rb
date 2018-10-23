@@ -1,4 +1,5 @@
-require_relative './base_parser.rb'
+require_relative 'base_parser'
+require_relative 'response'
 
 class ResponseParser < BaseParser
   def http_version
@@ -14,6 +15,10 @@ class ResponseParser < BaseParser
       http_version: http_version,
       status: status,
     )
+  end
+
+  def parse
+    Response.new(status, headers, body)
   end
 
   private
