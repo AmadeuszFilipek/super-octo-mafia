@@ -16,8 +16,9 @@ class StepRunner
   end
 
   def call
+    FileUtils.mkdir_p('./responses')
     step_name = File.basename(step_path)
-    cached_response_path = "./responses_v2/#{step_name}"
+    cached_response_path = "./responses/#{step_name}"
     cached_response_string = if File.exists?(cached_response_path)
                                File.read(cached_response_path)
                              else
