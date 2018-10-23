@@ -10,6 +10,10 @@ class ResponseParser < BaseParser
     first_line_parts[1].to_i
   end
 
+  def status_name
+    first_line_parts[2]
+  end
+
   def to_h
     super.merge(
       http_version: http_version,
@@ -18,7 +22,7 @@ class ResponseParser < BaseParser
   end
 
   def parse
-    Response.new(status, headers, body)
+    Response.new(status, status_name, headers, body)
   end
 
   private

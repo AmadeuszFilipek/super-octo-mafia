@@ -1,2 +1,2 @@
 
-Response = Struct.new(:status, :headers, :body)
+Response = Struct.new(:status, :status_name, :headers, :body)

@@ -10,6 +10,7 @@ describe ResponseParser do
 
     specify do
       expect(response.status).to eq 200
+      expect(response.status_name).to eq 'OK'
       expect(response.headers).to eq(
         'Header-One' => 'Value One',
         'Header-Two' => 'Value Two'
@@ -23,6 +24,7 @@ describe ResponseParser do
 
     specify do
       expect(response.status).to eq 200
+      expect(response.status_name).to eq 'OK'
       expect(response.headers).to eq({})
       expect(response.body).to eq 'some body'
     end
@@ -33,6 +35,7 @@ describe ResponseParser do
 
     specify do
       expect(response.status).to eq 200
+      expect(response.status_name).to eq 'OK'
       expect(response.headers).to eq(
         'Header-One' => 'Value One',
         'Header-Two' => 'Value Two'
@@ -46,6 +49,7 @@ describe ResponseParser do
 
     specify do
       expect(response.status).to eq 200
+      expect(response.status_name).to eq 'OK'
       expect(response.headers).to eq({})
       expect(response.body).to eq ''
     end
