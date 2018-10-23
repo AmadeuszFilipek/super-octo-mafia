@@ -28,11 +28,7 @@ class StepRunner
     response = RequestExecutor.new(request).call
 
     dumper = ResponseDumper.new(OctoMafiaResponse.new response)
-    actual_response_string = dumper.to_s(
-      ignore_headers: HEADERS_TO_IGNORE,
-      transform_body: BodyTransformer
-    )
-
+    actual_response_string = dumper.to_s
     diff = Diffy::Diff.new(cached_response_string, actual_response_string)
 
     print "--- #{step_name}: "
