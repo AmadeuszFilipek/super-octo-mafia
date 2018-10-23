@@ -1,14 +1,25 @@
-from backend_python.backend.player import Player
+try:
+	from backend_python.backend.player import Player
+except ModuleNotFoundError:
+	from player import Player
+
+from player import Player
 from flask import jsonify
 from datetime import datetime
 from random import sample, choice
 from math import floor, ceil
-from transitions import Machine
+from transitions import Machine, State
+
+import logging
+logging.basicConfig(filename='state_machine.log', level=logging.DEBUG)
+logging.getLogger('transitions').setLevel(logging.DEBUG)
 
 class Town(object):
 
 	states = ['waiting_for_players', 'day_voting', 'day_results',
        	'night_voting', 'night_results', 'game_ended']
+
+	timed_states = ['day_voting', 'day_results', 'night_voting', 'night_results']
 
 	initial_state = 'waiting_for_players'
 
@@ -74,13 +85,8 @@ class Town(object):
 			if '*' in Town.on_exit_hooks:
 				on_exits.append(Town.on_enter_hooks['*'])
 
-			hooked_states.append({   
-				'name': state, 
-				'on_enter': on_enters, 
-				'on_exit': on_exits
-			}) 
+			hooked_states.append(State(name=state, on_enter=on_enters, on_exit=on_exits)) 
 		
-		# print(hooked_states)
 		return hooked_states
 
 
@@ -108,7 +114,6 @@ class Town(object):
 				'unless': unlesses
 			})
 
-		# print(hooked_transitions)
 		return hooked_transitions
 
 
@@ -133,7 +138,6 @@ class Town(object):
 		for player in self.players.keys():
 			dictionary['players'][player] = self.players[player].to_dict()
 
-		print(dictionary)
 		return dictionary
 
 	
@@ -153,13 +157,11 @@ class Town(object):
 
 
 	def stamp_state(self):
-		print("stamping state " + self.state)
-		# print(self.to_dict())
 		self.status['started_at'] = datetime.now().timestamp()
 		self.status['id'] = self.state
 		
 
-	def check_ready_to_start(self):
+	def check_ready_to_start(self, *args, **kwargs):
 		self.is_ready_to_start = len(self.players.keys()) >= 5
 		return self.is_ready_to_start
 
@@ -178,14 +180,14 @@ class Town(object):
 					player.set_character('mafia')
 
 
-	def execute_vote(self):
+	def execute_vote(self, *args, **kwargs):
 
 		player_to_die = self.resolve_vote()
 		player_to_die.kill()
 		self.status['killed_player'] = player_to_die.name
 
 	
-	def resolve_vote(self):
+	def resolve_vote(self, *args, **kwargs):
 
 		vote_counts = []
 		player_names = []
@@ -211,15 +213,15 @@ class Town(object):
 		return player_to_die
 
 
-	def is_vote_finished(self):
-		return len(self.votes.keys()) == len(self.players.keys())
+	def is_vote_finished(self, *args, **kwargs):
+		return len(self.votes.keys()) == len(self.players.keys()) and len(self.players.keys() > 0)
 
 
-	def clear_vote_pool(self):
+	def clear_vote_pool(self,*args, **kwargs):
 		self.votes = {}
 
 
-	def clear_results(self):
+	def clear_results(self, *args, **kwargs):
 		self.status['killed_player'] = None
 
 
@@ -247,7 +249,7 @@ class Town(object):
 		return winner
 
 
-	def is_game_ended(self):
+	def is_game_ended(self, *args, **kwargs):
 
 		winner = self.get_winner()
 
@@ -264,7 +266,8 @@ class Town(object):
 
 	def next_state_maybe(self):
 		# debug this, somehow it triggers in waiting_for_players
-		if self.is_state_outdated or self.is_vote_finished():
+		if self.state in self.timed_states and \
+			(self.is_state_outdated or self.is_vote_finished()):
 			self.progress()
 
 
