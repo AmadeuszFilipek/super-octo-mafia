@@ -3,12 +3,12 @@ require 'json'
 require 'diffy'
 require 'paint'
 require 'tty-reader'
-require './lib/request_dumper.rb'
-require './lib/request_parser.rb'
-require './lib/response_dumper.rb'
-require './lib/response_parser.rb'
-require './lib/request_executor.rb'
-require './lib/octo_mafia_response.rb'
+require_relative 'request_dumper'
+require_relative 'request_parser'
+require_relative 'response_dumper'
+require_relative 'response_parser'
+require_relative 'request_executor'
+require_relative 'octo_mafia_response'
 
 class StepRunner
   def initialize(step_path)

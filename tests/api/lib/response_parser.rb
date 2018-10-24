@@ -1,5 +1,5 @@
-require_relative 'base_parser'
 require_relative 'response'
+require_relative 'base_parser'
 
 class ResponseParser < BaseParser
   def http_version
@@ -12,13 +12,6 @@ class ResponseParser < BaseParser
 
   def status_name
     first_line_parts[2]
-  end
-
-  def to_h
-    super.merge(
-      http_version: http_version,
-      status: status,
-    )
   end
 
   def parse
