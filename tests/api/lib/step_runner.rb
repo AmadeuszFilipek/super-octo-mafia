@@ -25,7 +25,7 @@ class StepRunner
                                ''
                              end
 
-    request = RequestParser.new(File.read(step_path)).to_h
+    request = RequestParser.new(File.read(step_path)).parse
     response = RequestExecutor.new(request).call
 
     dumper = ResponseDumper.new(OctoMafiaResponse.new response)
