@@ -1,5 +1,5 @@
-require './spec_helper'
-require './response_parser'
+require_relative 'spec_helper'
+require_relative 'response_parser'
 
 describe ResponseParser do
   let(:parser) { ResponseParser.new(File.read('./fixtures/' + fixture)) }

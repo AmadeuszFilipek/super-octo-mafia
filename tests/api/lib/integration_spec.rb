@@ -1,8 +1,8 @@
-require './spec_helper.rb'
-require './request_parser.rb'
-require './request_dumper.rb'
-require './response_parser.rb'
-require './response_dumper.rb'
+require_relative 'spec_helper'
+require_relative 'request_parser'
+require_relative 'request_dumper'
+require_relative 'response_parser'
+require_relative 'response_dumper'
 
 describe "Integration of dumpers with parsers" do
   describe "Request" do

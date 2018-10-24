@@ -1,7 +1,6 @@
-require './spec_helper'
-require './request_dumper'
-require './request'
-require 'http'
+require_relative 'spec_helper'
+require_relative 'request_dumper'
+require_relative 'request'
 
 describe RequestDumper do
   let(:request) { Request.new(verb, uri, headers, body) }

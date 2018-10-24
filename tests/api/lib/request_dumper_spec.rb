@@ -1,7 +1,6 @@
-require './spec_helper'
-require './response_dumper'
-require './response'
-require 'http'
+require_relative 'spec_helper'
+require_relative 'response_dumper'
+require_relative 'response'
 
 describe ResponseDumper do
   let(:response) { Response.new(status, status_name, headers, body) }

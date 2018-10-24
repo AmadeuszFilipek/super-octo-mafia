@@ -1,7 +1,7 @@
 require 'pry'
 
 task :default do
-  require './lib/request_runner.rb'
+  require_relative 'lib/request_runner'
 
   Dir['./requests/*'].sort.each do |request_path|
     RequestRunner.new(request_path).call
