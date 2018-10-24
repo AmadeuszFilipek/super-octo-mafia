@@ -1,9 +1,9 @@
 require 'pry'
 
 task :default do
-  require './lib/step_runner.rb'
+  require './lib/request_runner.rb'
 
-  Dir['./steps/*'].sort.each do |step_path|
-    StepRunner.new(step_path).call
+  Dir['./requests/*'].sort.each do |request_path|
+    RequestRunner.new(request_path).call
   end
 end

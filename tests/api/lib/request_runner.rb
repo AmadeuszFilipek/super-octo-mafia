@@ -10,29 +10,29 @@ require_relative 'response_parser'
 require_relative 'request_executor'
 require_relative 'octo_mafia_response'
 
-class StepRunner
-  def initialize(step_path)
-    @step_path = step_path
+class RequestRunner
+  def initialize(request_path)
+    @request_path = request_path
   end
 
   def call
     FileUtils.mkdir_p('./responses')
-    step_name = File.basename(step_path)
-    cached_response_path = "./responses/#{step_name}"
+    request_name = File.basename(request_path)
+    cached_response_path = "./responses/#{request_name}"
     cached_response_string = if File.exists?(cached_response_path)
                                File.read(cached_response_path)
                              else
                                ''
                              end
 
-    request = RequestParser.new(File.read(step_path)).parse
+    request = RequestParser.new(File.read(request_path)).parse
     response = RequestExecutor.new(request).call
 
     dumper = ResponseDumper.new(OctoMafiaResponse.new response)
     actual_response_string = dumper.to_s
     diff = Diffy::Diff.new(cached_response_string, actual_response_string)
 
-    print "--- #{step_name}: "
+    print "--- #{request_name}: "
 
     if diff.none?
       puts Paint["OK", :green]
@@ -54,7 +54,7 @@ class StepRunner
 
   private
 
-  attr_reader :step_path
+  attr_reader :request_path
 
   def tty_reader
     @tty_reader ||= TTY::Reader.new
