@@ -1,0 +1,6 @@
+require 'rspec/core/rake_task'
+
+RSpec::Core::RakeTask.new(:default) do |t|
+  t.rspec_opts = '--default_path ./ -I./'
+  t.pattern = '*_spec.rb'
+end
