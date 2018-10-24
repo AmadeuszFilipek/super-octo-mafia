@@ -1,0 +1,2 @@
+DELETE /api/towns/Swiebodzin
+Content-Type: applictation/json
