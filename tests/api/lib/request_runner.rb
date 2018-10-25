@@ -1,5 +1,3 @@
-require 'http'
-require 'json'
 require 'diffy'
 require 'paint'
 require 'tty-reader'

@@ -1,3 +1,4 @@
+require 'http'
 
 class RequestExecutor
   def initialize(request)

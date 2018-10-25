@@ -1,3 +1,4 @@
+require 'json'
 
 class OctoMafiaResponse < SimpleDelegator
   IGNORED_HEADERS = ['Date', 'Server', 'Content-Length']
