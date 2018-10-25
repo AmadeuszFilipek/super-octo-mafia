@@ -1,9 +1,52 @@
 require 'pry'
 
+module WebServer
+  module_function
+
+  def start
+    command = './run_server'
+    env = {
+      'HTTP_PORT' => '5001'
+    }
+    options = {
+      chdir: '../../backend_python/',
+      1 => '/dev/null',
+      2 => '/dev/null',
+    }
+
+    @pid = Process.spawn(env, command, options)
+  end
+
+  def exit!
+    Process.kill('KILL', pid)
+    Process.wait(pid)
+
+    # begin
+    #   Timeout.timeout(5) do
+    #     puts 'waiting for the process to end'
+    #     Process.wait(pid)
+    #     puts 'process finished in time'
+    #   end
+    # rescue Timeout::Error
+    #   puts 'process not finished in time, killing it'
+    #   Process.kill('KILL', pid)
+    # end
+  end
+
+  def pid
+    raise "No pid found!" unless @pid
+    @pid
+  end
+end
+
 task :default do
   require_relative 'lib/request_runner'
 
-  Dir['./requests/*'].sort.each do |request_path|
-    RequestRunner.new(request_path).call
-  end
+  at_exit { WebServer.exit! }
+  WebServer.start
+  sleep 2
+
+  # Dir['./requests/*'].sort.each do |request_path|
+  #   RequestRunner.new(request_path).call
+  # end
 end
