@@ -7,119 +7,127 @@ function init() {
     el: '#app',
     data: {
       appState: {
-	version: 0,
-	state: {
-	  id: 'new_town_form',
-	}
+        version: 0,
+        state: {
+          id: 'new_town_form',
+        }
       },
       playerName: null,
     },
 
     async mounted() {
       if (localStorage.playerName) {
-	this.playerName = localStorage.playerName;
+        this.playerName = localStorage.playerName;
       }
 
       let pathParts = window.location.pathname.split('/');
       if (pathParts.length === 3 && pathParts[1] === 'towns') {
-	this.appState.slug = pathParts[2];
-	await this.loadState();
-	this.startPolling();
+        this.appState.slug = pathParts[2];
+        await this.loadState();
+        this.startPolling();
       }
     },
 
     computed: {
       currentPlayer() {
-	if (this.appState && this.appState.players) {
-	  return this.appState.players[this.playerName];
-	}
+        if (this.appState && this.appState.players) {
+          return this.appState.players[this.playerName];
+        }
 
-	return false;
+        return false;
       },
 
       isHost() {
-	if (this.currentPlayer) {
-	  return this.currentPlayer.is_host;
-	}
+        if (this.currentPlayer) {
+          return this.currentPlayer.is_host;
+        }
 
-	return false;
+        return false;
+      },
+
+      canShowStartButton() {
+        return this.isHost && this.appState.is_read_to_start;
       },
 
       api() {
-	return new ApiClient;
+        return new ApiClient({ pathPrefix: 'http://localhost:5000/' });
       },
     },
 
     methods: {
       setState(newState) {
-	if (newState.version > this.appState.version) {
-	  // console.log("setting new state", newState);
-	  this.appState = newState;
-	  // console.log("this.appState = ", this.appState);
-	}
+        if (newState.version > this.appState.version) {
+          // console.log("setting new state", newState);
+          this.appState = newState;
+          // console.log("this.appState = ", this.appState);
+        }
       },
 
       hasVotedOn(votee) {
-	return this.appState.votes[this.playerName] === votee.name;
+        return this.appState.votes[this.playerName] === votee.name;
       },
 
       startPolling() {
-	setInterval(this.loadState.bind(this), 1000);
+        setInterval(this.loadState.bind(this), 1000);
       },
 
       async loadState() {
-	try {
-	  let json = await this.api.getTown({ townSlug: this.appState.slug });
+        try {
+          let json = await this.api.getTown({
+            townSlug: this.appState.slug
+          });
 
-	  this.setState(json);
-	} catch(e) {
-	  console.error('error =', e);
-	  window.history.pushState({}, null, '/');
-	}
+          this.setState(json);
+        } catch (e) {
+          console.error('error =', e);
+          window.history.pushState({}, null, '/');
+        }
       },
 
       async createTown() {
-	let json = await this.api.createTown({
-	  townSlug: this.appState.slug,
-	  playerName: this.playerName
-	});
-	console.log("json = ", json);
+        let json = await this.api.createTown({
+          townSlug: this.appState.slug,
+          playerName: this.playerName
+        });
+        console.log("json = ", json);
 
-	this.setState(json);
-	window.history.pushState({}, null, `/towns/${this.appState.slug}`);
-	this.startPolling();
+        this.setState(json);
+        window.history.pushState({}, null, `/towns/${this.appState.slug}`);
+        this.startPolling();
       },
 
       async joinTown() {
-	let json = await this.api.joinTown({
-	  playerName: this.playerName,
-	  townSlug: this.appState.slug
-	});
+        let json = await this.api.joinTown({
+          playerName: this.playerName,
+          townSlug: this.appState.slug
+        });
 
-	this.setState(json);
-	window.history.pushState({}, null, `/towns/${this.appState.slug}`);
+        this.setState(json);
+        window.history.pushState({}, null, `/towns/${this.appState.slug}`);
       },
 
       async startGame() {
-	let json = await this.api.startGame({ townSlug: this.appState.slug });
+        let json = await this.api.startGame({
+          townSlug: this.appState.slug
+        });
 
-	this.setState(json);
+        this.setState(json);
       },
 
       async vote(votee) {
-	let json = await this.api.createVote({
-	  townSlug: this.appState.slug,
-	  voteeName: votee.name,
-	  voterName: this.currentPlayer.name
-	});
+        let json = await this.api.createVote({
+          townSlug: this.appState.slug,
+          voteeName: votee.name,
+          voterName: this.currentPlayer.name
+        });
 
-	this.setState(json);
+        this.setState(json);
       },
     },
 
     watch: {
       playerName(name) {
-	localStorage.playerName = name;
+        localStorage.playerName = name;
       }
     }
   });

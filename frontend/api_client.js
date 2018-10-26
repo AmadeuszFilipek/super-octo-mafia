@@ -1,4 +1,3 @@
-
 class ApiClient {
   async getTown({ townSlug }) {
     let res = await fetch(`/api/towns/${townSlug}`);
@@ -24,10 +23,7 @@ class ApiClient {
 
   async createVote({ townSlug, voteeName, voterName }) {
     return await this.post(`/api/towns/${townSlug}/votes`, {
-      vote: {
-	voteeName: voteeName,
-	voterName: voterName
-      }
+      vote: { voteeName, voterName }
     })
   }
 
@@ -38,7 +34,7 @@ class ApiClient {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
-	'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       }
     });
     return await res.json();

@@ -13,38 +13,38 @@
 
   <body>
     <div id="app">
-      <div v-if="appState.state.id === 'new_town_form'">
-        Town slug: <input placeholder="input your town slug" v-model=appState.slug /> <br/>
-        Player name: <input placeholder="input your player name" v-model=playerName /> <br/>
+      <div id="new-town-form" v-if="appState.state.id === 'new_town_form'">
+        Town slug: <input id="town-slug" placeholder="input your town slug" v-model=appState.slug /> <br/>
+        Player name: <input id="player-name" placeholder="input your player name" v-model=playerName /> <br/>
 
-        <button v-on:click=createTown :disabled="!appState.slug || !playerName">
+        <button id="create-town" v-on:click=createTown :disabled="!appState.slug || !playerName">
           Create town
         </button>
       </div>
 
-      <div v-if="appState.state.id === 'waiting_for_players'">
+      <div id="waiting-for-players" v-if="appState.state.id === 'waiting_for_players'">
         <div v-if="currentPlayer">
           currentPlayer={{currentPlayer}}
         </div>
         <div v-else>
-          Player name: <input placeholder="input your player name" v-model=playerName /> <br/>
-          <button v-on:click=joinTown :disabled=!playerName>Join town</button>
+          Player name: <input id="player-name" placeholder="input your player name" v-model=playerName /> <br/>
+          <button id="join-town" v-on:click=joinTown :disabled=!playerName>Join town</button>
         </div>
 
         Town name: {{ appState.slug }} <br/>
         Players:
 
-        <ul>
+        <ul id="players">
           <li v-for="player in appState.players">
             {{player.name}}
           </li>
         </ul>
 
-        <button v-if=isHost v-on:click=startGame>Start game</button>
+        <button id="start-game" v-if=canShowStartButton v-on:click=startGame>Start game</button>
       </div>
 
-      <div v-if="appState.state.id === 'day_voting'">
-        <ul>
+      <div id="day-voting" v-if="appState.state.id === 'day_voting'">
+        <ul id="players">
           <li v-for="player in appState.players" v-bind:class="{ voted: hasVotedOn(player) }">
             {{player.name}}
             <button v-if="currentPlayer !== player" v-on:click="vote(player)">Vote!</button>
@@ -54,12 +54,7 @@
 
       <pre>
         appState={{appState}}
-        currentPlayer={{currentPlayer}}
-        isHost={{isHost}}
       </pre>
-
-
     </div>
   </body>
-
 </html>
