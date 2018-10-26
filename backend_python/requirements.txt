@@ -1,0 +1,15 @@
+## The following requirements were added by pip freeze:
+click==6.7
+configobj==5.0.6
+Flask==1.0.2
+ino==0.3.6
+itsdangerous==0.24
+Jinja2==2.10
+MarkupSafe==1.0
+obd==0.6.1
+ordereddict==1.1
+Pint==0.8.1
+pyserial==3.4
+six==1.11.0
+transitions==0.6.8
+Werkzeug==0.14.1
