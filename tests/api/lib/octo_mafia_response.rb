@@ -4,8 +4,15 @@ class OctoMafiaResponse < SimpleDelegator
 
   def body
     json = JSON.parse(super)
-    json.delete('version')
-    json['state']&.delete('started_at')
+
+    if json.key?('version')
+      json['version'] = nil
+    end
+
+    if json.key?('state') && json['state'].key?('started_at')
+      json['state']['started_at'] = nil
+    end
+
     JSON.dump(json)
   rescue JSON::ParserError
     super
