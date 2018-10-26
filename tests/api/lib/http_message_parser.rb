@@ -1,4 +1,4 @@
-class BaseParser
+class HTTPMessageParser
   def initialize(content)
     @content = content
   end
@@ -27,7 +27,7 @@ class BaseParser
     @lines ||= content.split("\n")
   end
 
-  def first_line
+  def request_line
     lines[0]
   end
 end
