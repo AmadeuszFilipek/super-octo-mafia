@@ -1,4 +1,4 @@
-class BaseParser
+class HTTPMessageParser
   def initialize(content)
     @content = content
   end

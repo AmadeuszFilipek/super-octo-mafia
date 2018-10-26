@@ -1,7 +1,7 @@
 require_relative 'response'
-require_relative 'base_parser'
+require_relative 'http_message_parser'
 
-class ResponseParser < BaseParser
+class ResponseParser < HTTPMessageParser
   def http_version
     first_line_parts[0]
   end

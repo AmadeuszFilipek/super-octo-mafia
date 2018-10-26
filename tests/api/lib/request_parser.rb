@@ -1,7 +1,7 @@
 require_relative 'request'
-require_relative 'base_parser'
+require_relative 'http_message_parser'
 
-class RequestParser < BaseParser
+class RequestParser < HTTPMessageParser
   def verb
     first_line.split(/\s+/).first
   end
