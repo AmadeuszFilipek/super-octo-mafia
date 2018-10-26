@@ -1,7 +1,4 @@
 const puppeteer = require('puppeteer')
-const fetch = require('node-fetch')
-
-global.fetch = fetch;
 
 async function createPlayer({number, isHeadless=true}) {
   const browser = await puppeteer.launch({
