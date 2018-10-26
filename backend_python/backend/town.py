@@ -3,7 +3,6 @@ try:
 except ModuleNotFoundError:
 	from player import Player
 
-from player import Player
 from flask import jsonify
 from datetime import datetime
 from random import sample, choice
@@ -37,7 +36,7 @@ class Town(object):
 
 		['execute_vote', 'day_voting', 'day_results'],
         ['execute_vote', 'night_voting', 'night_results'],
-        
+
         ['progress', 'day_voting', 'day_results'],
         ['progress', 'night_voting', 'night_results'],
         ['progress', 'day_results', 'night_voting'],
@@ -53,8 +52,8 @@ class Town(object):
 
 	def __init__(self, slug):
 
-		self.game = Machine(model=self, 
-			states=self.generate_states(), 
+		self.game = Machine(model=self,
+			states=self.generate_states(),
 			transitions=self.generate_transitions(),
 			initial=Town.initial_state)
 
@@ -64,7 +63,7 @@ class Town(object):
 		self.slug = slug
 		self.players = {}
 		self.votes = {}
-		self.is_ready_to_start = False	
+		self.is_ready_to_start = False
 
 
 	def generate_states(self):
@@ -75,9 +74,9 @@ class Town(object):
 			on_enters = []
 			on_exits = []
 
-			if state in Town.on_enter_hooks: 
+			if state in Town.on_enter_hooks:
 				on_enters.append(Town.on_enter_hooks[state])
-			if state in Town.on_exit_hooks: 
+			if state in Town.on_exit_hooks:
 				on_exits.append(Town.on_exit_hooks[state])
 
 			if '*' in Town.on_enter_hooks:
@@ -85,21 +84,21 @@ class Town(object):
 			if '*' in Town.on_exit_hooks:
 				on_exits.append(Town.on_enter_hooks['*'])
 
-			hooked_states.append(State(name=state, on_enter=on_enters, on_exit=on_exits)) 
-		
+			hooked_states.append(State(name=state, on_enter=on_enters, on_exit=on_exits))
+
 		return hooked_states
 
 
 	def generate_transitions(self):
-	
+
 		hooked_transitions = []
 		for trans_name, trans_sources, trans_dest in Town.transitions:
-			
+
 			conditions = []
 			unlesses = []
-			if trans_name in Town.conditions: 
+			if trans_name in Town.conditions:
 				conditions.append(Town.conditions[trans_name])
-			if trans_name in Town.unless_conditions: 
+			if trans_name in Town.unless_conditions:
 				unlesses.append(Town.unless_conditions[trans_name])
 			if '*' in Town.conditions:
 				conditions.append(Town.conditions['*'])
@@ -119,14 +118,14 @@ class Town(object):
 
 	def to_dict(self):
 		dictionary = self.__dict__.copy()
-		
+
 		# rip all the unseriazable objects
 		respected_types = (int, float, str, list, dict, tuple)
 		keys_to_remove = []
 		for key in dictionary.keys():
 			if not(isinstance(dictionary[key], respected_types) or dictionary[key] is None):
 				keys_to_remove.append(key)
-		
+
 		for key in keys_to_remove:
 			dictionary.pop(key)
 
@@ -140,7 +139,7 @@ class Town(object):
 
 		return dictionary
 
-	
+
 	def jversonify(self):
 		self.version = datetime.now().timestamp()
 
@@ -159,7 +158,7 @@ class Town(object):
 	def stamp_state(self):
 		self.status['started_at'] = datetime.now().timestamp()
 		self.status['id'] = self.state
-		
+
 
 	def check_ready_to_start(self, *args, **kwargs):
 		self.is_ready_to_start = len(self.players.keys()) >= 5
@@ -167,15 +166,15 @@ class Town(object):
 
 
 	def start_game(self, backdoor_players = None):
-		
+
 		for player in self.players.values():
 			if backdoor_players and player.name in backdoor_players.keys():
-			
+
 				player.set_character(backdoor_players[player.name])
-			
+
 			else:
 				number_of_mafia = floor(len(self.players.keys()) * 0.25)
-			
+
 				for player in sample(self.players.values(), number_of_mafia):
 					player.set_character('mafia')
 
@@ -186,18 +185,18 @@ class Town(object):
 		player_to_die.kill()
 		self.status['killed_player'] = player_to_die.name
 
-	
+
 	def resolve_vote(self, *args, **kwargs):
 
 		vote_counts = []
 		player_names = []
-		
+
 		for player in self.votes.keys():
-		
+
 			vote_count = sum([vote for vote in self.votes.values() if vote == player.name])
 			vote_counts.append(vote_count)
 
-		max_votes = max(vote_counts)	
+		max_votes = max(vote_counts)
 		potential_targets = []
 
 		# build potential target list
@@ -206,7 +205,7 @@ class Town(object):
 			potential_targets.append(player_names[index])
 			vote_counts.pop(index)
 			player_names.pop(index)
-		
+
 		killed_player_name = choice(potential_targets)
 		player_to_die = self.players[killed_player_name]
 
@@ -229,14 +228,14 @@ class Town(object):
 
 		alive_mafia = 0
 		alive_civils = 0
-		
+
 		for player in self.players.values():
 			if player.is_alive:
 				if player.character == 'mafia':
 					alive_mafia += 1
 				else:
 					allive_civils += 1
-		
+
 		winner = None
 
 		if alive_mafia == 0:
@@ -244,7 +243,7 @@ class Town(object):
 		elif alive_civils < alive_mafia:
 			winner = 'mafia'
 		elif alive_mafia == 1 and alive_mafia == alive_civils:
-			winner = 'mafia' 		
+			winner = 'mafia'
 
 		return winner
 
