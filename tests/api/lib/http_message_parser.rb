@@ -27,7 +27,7 @@ class HTTPMessageParser
     @lines ||= content.split("\n")
   end
 
-  def first_line
+  def request_line
     lines[0]
   end
 end
