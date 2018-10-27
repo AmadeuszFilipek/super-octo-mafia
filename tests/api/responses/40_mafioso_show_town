@@ -37,8 +37,9 @@ Content-Type: application/json
   },
   "slug": "Swiebodzin",
   "state": {
-    "id": "day_results",
+    "id": "end_game",
     "killed_player": "mafioso",
+    "winners": "civil",
     "started_at": null
   },
   "state_live_time": 5,

@@ -46,9 +46,13 @@ class Town(object):
         ['t_end_game', ['day_voting', 'day_results', 'night_voting', 'night_results'], 'game_ended']
     ]
 
-    conditions = {'t_start_game': 'check_ready_to_start'}
+    conditions = {
+        't_start_game': 'check_ready_to_start',
+        't_progress': 'can_game_continue'
+    }
 
-    unless_conditions = {'t_progress': 'is_game_ended'}
+    unless_conditions = {}
+
 
 
     def __init__(self, slug):
@@ -231,7 +235,7 @@ class Town(object):
                 if player.character == 'mafia':
                     alive_mafia += 1
                 else:
-                    allive_civils += 1
+                    alive_civils += 1
 
         winner = None
 
@@ -245,15 +249,15 @@ class Town(object):
         return winner
 
 
-    def is_game_ended(self, *args, **kwargs):
+    def can_game_continue(self, *args, **kwargs):
 
-        winner = self.get_winner()
+        winners = self.get_winner()
 
-        if winner:
-            self.status['winner'] = winner
-            self.end_game()
+        if winners:
+            self.status['winners'] = winners
+            self.t_end_game()
 
-        return (winner is not None)
+        return (winners is None)
 
 
     def is_state_outdated(self):
