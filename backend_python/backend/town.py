@@ -216,7 +216,7 @@ class Town(object):
 
 
     def is_vote_finished(self, *args, **kwargs):
-        return len(self.votes.keys()) == len(self.players.keys()) and len(self.players.keys() > 0)
+        return len(self.votes.keys()) == len(self.players.keys()) and len(self.players.keys()) > 0
 
 
     def clear_vote_pool(self,*args, **kwargs):
