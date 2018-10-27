@@ -1,4 +1,4 @@
 main: 
-	FLASK_APP=mafia.py flask run
+    FLASK_APP=mafia.py flask run
 test: 
-	./test_with_curl
+    ./test_with_curl

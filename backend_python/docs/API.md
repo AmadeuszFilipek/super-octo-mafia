@@ -9,7 +9,7 @@
   "state": {
     "id": "day_voting",
     "other": "attributes"
-	"started_at": timestamp,
+    "started_at": timestamp,
   },
   "votes": {
     "dziku": "dziku2",
