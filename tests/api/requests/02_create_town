@@ -1,7 +1,0 @@
-POST /api/towns
-Content-Type: applictation/json
-
-{
-  "town": { "slug": "Swiebodzin" },
-  "player": { "name": "Krzysztof" }
-}

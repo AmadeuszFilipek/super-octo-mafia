@@ -14,7 +14,7 @@ class OctoMafiaResponse < SimpleDelegator
       json['state']['started_at'] = nil
     end
 
-    JSON.dump(json)
+    JSON.pretty_generate(json)
   rescue JSON::ParserError
     super
   end
