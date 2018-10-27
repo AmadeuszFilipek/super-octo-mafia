@@ -1,0 +1,51 @@
+HTTP/1.0 200 OK
+Content-Type: application/json
+
+{
+  "is_ready_to_start": true,
+  "players": {
+    "civil1": {
+      "character": "civil",
+      "is_alive": true,
+      "is_host": false,
+      "name": "civil1"
+    },
+    "civil2": {
+      "character": "civil",
+      "is_alive": true,
+      "is_host": false,
+      "name": "civil2"
+    },
+    "civil3": {
+      "character": "civil",
+      "is_alive": true,
+      "is_host": false,
+      "name": "civil3"
+    },
+    "hostessa": {
+      "character": "civil",
+      "is_alive": true,
+      "is_host": true,
+      "name": "hostessa"
+    },
+    "mafioso": {
+      "character": "mafia",
+      "is_alive": true,
+      "is_host": false,
+      "name": "mafioso"
+    }
+  },
+  "slug": "Swiebodzin",
+  "state": {
+    "id": "day_voting",
+    "started_at": null
+  },
+  "state_live_time": 5,
+  "version": null,
+  "votes": {
+    "civil1": "mafioso",
+    "civil2": "mafioso",
+    "civil3": "mafioso",
+    "hostessa": "mafioso"
+  }
+}

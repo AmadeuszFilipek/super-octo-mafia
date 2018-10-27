@@ -1,9 +1,0 @@
-POST /api/towns/Swiebodzin/votes
-Content-Type: applictation/json
-
-{
-  "vote": {
-    "voteeName": "Krzysztof",
-    "voterName": "Andrzej"
-  }
-}

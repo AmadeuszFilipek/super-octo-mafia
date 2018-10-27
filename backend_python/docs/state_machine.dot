@@ -1,9 +1,0 @@
-digraph G {
-  "waiting_for_players" -> "day_voting"
-  "day_voting" -> "day_results"
-  "day_results" -> "night_voting" [ label="m < c" ]
-  "day_results" -> "end_game" [ label="m >= c" ]
-  "night_voting" -> "night_results"
-  "night_results" -> "day_voting" [ label="m >= c" ]
-  "night_results" -> "end_game" [ label="m < c" ]
-}

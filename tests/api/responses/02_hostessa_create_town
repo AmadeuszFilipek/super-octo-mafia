@@ -1,0 +1,22 @@
+HTTP/1.0 200 OK
+Content-Type: application/json
+
+{
+  "is_ready_to_start": false,
+  "players": {
+    "hostessa": {
+      "character": "civil",
+      "is_alive": true,
+      "is_host": true,
+      "name": "hostessa"
+    }
+  },
+  "slug": "Swiebodzin",
+  "state": {
+    "id": "waiting_for_players"
+  },
+  "state_live_time": 5,
+  "version": null,
+  "votes": {
+  }
+}
