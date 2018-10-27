@@ -23,10 +23,13 @@ class Town(object):
 
     initial_state = 'waiting_for_players'
 
-    on_enter_hooks = {'*': 'stamp_state'}
+    on_enter_hooks = {
+        '*': 'stamp_state',
+    }
 
-    on_exit_hooks = {'day_voting': 'clear_vote_pool',
-        'night_voting': 'clear_vote_pool',
+    on_exit_hooks = {
+        'day_voting': 'execute_vote',
+        'night_voting': 'execute_vote',
         'day_results': 'clear_results',
         'night_results': 'clear_results'
         }
@@ -34,9 +37,6 @@ class Town(object):
     # name, source, destination
     transitions = [
         ['t_start_game', 'waiting_for_players', 'day_voting'],
-
-        ['t_execute_vote', 'day_voting', 'day_results'],
-        ['t_execute_vote', 'night_voting', 'night_results'],
 
         ['t_progress', 'day_voting', 'day_results'],
         ['t_progress', 'night_voting', 'night_results'],
@@ -182,37 +182,31 @@ class Town(object):
 
 
     def execute_vote(self, *args, **kwargs):
-        self.t_execute_vote()
-
         player_to_die = self.resolve_vote()
         player_to_die.kill()
         self.status['killed_player'] = player_to_die.name
 
 
     def resolve_vote(self, *args, **kwargs):
+        vote_counts = {}
+        players_having_votes = []
 
-        vote_counts = []
-        player_names = []
+        for voterName in self.votes.keys():
+            voteeName = self.votes[voterName]
 
-        for player in self.votes.keys():
+            if voteeName not in vote_counts:
+                vote_counts[voteeName] = 0
 
-            vote_count = sum([vote for vote in self.votes.values() if vote == player.name])
-            vote_counts.append(vote_count)
+            vote_counts[voteeName] += 1
 
-        max_votes = max(vote_counts)
-        potential_targets = []
+        voteeWithMaxVotes = None
+        maxVotes = 0
+        for voteeName, voteCounts in zip(vote_counts.keys(), vote_counts.values()):
+            if voteCounts >= maxVotes:
+                voteeWithMaxVotes = voteeName
+                maxVotes = voteCounts
 
-        # build potential target list
-        while len(vote_counts.count(max_votes)) > 0:
-            index = vote_counts.index(max_votes)
-            potential_targets.append(player_names[index])
-            vote_counts.pop(index)
-            player_names.pop(index)
-
-        killed_player_name = choice(potential_targets)
-        player_to_die = self.players[killed_player_name]
-
-        return player_to_die
+        return self.players[voteeWithMaxVotes]
 
 
     def is_vote_finished(self, *args, **kwargs):

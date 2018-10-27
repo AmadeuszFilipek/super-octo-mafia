@@ -38,11 +38,16 @@ Content-Type: application/json
   "slug": "Swiebodzin",
   "state": {
     "id": "day_results",
-    "started_at": null,
-    "killed_player": "mafioso"
+    "killed_player": "mafioso",
+    "started_at": null
   },
   "state_live_time": 5,
   "version": null,
   "votes": {
+    "civil1": "mafioso",
+    "civil2": "mafioso",
+    "civil3": "mafioso",
+    "hostessa": "mafioso",
+    "mafioso": "civil1"
   }
 }
