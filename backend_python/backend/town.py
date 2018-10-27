@@ -10,6 +10,7 @@ from math import floor, ceil
 from transitions import Machine, State
 
 import logging
+import code
 logging.basicConfig(filename='state_machine.log', level=logging.DEBUG)
 logging.getLogger('transitions').setLevel(logging.DEBUG)
 
@@ -267,9 +268,10 @@ class Town(object):
 
     def next_state_maybe(self):
         # debug this, somehow it triggers in waiting_for_players
+        # code.interact(local=dict(locals(), **globals()))
         if self.state in self.timed_states and \
-            (self.is_state_outdated or self.is_vote_finished()):
-            self.progress()
+            (self.is_state_outdated() or self.is_vote_finished()):
+            self.t_progress()
 
 
 class TownDoesNotExistException(Exception):
