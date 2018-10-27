@@ -32,22 +32,22 @@ class Town(object):
 
     # name, source, destination
     transitions = [
-        ['start_game', 'waiting_for_players', 'day_voting'],
+        ['t_start_game', 'waiting_for_players', 'day_voting'],
 
-        ['execute_vote', 'day_voting', 'day_results'],
-        ['execute_vote', 'night_voting', 'night_results'],
+        ['t_execute_vote', 'day_voting', 'day_results'],
+        ['t_execute_vote', 'night_voting', 'night_results'],
 
-        ['progress', 'day_voting', 'day_results'],
-        ['progress', 'night_voting', 'night_results'],
-        ['progress', 'day_results', 'night_voting'],
-        ['progress', 'night_results', 'day_voting'],
+        ['t_progress', 'day_voting', 'day_results'],
+        ['t_progress', 'night_voting', 'night_results'],
+        ['t_progress', 'day_results', 'night_voting'],
+        ['t_progress', 'night_results', 'day_voting'],
 
-        ['end_game', ['day_voting', 'day_results', 'night_voting', 'night_results'], 'game_ended']
+        ['t_end_game', ['day_voting', 'day_results', 'night_voting', 'night_results'], 'game_ended']
     ]
 
-    conditions = {'start_game': 'check_ready_to_start'}
+    conditions = {'t_start_game': 'check_ready_to_start'}
 
-    unless_conditions = {'progress': 'is_game_ended'}
+    unless_conditions = {'t_progress': 'is_game_ended'}
 
 
     def __init__(self, slug):
@@ -166,6 +166,7 @@ class Town(object):
 
 
     def start_game(self, backdoor_players = None):
+        self.t_start_game()
 
         for player in self.players.values():
             if backdoor_players and player.name in backdoor_players.keys():
@@ -180,6 +181,7 @@ class Town(object):
 
 
     def execute_vote(self, *args, **kwargs):
+        self.t_execute_vote()
 
         player_to_die = self.resolve_vote()
         player_to_die.kill()
