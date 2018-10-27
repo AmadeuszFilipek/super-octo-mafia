@@ -40,11 +40,16 @@ class RequestRunner
       puts diff.to_s(:color)
       puts
       puts '--- ' + Paint[request[:verb], :red] + ' ' + request[:uri] + ' -> ' + response.status.to_s
+      print "--- #{request_name}: "
+      puts Paint["FAILED", :red]
       print Paint["----- cache response? ", :yellow]
 
       if tty_reader.read_char.downcase == 'y'
         File.open(cached_response_path, 'wb') { |f| f.write(actual_response_string) }
         puts Paint["---> cached", :green]
+      else
+        puts Paint['Exiting!', :red]
+        exit 1
       end
       puts
     end

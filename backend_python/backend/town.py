@@ -155,7 +155,7 @@ class Town(object):
         self.votes[vote['voterName']] = vote['voteeName']
 
 
-    def stamp_state(self):
+    def stamp_state(self, *args, **kwargs):
         self.status['started_at'] = datetime.now().timestamp()
         self.status['id'] = self.state
 

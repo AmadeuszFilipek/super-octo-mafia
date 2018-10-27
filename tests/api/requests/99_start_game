@@ -1,7 +1,0 @@
-POST /api/towns/Swiebodzin/start
-Content-Type: application/json
-
-{
-    "Andrzej": "mafia",
-    "Krzysztof": "civil"
-}
