@@ -25,13 +25,13 @@ class Town(object):
 
     on_enter_hooks = {
         '*': 'stamp_state',
+        'day_voting': 'clear_results',
+        'night_voting': 'clear_results'
     }
 
     on_exit_hooks = {
         'day_voting': 'execute_vote',
         'night_voting': 'execute_vote',
-        'day_results': 'clear_results',
-        'night_results': 'clear_results'
         }
 
     # name, source, destination
@@ -222,7 +222,7 @@ class Town(object):
 
 
     def clear_results(self, *args, **kwargs):
-        self.status['killed_player'] = None
+        self.status.pop('killed_player', None)
 
 
     def get_winner(self):
@@ -253,10 +253,6 @@ class Town(object):
 
         winners = self.get_winner()
 
-        if winners:
-            self.status['winners'] = winners
-            self.t_end_game()
-
         return (winners is None)
 
 
@@ -266,16 +262,18 @@ class Town(object):
 
     def next_state_maybe(self):
         # debug this, somehow it triggers in waiting_for_players
-        # code.interact(local=dict(locals(), **globals()))
         if self.state in self.timed_states and \
             (self.is_state_outdated() or self.is_vote_finished()):
+
             self.t_progress()
+
+            if (not self.can_game_continue()):
+                self.status['winners'] = self.get_winner()
+                self.t_end_game()
+
 
 
 class TownDoesNotExistException(Exception):
     pass
-
-
-
 
 
