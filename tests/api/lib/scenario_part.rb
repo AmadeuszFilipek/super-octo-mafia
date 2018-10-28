@@ -3,7 +3,7 @@ class ScenarioPart
   attr_reader :parent, :path
 
   def initialize(path, parent = nil)
-    @path = path
+    @path = path.chomp('/')
     @parent = parent
   end
 
@@ -24,6 +24,6 @@ class ScenarioPart
   private
 
   def subdirectories
-    Dir[File.join(path, '*')].select { |p| File.directory?(p) }
+    Dir[File.join(path, '*')].map { |p| p.chomp('/') }.select { |p| File.directory?(p) }.sort
   end
 end
