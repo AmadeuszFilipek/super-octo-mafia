@@ -1,18 +1,18 @@
 
-class ScenarioList
+class ScenarioPart
   def initialize(path, parent = nil)
     @path = path
     @parent = parent
   end
 
-  def sub_lists
+  def sub_parts
     Dir[File.join(path, '*')].select { |p| File.directory?(p) }.map do |path|
-      ScenarioList.new(path, self)
+      ScenarioPart.new(path, self)
     end
   end
 
   def leaf?
-    sub_lists.empty?
+    sub_parts.empty?
   end
 
   def to_s
