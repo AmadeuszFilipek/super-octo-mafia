@@ -6,9 +6,7 @@ class ScenarioPart
   end
 
   def sub_parts
-    Dir[File.join(path, '*')].select { |p| File.directory?(p) }.map do |path|
-      ScenarioPart.new(path, self)
-    end
+    subdirectories.map { |path| ScenarioPart.new(path, self) }
   end
 
   def leaf?
@@ -24,4 +22,8 @@ class ScenarioPart
   private
 
   attr_reader :path, :parent
+
+  def subdirectories
+    Dir[File.join(path, '*')].select { |p| File.directory?(p) }
+  end
 end
