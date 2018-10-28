@@ -1,9 +1,10 @@
 
 class ScenarioPart
-  attr_reader :path
+  attr_reader :path, :root
 
-  def initialize(path)
-    @path = path.chomp('/')
+  def initialize(path, root:)
+    @path = File.expand_path(path.chomp('/')).sub(root, '')
+    @root = root
   end
 
   def ==(other_part)
@@ -14,12 +15,12 @@ class ScenarioPart
     @parent ||=
       begin
         parent_path = path.split('/')[0..-2].join('/')
-        ScenarioPart.new(parent_path)
+        ScenarioPart.new(parent_path, root: root)
       end
   end
 
   def parts
-    subdirectories.map { |path| ScenarioPart.new(path) }
+    subdirectories.map { |path| ScenarioPart.new(path, root: root) }
   end
 
   def leaf?

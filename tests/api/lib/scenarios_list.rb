@@ -16,7 +16,7 @@ class ScenariosList
       path_parts = diff_path.split('/')[1..-1]
 
       path_parts.map.with_index do |part, idx|
-        ScenarioPart.new(File.join(full_path, path_parts[0..idx].join('/')))
+        ScenarioPart.new(File.join(full_path, path_parts[0..idx].join('/')), root: File.expand_path(path))
       end
     end
   end
@@ -32,7 +32,7 @@ class ScenariosList
   end
 
   def parts
-    subdirectories.map { |subdirectory| ScenarioPart.new(subdirectory) }
+    subdirectories.map { |subdirectory| ScenarioPart.new(subdirectory, root: path) }
   end
 
   def subdirectories
