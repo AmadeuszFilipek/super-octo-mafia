@@ -1,6 +1,7 @@
 from flask import request
 from flask import send_from_directory
-from backend_python.backend.town import Town, TownDoesNotExistException
+from backend_python.backend.town import TownDoesNotExistException
+from backend_python.backend.game import Game
 from backend_python import app, app_state
 
 def find_town(slug):
@@ -23,7 +24,7 @@ def endpoint_create_town():
     town = find_town(request.json['town']['slug'])
 
     if not town:
-        town = Town(request.json['town']['slug'])
+        town = Game(request.json['town']['slug'])
         town.add_player(request.json['player']['name'], True)
 
         app.logger.info('new town = ' + str(town.jversonify()))
@@ -84,7 +85,8 @@ def endpoint_start_game(slug):
 @app.route('/api/towns/<slug>/votes', methods = ['POST'])
 def endpoint_vote(slug):
     town = find_town(slug)
-
-    town.vote(request.json['vote'])
+    
+    vote = request.json['vote']
+    town.vote(vote['voterName'], vote['voteeName'])
 
     return town.jversonify()
