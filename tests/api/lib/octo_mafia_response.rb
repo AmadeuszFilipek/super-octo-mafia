@@ -6,11 +6,11 @@ class OctoMafiaResponse < SimpleDelegator
   def body
     json = JSON.parse(super)
 
-    if json.key?('version')
+    if json&.key?('version')
       json['version'] = nil
     end
 
-    if json.key?('state') && json['state'].key?('started_at')
+    if json&.key?('state') && json['state']&.key?('started_at')
       json['state']['started_at'] = nil
     end
 
