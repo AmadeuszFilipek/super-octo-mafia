@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo rake "scenarios[$1]"
+rake "scenarios[$1]"
