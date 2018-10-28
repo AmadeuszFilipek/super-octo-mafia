@@ -5,7 +5,7 @@ class ScenariosList
   attr_reader :path
 
   def initialize(path)
-    @path = path
+    @path = "#{path.chomp('/')}/"
   end
 
   ::Scenario = Struct.new(:scenarios_root, :sub_scenarios) do
@@ -18,18 +18,41 @@ class ScenariosList
         current_path = current_path.split('/')[0..-2].join('/')
       end
 
-      sub_scenarios = paths.map { |path| SubScenario.new(path) }
+      sub_scenarios = paths.map do |sub_scenario_path|
+        relative_path = sub_scenario_path.sub(scenarios_root, '')
+
+        SubScenario.new(scenarios_root, relative_path)
+      end
+
       new(scenarios_root, sub_scenarios)
     end
 
     def steps
       sub_scenarios.flat_map(&:steps)
     end
+
+    def name
+      sub_scenarios.last.path
+    end
   end
 
-  ::SubScenario = Struct.new(:path) do
+  ::ScenarioStep = Struct.new(:scenarios_root, :name) do
+    def request_path
+      File.join(scenarios_root, name) + '.request'
+    end
+
+    def response_path
+      File.join(scenarios_root, name) + '.response'
+    end
+  end
+
+  ::SubScenario = Struct.new(:scenarios_root, :path) do
     def steps
-      Dir[File.join(path, '*.{request,response}')].sort
+      Dir[File.join(scenarios_root, path, '*.{request,response}')].sort.map do |step_path|
+        step_path.sub(scenarios_root, '').sub(/\.(request|response)/, '')
+      end.map do |step_path|
+        ScenarioStep.new(scenarios_root, step_path)
+      end
     end
   end
 
