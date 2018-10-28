@@ -1,4 +1,5 @@
-require_relative 'scenario_part'
+# require_relative 'scenario_part'
+require 'rake/file_list'
 
 class ScenariosList
   attr_reader :path
@@ -7,32 +8,42 @@ class ScenariosList
     @path = path
   end
 
-  def all
-    leaves.map do |leaf|
-      full_path = File.expand_path(self.path)
-      leaf_path = File.expand_path(leaf.path)
+  ::Scenario = Struct.new(:scenarios_root, :sub_scenarios) do
+    def self.build_for(scenarios_root, leaf_path)
+      paths = []
+      current_path = leaf_path
 
-      diff_path = leaf_path.sub(full_path, '')
-      path_parts = diff_path.split('/')[1..-1]
-
-      path_parts.map.with_index do |part, idx|
-        ScenarioPart.new(File.join(full_path, path_parts[0..idx].join('/')), root: File.expand_path(path))
+      while File.realpath(scenarios_root) != File.realpath(current_path)
+        paths.unshift current_path
+        current_path = current_path.split('/')[0..-2].join('/')
       end
+
+      sub_scenarios = paths.map { |path| SubScenario.new(path) }
+      new(scenarios_root, sub_scenarios)
+    end
+
+    def steps
+      sub_scenarios.flat_map(&:steps)
     end
   end
 
-  def ==(other)
-    File.expand_path(path) == File.expand_path(other.path)
+  ::SubScenario = Struct.new(:path) do
+    def steps
+      Dir[File.join(path, '*.{request,response}')].sort
+    end
   end
 
-  private
-
-  def leaves
-    parts.select(&:leaf?)
+  def all
+    leaf_subdirectories.map do |leaf_subdir|
+      Scenario.build_for(path, leaf_subdir)
+    end
   end
 
-  def parts
-    subdirectories.map { |subdirectory| ScenarioPart.new(subdirectory, root: path) }
+
+  def leaf_subdirectories
+    subdirectories.select do |subdir|
+      Dir[File.join(subdir, '**/**')].none? { |p| File.directory?(p) }
+    end
   end
 
   def subdirectories
