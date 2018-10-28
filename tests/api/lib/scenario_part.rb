@@ -1,5 +1,7 @@
 
 class ScenarioPart
+  attr_reader :parent, :path
+
   def initialize(path, parent = nil)
     @path = path
     @parent = parent
@@ -20,8 +22,6 @@ class ScenarioPart
   alias_method :inspect, :to_s
 
   private
-
-  attr_reader :path, :parent
 
   def subdirectories
     Dir[File.join(path, '*')].select { |p| File.directory?(p) }
