@@ -74,7 +74,7 @@ class Town(object):
     def resolve_vote(self):
         # if len(self.votes.keys() == 0) return None
     
-        vote_counts = dict.fromkeys(self.votes, 0)
+        vote_counts = dict.fromkeys(self.votes.values(), 0)
         for voteeName in self.votes.values(): vote_counts[voteeName] += 1
             
         voteeWithMaxVotes = None
