@@ -7,6 +7,7 @@ from transitions import Machine, State, Transition
 from datetime import datetime
 from flask import jsonify
 import logging
+import code
 
 logging.basicConfig(filename='state_machine.log', level=logging.DEBUG)
 logging.getLogger('transitions').setLevel(logging.DEBUG)
@@ -46,7 +47,9 @@ class Game(object):
 
         states.append(State('night_results',
             on_enter=self.stamp_state))
-        states.append(State('game_ended', on_enter=self.stamp_state))
+            
+        states.append(State('game_ended', 
+            on_enter=[self.stamp_state, self.set_winner]))
                 
         return states
 
@@ -89,7 +92,7 @@ class Game(object):
             })
         transitions.append({
                 'trigger': 't_end_game',
-                'source': ['day_voting', 'night_voting'],
+                'source': ['day_results', 'night_results'],
                 'dest': 'game_ended',
                 'before': self.end_game
             })
@@ -101,7 +104,9 @@ class Game(object):
         dictionary = self.town.to_dict()
         self.status['id'] = self.state
         dictionary['state'] = self.status
-    
+        dictionary['version'] = self.version
+
+        return dictionary
 
     def jversonify(self):
         self.version = datetime.now().timestamp()
@@ -109,14 +114,13 @@ class Game(object):
         return(jsonify(self.to_dict()))
 
 
-    def start_game(self):
+    def start_game(self, *args):
         self.t_start_game()
         self.town.assign_characters(*args)
 
 
     def execute_vote(self, *args, **kwargs):
-        self.town.execute_vote()
-
+        self.status['killed_player'] = self.town.execute_vote()
 
     def progress(self, *args, **kwargs):
         self.town.clear_vote_pool()
@@ -152,13 +156,9 @@ class Game(object):
             else:
                 self.t_progress()
             
-            if not self.town.can_game_continue():
-                self.status['winners'] = self.town.get_winner()
-                self.end_game()
-
 
     def end_game_maybe(self):
-        if not town.can_game_continue: self.t_end_game
+        if not self.can_game_continue(): self.t_end_game()
 
 
     def stamp_state(self, *args, **kwargs):
@@ -167,6 +167,10 @@ class Game(object):
     
     def clear_results(self, *args, **kwargs):
         self.status.pop('killed_player', None)
+
+
+    def set_winner(self, *args, **kwargs):
+        self.status['winners'] = self.town.get_winner()
 
 
     def add_player(self, player, is_host=False):

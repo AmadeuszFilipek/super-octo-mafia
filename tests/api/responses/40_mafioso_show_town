@@ -42,7 +42,6 @@ Content-Type: application/json
     "started_at": null,
     "winners": "civils"
   },
-  "state_live_time": 5,
   "version": null,
   "votes": {
     "civil1": "mafioso",

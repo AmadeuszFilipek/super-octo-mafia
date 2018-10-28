@@ -51,7 +51,7 @@ class Town(object):
         return self.is_ready_to_start
 
 
-    def assign_characters(self, backdoor_players = None):
+    def assign_characters(self, backdoor_players=None):
 
         for player in self.players.values():
             if backdoor_players and player.name in backdoor_players.keys():
@@ -68,8 +68,8 @@ class Town(object):
     def execute_vote(self, *args, **kwargs):
         player_to_die = self.resolve_vote()
         player_to_die.kill()
-        self.status['killed_player'] = player_to_die.name
 
+        return player_to_die.name
 
     def resolve_vote(self):
         # if len(self.votes.keys() == 0) return None

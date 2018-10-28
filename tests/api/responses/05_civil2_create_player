@@ -33,7 +33,6 @@ Content-Type: application/json
   "state": {
     "id": "waiting_for_players"
   },
-  "state_live_time": 5,
   "version": null,
   "votes": {
   }
