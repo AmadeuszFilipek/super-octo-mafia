@@ -9,6 +9,10 @@ class ScenarioStep
     new(root_path, step_path)
   end
 
+  def name
+    relative_path.to_s
+  end
+
   def relative_path
     step_path.relative_path_from(root_path)
   end

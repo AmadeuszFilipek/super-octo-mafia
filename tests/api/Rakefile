@@ -1,35 +1,12 @@
 require 'pry'
 require_relative 'lib/scenarios_list'
+require_relative 'lib/step_runner'
 
 task :default do
-  require_relative 'lib/request_runner'
-
-  Dir['./requests/*'].sort.each do |request_path|
-    RequestRunner.new(request_path).call
-  end
-end
-
-task :scenario, [:path] do |t, args|
   list = ScenariosList.new('./scenarios')
-  binding.pry
-  # scenario = list.find_by_path('happy_path/part1')
+  scenario = list.all.first
 
-  # scenario.steps.each do |step|
-  #   StepRunner.new(step.request_path).call
-  # end
-end
-
-task :scenarios, [:path] do |t, args|
-  require_relative 'lib/scenarios_list'
-  # require_relative 'lib/scenario_runner'
-
-  scenarios_list = ScenariosList.new(  './lib/fixtures/scenarios')
-  puts args[:path].inspect
-  exit 1
-
-  scenarios = tree.scenarios_for_path(path)
-
-  scenarios.each do |scenario|
-    ScenarioRunner.new(scenario).call
+  scenario.steps.each do |step|
+    StepRunner.new(step).call
   end
 end
