@@ -1,5 +1,6 @@
 # require_relative 'scenario_part'
 require 'rake/file_list'
+require 'pathname'
 
 class ScenariosList
   attr_reader :path

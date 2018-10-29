@@ -1,37 +1,81 @@
-require_relative 'spec_helper'
-require_relative 'scenarios_list'
+require 'pry'
+require 'pathname'
 
-describe ScenariosList do
-  let(:list) { ScenariosList.new('./fixtures/scenarios') }
+ScenarioStep = Struct.new(:root_path, :step_path) do
+  def self.from_request_path(root_path, request_path)
+    step_path = Pathname.new(request_path).sub_ext('')
 
-  def expect_scenario_paths_exist(scenario)
-    scenario.steps.each do |step|
-      expect(File.exists?(step.request_path)).to be_truthy
+    new(root_path, step_path)
+  end
+
+  def relative_path
+    step_path.relative_path_from(root_path)
+  end
+
+  def to_s
+    relative_path.to_s
+  end
+  alias_method :inspect, :to_s
+
+  def request_path
+    step_path.join('.request')
+  end
+
+  def response_path
+    step_path.join('.response')
+  end
+end
+
+Scenario = Struct.new(:root_path, :steps) do
+  def self.from_leaf(root_path, leaf_path)
+    root_path = Pathname.new(root_path).expand_path
+    leaf_path = Pathname.new(leaf_path).expand_path
+
+    parts = leaf_path.ascend.take_while { |ls| ls != root_path }.reverse
+    request_paths = parts.flat_map do |part|
+      part.children.select do |child|
+        child.file? && child.fnmatch?('*.request')
+      end
+    end
+
+    request_paths.map do |request_path|
+      ScenarioStep.from_request_path(root_path, request_path)
+    end
+  end
+end
+
+class ScenariosList
+  def initialize(root_path)
+    @root_path = Pathname.new(root_path).expand_path
+  end
+
+  def all
+    leaf_subdirectories.map do |leaf_subdirectory|
+      Scenario.from_leaf(root_path, leaf_subdirectory)
     end
   end
 
-  it '#all' do
+  private
+
+  attr_reader :root_path
+
+  def leaf_subdirectories
+    Dir[root_path.join('**/**')]
+      .map { |p| Pathname.new(p).expand_path }
+      .select { |p| p.directory? && p.children.all?(&:file?) }
+  end
+end
+
+describe ScenariosList do
+  it "#all returns all scenarios" do
+    list = ScenariosList.new('./fixtures/scenarios')
     scenarios = list.all
     expect(scenarios.length).to eq 6
 
-    s1, s2, s3, s4, s5, s6 = scenarios
-
-    expect(s1.name).to eq 'error_path/second_level/third_level'
-    expect_scenario_paths_exist(s1)
-
-    expect(s2.name).to eq 'error_path/second_level_2/third_level_2'
-    expect_scenario_paths_exist(s2)
-
-    expect(s3.name).to eq 'happy_path/part1/part1_1'
-    expect_scenario_paths_exist(s3)
-
-    expect(s4.name).to eq 'happy_path/part1/part1_2'
-    expect_scenario_paths_exist(s4)
-
-    expect(s5.name).to eq 'happy_path/part2/part2_1'
-    expect_scenario_paths_exist(s5)
-
-    expect(s6.name).to eq 'happy_path/part2/part2_2'
-    expect_scenario_paths_exist(s6)
+    binding.pry
+    # require 'pp'
+    # pp scenarios.first
+    # # binding.pry
+    # # expect(scenarios).to eq :omghax
   end
 end
