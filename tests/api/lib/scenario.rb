@@ -13,7 +13,7 @@ class Scenario
       part.children.select do |child|
         child.file? && child.fnmatch?('*.request')
       end
-    end
+    end.sort
 
     steps = request_paths.map do |request_path|
       ScenarioStep.from_request_path(root_path, request_path)

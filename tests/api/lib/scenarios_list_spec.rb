@@ -1,3 +1,4 @@
+require 'pry'
 require_relative 'scenarios_list'
 
 describe ScenariosList do
@@ -27,5 +28,13 @@ describe ScenariosList do
     expect(s4.name).to eq 'happy_path/part1/part1_2'
     expect(s5.name).to eq 'happy_path/part2/part2_1'
     expect(s6.name).to eq 'happy_path/part2/part2_2'
+
+    # steps are sorted alphabetically
+    expect(s1.steps).to eq s1.steps.sort_by(&:request_path)
+    expect(s2.steps).to eq s2.steps.sort_by(&:request_path)
+    expect(s3.steps).to eq s3.steps.sort_by(&:request_path)
+    expect(s4.steps).to eq s4.steps.sort_by(&:request_path)
+    expect(s5.steps).to eq s5.steps.sort_by(&:request_path)
+    expect(s6.steps).to eq s6.steps.sort_by(&:request_path)
   end
 end

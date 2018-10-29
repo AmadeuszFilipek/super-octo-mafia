@@ -1,4 +1,5 @@
 require 'pry'
+require_relative 'lib/scenarios_list'
 
 task :default do
   require_relative 'lib/request_runner'
@@ -9,12 +10,13 @@ task :default do
 end
 
 task :scenario, [:path] do |t, args|
-  list = ScenariosList.new('./lib/fixtures/scenarios')
-  scenario = list.find_by_path('happy_path/part1')
+  list = ScenariosList.new('./scenarios')
+  binding.pry
+  # scenario = list.find_by_path('happy_path/part1')
 
-  scenario.steps.each do |step|
-    StepRunner.new(step.request_path).call
-  end
+  # scenario.steps.each do |step|
+  #   StepRunner.new(step.request_path).call
+  # end
 end
 
 task :scenarios, [:path] do |t, args|
