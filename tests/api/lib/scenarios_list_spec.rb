@@ -18,11 +18,11 @@ ScenarioStep = Struct.new(:root_path, :step_path) do
   alias_method :inspect, :to_s
 
   def request_path
-    step_path.join('.request')
+    step_path.sub_ext '.request'
   end
 
   def response_path
-    step_path.join('.response')
+    step_path.sub_ext '.response'
   end
 end
 
@@ -38,9 +38,15 @@ Scenario = Struct.new(:root_path, :steps) do
       end
     end
 
-    request_paths.map do |request_path|
+    steps = request_paths.map do |request_path|
       ScenarioStep.from_request_path(root_path, request_path)
     end
+
+    new(root_path, steps)
+  end
+
+  def name
+    steps.last.relative_path.dirname.to_s
   end
 end
 
@@ -72,10 +78,8 @@ describe ScenariosList do
     scenarios = list.all
     expect(scenarios.length).to eq 6
 
+    s1, s2, s3, s4, s5, s6 = scenarios
+
     binding.pry
-    # require 'pp'
-    # pp scenarios.first
-    # # binding.pry
-    # # expect(scenarios).to eq :omghax
   end
 end
