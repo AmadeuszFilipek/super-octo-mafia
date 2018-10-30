@@ -30,6 +30,8 @@ class VerboseStepFormatter
   def ask_to_cache(step, diff, request, response)
     output.puts '- Response for ' + Paint[step.name, :yellow] + ' differs from cached version'
     output.print '  Do you want to save it? [n] '
+
+    tty_reader.read_char.downcase == 'y'
   end
 
   def step_cached
@@ -47,5 +49,8 @@ class VerboseStepFormatter
   private
 
   attr_reader :output
-end
 
+  def tty_reader
+    @tty_reader ||= TTY::Reader.new
+  end
+end
