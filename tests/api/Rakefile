@@ -1,12 +1,44 @@
 require 'pry'
 require_relative 'lib/scenarios_list'
 require_relative 'lib/step_runner'
+require_relative 'lib/verbose_step_formatter'
+require 'paint'
+
+class ScenarioFormatter
+  def initialize(output)
+    @output = output
+  end
+
+  def scenario_started(scenario)
+    output.print Paint["- #{scenario.name}", :bold]
+    output.print ' '
+  end
+
+  private
+
+  attr_reader :output
+end
+
+class DotStepFormatter < VerboseStepFormatter
+  def step_started(*) end
+
+  def step_ok(step)
+    output.print Paint['.', :green]
+  end
+
+  def step_failed(step)
+    output.puts Paint['F', :red]
+  end
+end
 
 task :default do
   list = ScenariosList.new('./scenarios')
   scenario = list.all.first
+  scenario_formatter = ScenarioFormatter.new(STDOUT)
+  formatter = DotStepFormatter.new(STDOUT)
 
+  scenario_formatter.scenario_started(scenario)
   scenario.steps.each do |step|
-    StepRunner.new(step).call
+    StepRunner.new(step, formatter: formatter).call
   end
 end

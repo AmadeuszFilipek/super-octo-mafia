@@ -1,6 +1,6 @@
 require 'paint'
 
-class StepFormatter
+class VerboseStepFormatter
   def initialize(output)
     @output = output
   end
@@ -9,18 +9,21 @@ class StepFormatter
     output.print "--- #{step.name}: "
   end
 
-  def step_same_as_cached(step)
+  def step_ok(step)
     output.puts Paint["OK", :green]
   end
 
-  def step_different_as_cached(step, diff, request, response)
+  def step_failed(step)
     puts Paint["FAILED", :red]
-    puts
-    puts diff.to_s(:color)
-    puts
-    puts '--- ' + Paint[request[:verb], :red] + ' ' + request[:uri] + ' -> ' + response.status.to_s
-    print "--- #{step.name}: "
-    puts Paint["FAILED", :red]
+  end
+
+  def step_diff(step, diff, request, response)
+    output.puts
+    output.puts diff.to_s(:color)
+    output.puts
+    output.puts '--- ' + Paint[request[:verb], :red] + ' ' + request[:uri] + ' -> ' + response.status.to_s
+    output.print "--- #{step.name}: "
+    output.puts Paint["FAILED", :red]
   end
 
   def ask_to_cache
