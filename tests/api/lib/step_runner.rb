@@ -16,10 +16,10 @@ class StepRunner
 
   def call
     response_string = if File.exists?(response_path)
-                               File.read(response_path)
-                             else
-                               ''
-                             end
+                        File.read(response_path)
+                      else
+                        ''
+                      end
 
     request = RequestParser.new(File.read(request_path)).parse
     response = RequestExecutor.new(request).call
