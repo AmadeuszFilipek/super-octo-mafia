@@ -1,4 +1,5 @@
 require 'paint'
+require 'tty-pager'
 
 class VerboseStepFormatter
   def initialize(output)
@@ -14,10 +15,13 @@ class VerboseStepFormatter
   end
 
   def step_failed(step)
-    puts Paint["FAILED", :red]
+    output.puts Paint["FAILED", :red]
   end
 
   def step_diff(step, diff, request, response)
+    tty_pager = TTY::Pager::SystemPager.new command: 'less -R'
+    tty_pager.page(diff.to_s(:color))
+
     output.puts
     output.puts diff.to_s(:color)
     output.puts
