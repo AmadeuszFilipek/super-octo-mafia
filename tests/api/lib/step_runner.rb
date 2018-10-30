@@ -15,7 +15,6 @@ class StepRunner
   end
 
   def call
-    request_name = File.basename(request_path)
     response_string = if File.exists?(response_path)
                                File.read(response_path)
                              else
