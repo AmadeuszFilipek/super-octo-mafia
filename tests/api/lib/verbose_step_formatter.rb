@@ -21,13 +21,11 @@ class VerboseStepFormatter
     output.puts
     output.puts diff.to_s(:color)
     output.puts
-    output.puts '--- ' + Paint[request[:verb], :red] + ' ' + request[:uri] + ' -> ' + response.status.to_s
-    output.print "--- #{step.name}: "
-    output.puts Paint["FAILED", :red]
   end
 
-  def ask_to_cache
-    output.print Paint["----- cache response? ", :yellow]
+  def ask_to_cache(step, diff, request, response)
+    output.puts '- Response for ' + Paint[step.name, :yellow] + ' differs from cached version'
+    output.print '  Do you want to save it? [n] '
   end
 
   def step_cached

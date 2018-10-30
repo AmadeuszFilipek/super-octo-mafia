@@ -37,7 +37,7 @@ class StepRunner
       formatter.step_failed(step)
       formatter.step_diff(step, diff, request, response)
 
-      formatter.ask_to_cache
+      formatter.ask_to_cache(step, diff, request, response)
 
       if tty_reader.read_char.downcase == 'y'
         File.open(response_path, 'wb') { |f| f.write(actual_response_string) }
