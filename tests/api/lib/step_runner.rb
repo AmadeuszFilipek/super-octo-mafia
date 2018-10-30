@@ -1,6 +1,6 @@
 require 'diffy'
-require 'paint'
 require 'tty-reader'
+require_relative 'step_formatter'
 require_relative 'request_dumper'
 require_relative 'request_parser'
 require_relative 'response_dumper'
@@ -9,8 +9,9 @@ require_relative 'request_executor'
 require_relative 'octo_mafia_response'
 
 class StepRunner
-  def initialize(step)
+  def initialize(step, formatter: StepFormatter.new(STDOUT))
     @step = step
+    @formatter = formatter
   end
 
   def call
@@ -28,34 +29,29 @@ class StepRunner
     actual_response_string = dumper.to_s
     diff = Diffy::Diff.new(response_string, actual_response_string)
 
-    print "--- #{step.name}: "
+    formatter.step_started(step)
 
     if diff.none?
-      puts Paint["OK", :green]
+      formatter.step_same_as_cached(step)
     else
-      puts Paint["FAILED", :red]
-      puts
-      puts diff.to_s(:color)
-      puts
-      puts '--- ' + Paint[request[:verb], :red] + ' ' + request[:uri] + ' -> ' + response.status.to_s
-      print "--- #{request_name}: "
-      puts Paint["FAILED", :red]
-      print Paint["----- cache response? ", :yellow]
+      formatter.step_different_as_cached(step, diff, request, response)
+
+      formatter.ask_to_cache
 
       if tty_reader.read_char.downcase == 'y'
         File.open(response_path, 'wb') { |f| f.write(actual_response_string) }
-        puts Paint["---> cached", :green]
+        formatter.step_cached
       else
-        puts Paint['Exiting!', :red]
+        formatter.exiting
         exit 1
       end
-      puts
+      formatter.step_ended
     end
   end
 
   private
 
-  attr_reader :step
+  attr_reader :step, :formatter
 
   def request_path
     step.request_path
