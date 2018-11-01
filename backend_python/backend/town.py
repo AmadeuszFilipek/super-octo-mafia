@@ -88,7 +88,7 @@ class Town(object):
         return self.players[voteeWithMaxVotes]
 
 
-    def is_vote_finished(self, *args, **kwargs):
+    def is_voting_finished(self):
         return len(self.votes) == len(self.players) and len(self.players) > 0
 
 
