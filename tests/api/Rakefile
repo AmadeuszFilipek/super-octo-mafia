@@ -1,9 +1,15 @@
 require 'pry'
+require_relative 'lib/scenarios_list'
+require_relative 'lib/scenario_runner'
+require_relative 'lib/scenario_ui'
+require_relative 'lib/step_ui'
 
 task :default do
-  require_relative 'lib/request_runner'
+  list = ScenariosList.new('./scenarios')
+  step_ui = StepUI.new(STDOUT)
+  scenario_ui = ScenarioUI.new(STDOUT, step_ui: step_ui)
 
-  Dir['./requests/*'].sort.each do |request_path|
-    RequestRunner.new(request_path).call
+  list.all.each do |scenario|
+    ScenarioRunner.new(scenario, ui: scenario_ui).call
   end
 end
