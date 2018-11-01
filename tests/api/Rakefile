@@ -1,22 +1,17 @@
 require 'pry'
 require_relative 'lib/scenarios_list'
 require_relative 'lib/step_runner'
+require_relative 'lib/scenario_ui'
 require_relative 'lib/step_ui'
-require 'paint'
 
-class ScenarioUI
-  def initialize(output)
-    @output = output
+task :all do
+  list = ScenariosList.new('./scenarios')
+  step_ui = StepUI.new(STDOUT)
+  scenario_ui = ScenarioUI.new(STDOUT, step_ui: step_ui)
+
+  list.scenarios.each do |scenario|
+    ScenarioRunner.new(scenario, ui: scenario_ui).call
   end
-
-  def scenario_started(scenario)
-    output.print Paint["- #{scenario.name}", :bold]
-    output.print ' '
-  end
-
-  private
-
-  attr_reader :output
 end
 
 task :default do
