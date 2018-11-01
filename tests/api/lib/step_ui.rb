@@ -1,21 +1,19 @@
 require 'paint'
 require 'tty-pager'
 
-class VerboseStepFormatter
+class StepUI
   def initialize(output)
     @output = output
   end
 
-  def step_started(step)
-    output.print "--- #{step.name}: "
-  end
+  def step_started(*) end
 
   def step_ok(step)
-    output.puts Paint["OK", :green]
+    output.print Paint['.', :green]
   end
 
   def step_failed(step)
-    output.puts Paint["FAILED", :red]
+    output.puts Paint['F', :red]
   end
 
   def step_diff(step, diff, request, response)

@@ -1,6 +1,6 @@
 require 'diffy'
 require 'tty-reader'
-require_relative 'verbose_step_formatter'
+require_relative 'step_ui'
 require_relative 'request_dumper'
 require_relative 'request_parser'
 require_relative 'response_dumper'
@@ -9,9 +9,9 @@ require_relative 'request_executor'
 require_relative 'octo_mafia_response'
 
 class StepRunner
-  def initialize(step, formatter: VerboseStepFormatter.new(STDOUT))
+  def initialize(step, ui: StepUI.new(STDOUT))
     @step = step
-    @formatter = formatter
+    @ui = ui
   end
 
   def call
@@ -28,28 +28,28 @@ class StepRunner
     actual_response_string = dumper.to_s
     diff = Diffy::Diff.new(response_string, actual_response_string)
 
-    formatter.step_started(step)
+    ui.step_started(step)
 
     if diff.none?
-      formatter.step_ok(step)
+      ui.step_ok(step)
     else
-      formatter.step_failed(step)
-      formatter.step_diff(step, diff, request, response)
+      ui.step_failed(step)
+      ui.step_diff(step, diff, request, response)
 
-      if formatter.ask_to_cache(step, diff, request, response)
+      if ui.ask_to_cache(step, diff, request, response)
         File.open(response_path, 'wb') { |f| f.write(actual_response_string) }
-        formatter.step_cached
+        ui.step_cached
       else
-        formatter.exiting
+        ui.exiting
         exit 1
       end
-      formatter.step_ended
+      ui.step_ended
     end
   end
 
   private
 
-  attr_reader :step, :formatter
+  attr_reader :step, :ui
 
   def request_path
     step.request_path
