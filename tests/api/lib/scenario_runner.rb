@@ -1,3 +1,5 @@
+require_relative 'step_runner'
+
 class ScenarioRunner
   def initialize(scenario, ui:)
     @scenario = scenario
@@ -10,6 +12,8 @@ class ScenarioRunner
     scenario.steps.each do |step|
       StepRunner.new(step, ui: ui.step_ui).call
     end
+
+    ui.scenario_ended(scenario)
   end
 
   private

@@ -1,6 +1,6 @@
 require 'pry'
 require_relative 'lib/scenarios_list'
-require_relative 'lib/step_runner'
+require_relative 'lib/scenario_runner'
 require_relative 'lib/scenario_ui'
 require_relative 'lib/step_ui'
 
@@ -9,7 +9,7 @@ task :all do
   step_ui = StepUI.new(STDOUT)
   scenario_ui = ScenarioUI.new(STDOUT, step_ui: step_ui)
 
-  list.scenarios.each do |scenario|
+  list.all.each do |scenario|
     ScenarioRunner.new(scenario, ui: scenario_ui).call
   end
 end

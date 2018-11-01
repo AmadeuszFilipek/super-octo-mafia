@@ -13,6 +13,10 @@ class ScenarioUI
     output.print ' '
   end
 
+  def scenario_ended(scenario)
+    output.puts
+  end
+
   private
 
   attr_reader :output
