@@ -17,8 +17,14 @@ class StepUI
   end
 
   def show_diff(step, diff, request, response)
+    content_to_page = [
+      "Response for "+ Paint[step.name, :yellow],
+      '',
+      diff.to_s(:color)
+    ]
+
     tty_pager = TTY::Pager::SystemPager.new command: 'less -R'
-    tty_pager.page(diff.to_s(:color))
+    tty_pager.page(content_to_page.join("\n"))
 
     output.puts
     output.puts diff.to_s(:color)
