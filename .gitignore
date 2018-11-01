@@ -2,3 +2,4 @@ __pycache__
 node_modules
 tmp/
 *.pyc
+backend_python/state_machine.log
