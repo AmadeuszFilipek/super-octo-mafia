@@ -1,0 +1,46 @@
+HTTP/1.0 422 Unprocessable Entity
+Content-Type: application/json
+
+{
+  "is_ready_to_start": true,
+  "players": {
+    "civil1": {
+      "character": "civil",
+      "is_alive": true,
+      "is_host": false,
+      "name": "civil1"
+    },
+    "civil2": {
+      "character": "civil",
+      "is_alive": true,
+      "is_host": false,
+      "name": "civil2"
+    },
+    "civil3": {
+      "character": "civil",
+      "is_alive": true,
+      "is_host": false,
+      "name": "civil3"
+    },
+    "hostessa": {
+      "character": "civil",
+      "is_alive": true,
+      "is_host": true,
+      "name": "hostessa"
+    },
+    "mafioso": {
+      "character": "mafia",
+      "is_alive": true,
+      "is_host": false,
+      "name": "mafioso"
+    }
+  },
+  "slug": "Swiebodzin",
+  "state": {
+    "id": "day_voting",
+    "started_at": null
+  },
+  "version": null,
+  "votes": {
+  }
+}

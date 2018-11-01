@@ -2,6 +2,7 @@ from flask import request
 from flask import send_from_directory
 from backend_python.backend.game import Game
 from backend_python import app, app_state
+from backend_python.backend.town import *
 
 def find_game(slug):
     try:
@@ -86,9 +87,12 @@ def endpoint_vote(slug):
     game = find_game(slug)
     
     vote = request.json['vote']
-    game.vote(vote['voterName'], vote['voteeName'])
-
-    return game.jversonify()
+    try:
+        game.vote(vote['voterName'], vote['voteeName'])
+        return game.jversonify()
+    except (CannotVoteOnSelfException, NonExistingVoterException, \
+        NonExistingVoteeException, DeadVoterException, DeadVoteeException):
+        return game.jversonify(), 422
 
 
 class GameDoesNotExistException(Exception): pass

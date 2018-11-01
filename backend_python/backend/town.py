@@ -38,6 +38,8 @@ class Town(object):
             raise NonExistingVoterException
         if voteeName not in self.players:
             raise NonExistingVoteeException
+        if voterName == voteeName:
+            raise CannotVoteOnSelfException
         if not self.players[voterName].is_alive:
             raise DeadVoterException
         if not self.players[voteeName].is_alive:
@@ -125,6 +127,8 @@ class TownDoesNotExistException(Exception): pass
 class NonExistingVoterException(Exception): pass
 
 class NonExistingVoteeException(Exception): pass
+
+class CannotVoteOnSelfException(Exception): pass
 
 class DeadVoterException(Exception): pass
 
