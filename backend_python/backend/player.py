@@ -13,6 +13,8 @@ class Player(object):
         return self.__dict__
 
     def kill(self):
+        if not self.is_alive:
+            raise KillingDeadPlayerException('Player %s is already dead.' % self.name)
         self.is_alive = False
 
     def set_character(self, character):
@@ -21,5 +23,6 @@ class Player(object):
         else:
             raise CharacterNotSupportedException
 
-class CharacterNotSupportedException(Exception):
-    pass
+class CharacterNotSupportedException(Exception): pass
+
+class KillingDeadPlayerException(Exception): pass

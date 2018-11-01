@@ -40,7 +40,6 @@ Content-Type: application/json
     "id": "day_voting",
     "started_at": null
   },
-  "state_live_time": 5,
   "version": null,
   "votes": {
     "civil1": "mafioso",
