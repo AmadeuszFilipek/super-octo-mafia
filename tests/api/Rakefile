@@ -4,25 +4,12 @@ require_relative 'lib/scenario_runner'
 require_relative 'lib/scenario_ui'
 require_relative 'lib/step_ui'
 
-task :all do
+task :default do
   list = ScenariosList.new('./scenarios')
   step_ui = StepUI.new(STDOUT)
   scenario_ui = ScenarioUI.new(STDOUT, step_ui: step_ui)
 
   list.all.each do |scenario|
     ScenarioRunner.new(scenario, ui: scenario_ui).call
-  end
-end
-
-task :default do
-  list = ScenariosList.new('./scenarios')
-  scenario = list.all.first
-
-  scenario_ui = ScenarioUI.new(STDOUT)
-  step_ui = StepUI.new(STDOUT)
-
-  scenario_ui.scenario_started(scenario)
-  scenario.steps.each do |step|
-    StepRunner.new(step, ui: step_ui).call
   end
 end
