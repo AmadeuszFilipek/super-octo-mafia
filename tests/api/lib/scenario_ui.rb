@@ -8,12 +8,12 @@ class ScenarioUI
     @step_ui = step_ui
   end
 
-  def scenario_started(scenario)
+  def started(scenario)
     output.print Paint["- #{scenario.name}", :bold]
     output.print ' '
   end
 
-  def scenario_ended(scenario)
+  def ended(scenario)
     output.puts
   end
 

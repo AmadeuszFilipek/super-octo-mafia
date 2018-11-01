@@ -28,13 +28,13 @@ class StepRunner
     actual_response_string = dumper.to_s
     diff = Diffy::Diff.new(response_string, actual_response_string)
 
-    ui.step_started(step)
+    ui.started(step)
 
     if diff.none?
-      ui.step_ok(step)
+      ui.ok(step)
     else
-      ui.step_failed(step)
-      ui.step_diff(step, diff, request, response)
+      ui.failed(step)
+      ui.show_diff(step, diff, request, response)
 
       if ui.ask_to_cache(step, diff, request, response)
         File.open(response_path, 'wb') { |f| f.write(actual_response_string) }

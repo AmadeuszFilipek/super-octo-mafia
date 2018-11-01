@@ -6,17 +6,17 @@ class StepUI
     @output = output
   end
 
-  def step_started(*) end
+  def started(*) end
 
-  def step_ok(step)
+  def ok(step)
     output.print Paint['.', :green]
   end
 
-  def step_failed(step)
+  def failed(step)
     output.puts Paint['F', :red]
   end
 
-  def step_diff(step, diff, request, response)
+  def show_diff(step, diff, request, response)
     tty_pager = TTY::Pager::SystemPager.new command: 'less -R'
     tty_pager.page(diff.to_s(:color))
 

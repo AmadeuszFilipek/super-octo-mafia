@@ -7,13 +7,13 @@ class ScenarioRunner
   end
 
   def call
-    ui.scenario_started(scenario)
+    ui.started(scenario)
 
     scenario.steps.each do |step|
       StepRunner.new(step, ui: ui.step_ui).call
     end
 
-    ui.scenario_ended(scenario)
+    ui.ended(scenario)
   end
 
   private
