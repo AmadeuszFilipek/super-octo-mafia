@@ -3,12 +3,15 @@ try:
 except ModuleNotFoundError:
     from player import Player
 
-from datetime import datetime
-from random import sample, choice
-from math import floor, ceil
 import code
+from datetime import datetime
+from math import ceil, floor
+from random import choice, sample
+
 
 class Town(object):
+
+    MAFIA_RATIO = 0.25
 
     def __init__(self, slug):
 
@@ -61,7 +64,7 @@ class Town(object):
                 player.set_character(backdoor_players[player.name])
 
             else:
-                number_of_mafia = floor(len(self.players.keys()) * 0.25)
+                number_of_mafia = floor(len(self.players.keys()) * self.MAFIA_RATIO)
 
                 for player in sample(self.players.values(), number_of_mafia):
                     player.set_character('mafia')
@@ -124,14 +127,14 @@ class Town(object):
 
 class TownDoesNotExistException(Exception): pass
 
-class NonExistingVoterException(Exception): pass
+class VoteException(Exception): pass
 
-class NonExistingVoteeException(Exception): pass
+class NonExistingVoterException(VoteException): pass
 
-class CannotVoteOnSelfException(Exception): pass
+class NonExistingVoteeException(VoteException): pass
 
-class DeadVoterException(Exception): pass
+class CannotVoteOnSelfException(VoteException): pass
 
-class DeadVoteeException(Exception): pass
+class DeadVoterException(VoteException): pass
 
-
+class DeadVoteeException(VoteException): pass

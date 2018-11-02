@@ -1,0 +1,13 @@
+POST /api/towns/Swiebodzin/start
+Content-Type: application/json
+
+{
+    "hostessa": "civil",
+    "civil1": "civil",
+    "civil2": "civil",
+    "civil3": "civil",
+    "civil4": "civil",
+    "civil5": "civil",
+    "mafioso1": "mafia",
+    "mafioso2": "mafia"
+}

@@ -1,8 +1,8 @@
 from flask import request
 from flask import send_from_directory
-from backend_python.backend.game import Game
+from backend_python.backend.game import Game, WrongStateException
 from backend_python import app, app_state
-from backend_python.backend.town import *
+from backend_python.backend.town import VoteException
 
 def find_game(slug):
     try:
@@ -90,8 +90,7 @@ def endpoint_vote(slug):
     try:
         game.vote(vote['voterName'], vote['voteeName'])
         return game.jversonify()
-    except (CannotVoteOnSelfException, NonExistingVoterException, \
-        NonExistingVoteeException, DeadVoterException, DeadVoteeException):
+    except (VoteException, WrongStateException):
         return game.jversonify(), 422
 
 

@@ -1,0 +1,9 @@
+POST /api/towns/Swiebodzin/votes
+Content-Type: application/json
+
+{
+  "vote": {
+    "voterName": "hostessa",
+    "voteeName": "mafioso1"
+  }
+}

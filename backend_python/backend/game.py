@@ -168,8 +168,8 @@ class Game(object):
             raise NotInWaitingForPlayersStateException
         self.town.add_player(player, is_host)
 
+class WrongStateException(Exception): pass
 
-class NotInWaitingForPlayersStateException(Exception): pass
+class NotInWaitingForPlayersStateException(WrongStateException): pass
 
-
-class NotInVotingStateException(Exception): pass
+class NotInVotingStateException(WrongStateException): pass
