@@ -8,7 +8,7 @@ def find_game(slug):
     try:
         return app_state[slug]
     except KeyError:
-        return None
+        raise GameDoesNotExistException
 
 
 
@@ -21,10 +21,11 @@ def endpoint_index(path = None):
 
 @app.route('/api/towns', methods=['POST'])
 def endpoint_create_game():
-    game = find_game(request.json['town']['slug'])
+    try:
+        game = find_game(request.json['town']['slug'])
 
-    if not game:
-        game = Game(request.json['town']['slug'])
+    except GameDoesNotExistException:
+        game = Game(request.json['town']['slug'], request.json['options'])
         game.add_player(request.json['player']['name'], True)
 
         app.logger.info('new town = ' + str(game.jversonify()))
@@ -40,11 +41,15 @@ def endpoint_create_game():
 def endpoint_show_game(slug):
     game = find_game(slug)
 
-    if game is None:
-        raise GameDoesNotExistException
+    return game.jversonify()
 
+
+
+@app.route('/api/towns/<slug>/progress', methods=['PUT'])
+def endpoint_progress(slug):
+    game = find_game(slug)   
     game.next_state_maybe()
-
+    
     return game.jversonify()
 
 

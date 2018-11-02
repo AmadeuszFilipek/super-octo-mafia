@@ -19,9 +19,8 @@ class Game(object):
     initial_state = 'waiting_for_players'
     timed_states = ['day_voting', 'day_results', 'night_voting', 'night_results']
     voting_states = ['day_voting', 'night_voting']
-    state_ttl = 5
 
-    def __init__(self, slug):
+    def __init__(self, slug, options={}):
         self.town = Town(slug)
         self.status = {}
         self.version = datetime.now().timestamp()
@@ -133,21 +132,18 @@ class Game(object):
         self.town.vote(voterName, voteeName)
 
 
-    def is_state_outdated(self):
-        return self.status['started_at'] + Game.state_ttl < self.version
-
     def can_game_continue(self, *args, **kwargs):
         winners = self.town.get_winner()
         return (winners is None)
 
     def can_progress(self, *args, **kwargs):
-        return self.is_state_outdated() or self.town.is_voting_finished()
+        return self.town.is_voting_finished()
 
     def next_state_maybe(self):
         if self.state in Game.voting_states:
             self.t_execute_vote()
         else:
-            self.t_progress()      
+            self.t_progress()
 
     def end_game_maybe(self):
         if not self.can_game_continue(): 
