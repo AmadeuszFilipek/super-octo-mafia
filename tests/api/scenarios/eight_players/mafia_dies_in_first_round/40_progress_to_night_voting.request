@@ -1,0 +1,3 @@
+PUT /api/towns/Swiebodzin/progress
+Content-Type: application/json
+
