@@ -1,24 +1,23 @@
 require 'paint'
 require 'tty-pager'
+require_relative 'base_ui'
+require_relative 'errors'
 
-class StepUI
-  def initialize(output)
-    @output = output
+class InteractiveUI < BaseUI
+  def scenario_started(scenario)
+    output.print Paint["- #{scenario.name}", :bold]
+    output.print ' '
   end
 
-  def started(*) end
-
-  def ok(step)
+  def step_ok(step)
     output.print Paint['.', :green]
   end
 
-  def failed(step)
+  def step_response_differs(step, diff, request, response)
     output.puts Paint['F', :red]
-  end
 
-  def show_diff(step, diff, request, response)
     content_to_page = [
-      "Response for "+ Paint[step.name, :yellow],
+      "Response for " + Paint[step.name, :yellow],
       '',
       diff.to_s(:color)
     ]
@@ -38,12 +37,18 @@ class StepUI
     tty_reader.read_char.downcase == 'y'
   end
 
-  def step_cached
-    output.puts Paint["---> cached", :green]
+  def step_failed(_step)
+    output.puts
+    output.puts
+    raise StepFailed
   end
 
-  def exiting
-    output.puts Paint['Exiting!', :red]
+  def scenario_ended(_scenario)
+    output.puts
+  end
+
+  def step_cached
+    output.puts Paint["---> cached", :green]
   end
 
   def step_ended
@@ -52,9 +57,8 @@ class StepUI
 
   private
 
-  attr_reader :output
-
   def tty_reader
     @tty_reader ||= TTY::Reader.new
   end
 end
+

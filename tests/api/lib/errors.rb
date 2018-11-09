@@ -1,0 +1,2 @@
+
+StepFailed = Class.new(RuntimeError)
