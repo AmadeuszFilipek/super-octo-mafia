@@ -1,9 +1,10 @@
-from flask import request
-from flask import send_from_directory
-from flask import jsonify
-from backend_python.backend.game import Game, WrongStateException
-from backend_python import app, app_state
-from backend_python.backend.town import VoteException
+from flask import request, send_from_directory, jsonify, Flask
+from game import Game, WrongStateException
+# from backend import app, app_state
+from town import VoteException
+
+app = Flask(__name__)
+app_state = {}
 
 def find_game(slug):
     try:
@@ -108,3 +109,5 @@ class GameAlreadyExistException(Exception): pass
 def exception_handler(error):
     return jsonify({'error': error.__class__.__name__}), 422
 
+
+app.run()
