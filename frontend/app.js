@@ -50,7 +50,7 @@ function init() {
       },
 
       api() {
-        return new ApiClient({ pathPrefix: 'http://localhost:5000/' });
+        return new ApiClient({ pathPrefix: 'http://127.0.0.1:5000/' });
       },
     },
 

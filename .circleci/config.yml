@@ -38,11 +38,18 @@ jobs:
             pip install -r requirements.txt
 
       - run:
+<<<<<<< HEAD
           name: start server in background
           background: true
           command: |
               cd backend_python
               ./run_server
+=======
+        name: start server in background
+        background: true
+        command: |
+            cd backend_python && ./run_server 2>&1 >/dev/null
+>>>>>>> 646dbbd... Add simple `.circleci/config.yml`
 
       - run:
           name: start server and run tests

@@ -5,7 +5,7 @@ from datetime import datetime
 from flask import jsonify
 from transitions import Machine, State, Transition
 
-log_handler = logging.FileHandler('log/state_machine.log')
+log_handler = logging.FileHandler('state_machine.log')
 log_handler.setLevel(logging.DEBUG)
 log_handler.setFormatter(logging.Formatter('%(asctime)-15s %(message)s'))
 
