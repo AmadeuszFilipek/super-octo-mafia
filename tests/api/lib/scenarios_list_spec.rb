@@ -1,4 +1,3 @@
-require 'pry'
 require_relative 'scenarios_list'
 
 describe ScenariosList do
