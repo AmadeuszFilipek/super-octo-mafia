@@ -36,19 +36,25 @@ class Town(object):
         self.check_ready_to_start()
 
 
-    def vote(self, voterName, voteeName):
-        if voterName not in self.players:
+    def get_player_character(self, name):
+        return self.players[name].character
+
+
+    def vote(self, voter_name, votee_name, is_night_vote=False):
+        if voter_name not in self.players:
             raise NonExistingVoterException
-        if voteeName not in self.players:
+        if votee_name not in self.players:
             raise NonExistingVoteeException
-        if voterName == voteeName:
+        if voter_name == votee_name:
             raise CannotVoteOnSelfException
-        if not self.players[voterName].is_alive:
+        if is_night_vote and self.players[voter_name].character != 'mafia':
+            raise OnlyMafiaCanVoteAtNightException
+        if not self.players[voter_name].is_alive:
             raise DeadVoterException
-        if not self.players[voteeName].is_alive:
+        if not self.players[votee_name].is_alive:
             raise DeadVoteeException
 
-        self.votes[voterName] = voteeName
+        self.votes[voter_name] = votee_name
 
 
     def check_ready_to_start(self):
@@ -92,8 +98,13 @@ class Town(object):
         return self.players[voteeWithMaxVotes]
 
 
-    def is_voting_finished(self):
-        return len(self.votes) == len(self.players) and len(self.players) > 0
+    def is_voting_finished(self, is_night_vote=False):
+        if is_night_vote:
+            number_of_voters = [p for p in self.players.values() if p.is_alive and p.character == 'mafia']
+        else:
+            number_of_voters = len([p for p in self.players.values() if p.is_alive])
+
+        return len(self.votes) == number_of_voters
 
 
     def clear_vote_pool(self):
@@ -124,8 +135,6 @@ class Town(object):
         return winner
 
 
-class TownDoesNotExistException(Exception): pass
-
 class VoteException(Exception): pass
 
 class NonExistingVoterException(VoteException): pass
@@ -137,3 +146,5 @@ class CannotVoteOnSelfException(VoteException): pass
 class DeadVoterException(VoteException): pass
 
 class DeadVoteeException(VoteException): pass
+
+class OnlyMafiaCanVoteAtNightException(VoteException): pass

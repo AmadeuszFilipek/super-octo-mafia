@@ -1,5 +1,6 @@
 from flask import request
 from flask import send_from_directory
+from flask import jsonify
 from backend_python.backend.game import Game, WrongStateException
 from backend_python import app, app_state
 from backend_python.backend.town import VoteException
@@ -25,7 +26,7 @@ def endpoint_create_game():
         game = find_game(request.json['town']['slug'])
 
     except GameDoesNotExistException:
-        game = Game(request.json['town']['slug'], request.json['options'])
+        game = Game(request.json['town']['slug'])
         game.add_player(request.json['player']['name'], True)
 
         app.logger.info('new town = ' + str(game.jversonify()))
@@ -48,7 +49,7 @@ def endpoint_show_game(slug):
 @app.route('/api/towns/<slug>/progress', methods=['PUT'])
 def endpoint_progress(slug):
     game = find_game(slug)   
-    game.next_state_maybe()
+    game.progress()
     
     return game.jversonify()
 
@@ -92,11 +93,14 @@ def endpoint_vote(slug):
     game = find_game(slug)
     
     vote = request.json['vote']
-    try:
-        game.vote(vote['voterName'], vote['voteeName'])
-        return game.jversonify()
-    except (VoteException, WrongStateException):
-        return game.jversonify(), 422
+    game.vote(vote['voterName'], vote['voteeName'])
+
+    return game.jversonify()
 
 
+
+@app.errorhandler(VoteException)
+def exception_handler(error):
+    return jsonify({'error': error.__class__.__name__}), 422
+   
 class GameDoesNotExistException(Exception): pass
