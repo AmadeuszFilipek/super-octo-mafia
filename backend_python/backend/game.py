@@ -20,7 +20,7 @@ class Game(object):
     timed_states = ['day_voting', 'day_results', 'night_voting', 'night_results']
     voting_states = ['day_voting', 'night_voting']
 
-    def __init__(self, slug, options={}):
+    def __init__(self, slug):
         self.town = Town(slug)
         self.status = {}
         self.version = datetime.now().timestamp()
@@ -65,28 +65,24 @@ class Game(object):
                 'trigger': 't_execute_vote',
                 'source': 'day_voting',
                 'dest': 'day_results',
-                'conditions': None,
                 'after': self.end_game_maybe,
             })
         transitions.append({
                 'trigger': 't_progress',
                 'source': 'day_results',
                 'dest': 'night_voting',
-                'conditions': None,
                 'before': self.clear_vote_pool,
             })
         transitions.append({
                 'trigger': 't_execute_vote',
                 'source': 'night_voting',
                 'dest': 'night_results',
-                'conditions': None,
                 'after': self.end_game_maybe, 
             })
         transitions.append({
                 'trigger': 't_progress',
                 'source': 'night_results',
                 'dest': 'day_voting',
-                'conditions': None,
                 'before': self.clear_vote_pool,
             })
         transitions.append({
