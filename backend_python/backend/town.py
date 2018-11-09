@@ -95,12 +95,15 @@ class Town(object):
                 voteeWithMaxVotes = voteeName
                 maxVotes = voteCounts
 
+        if voteeWithMaxVotes is None:
+            raise EmptyVotePoolException
+            
         return self.players[voteeWithMaxVotes]
 
 
     def is_voting_finished(self, is_night_vote=False):
         if is_night_vote:
-            number_of_voters = [p for p in self.players.values() if p.is_alive and p.character == 'mafia']
+            number_of_voters = len([p for p in self.players.values() if p.is_alive and p.character == 'mafia'])
         else:
             number_of_voters = len([p for p in self.players.values() if p.is_alive])
 
@@ -148,3 +151,5 @@ class DeadVoterException(VoteException): pass
 class DeadVoteeException(VoteException): pass
 
 class OnlyMafiaCanVoteAtNightException(VoteException): pass
+
+class EmptyVotePoolException(VoteException): pass

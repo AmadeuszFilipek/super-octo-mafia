@@ -42,7 +42,7 @@ Content-Type: application/json
     },
     "mafioso1": {
       "character": "mafia",
-      "is_alive": true,
+      "is_alive": false,
       "is_host": false,
       "name": "mafioso1"
     },
@@ -55,7 +55,8 @@ Content-Type: application/json
   },
   "slug": "Swiebodzin",
   "state": {
-    "id": "day_voting",
+    "id": "day_results",
+    "killed_player": "mafioso1",
     "started_at": null
   },
   "version": null,

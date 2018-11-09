@@ -72,7 +72,7 @@ class Game(object):
                 'trigger': 't_progress',
                 'source': 'day_results',
                 'dest': 'night_voting',
-                'conditions': self.can_progress,
+                'conditions': None,
                 'before': self.clear_vote_pool,
             })
         transitions.append({
@@ -86,7 +86,7 @@ class Game(object):
                 'trigger': 't_progress',
                 'source': 'night_results',
                 'dest': 'day_voting',
-                'conditions': self.can_progress,
+                'conditions': None,
                 'before': self.clear_vote_pool,
             })
         transitions.append({
