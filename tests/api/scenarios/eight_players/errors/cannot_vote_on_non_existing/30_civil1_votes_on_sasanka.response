@@ -1,0 +1,6 @@
+HTTP/1.0 422 Unprocessable Entity
+Content-Type: application/json
+
+{
+  "error": "NonExistingVoteeException"
+}

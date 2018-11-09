@@ -3,12 +3,15 @@ try:
 except ModuleNotFoundError:
     from player import Player
 
-from datetime import datetime
-from random import sample, choice
-from math import floor, ceil
 import code
+from datetime import datetime
+from math import ceil, floor
+from random import choice, sample
+
 
 class Town(object):
+
+    MAFIA_RATIO = 0.25
 
     def __init__(self, slug):
 
@@ -33,17 +36,25 @@ class Town(object):
         self.check_ready_to_start()
 
 
-    def vote(self, voterName, voteeName):
-        if voterName not in self.players:
+    def get_player_character(self, name):
+        return self.players[name].character
+
+
+    def vote(self, voter_name, votee_name, is_night_vote=False):
+        if voter_name not in self.players:
             raise NonExistingVoterException
-        if voteeName not in self.players:
+        if votee_name not in self.players:
             raise NonExistingVoteeException
-        if not self.players[voterName].is_alive:
+        if voter_name == votee_name:
+            raise CannotVoteOnSelfException
+        if is_night_vote and self.players[voter_name].character != 'mafia':
+            raise OnlyMafiaCanVoteAtNightException
+        if not self.players[voter_name].is_alive:
             raise DeadVoterException
-        if not self.players[voteeName].is_alive:
+        if not self.players[votee_name].is_alive:
             raise DeadVoteeException
 
-        self.votes[voterName] = voteeName
+        self.votes[voter_name] = votee_name
 
 
     def check_ready_to_start(self):
@@ -59,7 +70,7 @@ class Town(object):
                 player.set_character(backdoor_players[player.name])
 
             else:
-                number_of_mafia = floor(len(self.players.keys()) * 0.25)
+                number_of_mafia = floor(len(self.players.keys()) * self.MAFIA_RATIO)
 
                 for player in sample(self.players.values(), number_of_mafia):
                     player.set_character('mafia')
@@ -72,7 +83,6 @@ class Town(object):
         return player_to_die.name
 
     def resolve_vote(self):
-        # if len(self.votes.keys() == 0) return None
     
         vote_counts = dict.fromkeys(self.votes.values(), 0)
         for voteeName in self.votes.values(): vote_counts[voteeName] += 1
@@ -85,11 +95,19 @@ class Town(object):
                 voteeWithMaxVotes = voteeName
                 maxVotes = voteCounts
 
+        if voteeWithMaxVotes is None:
+            raise EmptyVotePoolException
+            
         return self.players[voteeWithMaxVotes]
 
 
-    def is_voting_finished(self):
-        return len(self.votes) == len(self.players) and len(self.players) > 0
+    def is_voting_finished(self, is_night_vote=False):
+        if is_night_vote:
+            number_of_voters = len([p for p in self.players.values() if p.is_alive and p.character == 'mafia'])
+        else:
+            number_of_voters = len([p for p in self.players.values() if p.is_alive])
+
+        return len(self.votes) == number_of_voters
 
 
     def clear_vote_pool(self):
@@ -120,14 +138,18 @@ class Town(object):
         return winner
 
 
-class TownDoesNotExistException(Exception): pass
+class VoteException(Exception): pass
 
-class NonExistingVoterException(Exception): pass
+class NonExistingVoterException(VoteException): pass
 
-class NonExistingVoteeException(Exception): pass
+class NonExistingVoteeException(VoteException): pass
 
-class DeadVoterException(Exception): pass
+class CannotVoteOnSelfException(VoteException): pass
 
-class DeadVoteeException(Exception): pass
+class DeadVoterException(VoteException): pass
 
+class DeadVoteeException(VoteException): pass
 
+class OnlyMafiaCanVoteAtNightException(VoteException): pass
+
+class EmptyVotePoolException(VoteException): pass

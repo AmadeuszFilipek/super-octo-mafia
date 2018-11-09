@@ -28,11 +28,11 @@ Content-Type: application/json
       "is_host": true,
       "name": "hostessa"
     },
-    "mafioso": {
+    "mafioso1": {
       "character": "civil",
       "is_alive": true,
       "is_host": false,
-      "name": "mafioso"
+      "name": "mafioso1"
     }
   },
   "slug": "Swiebodzin",

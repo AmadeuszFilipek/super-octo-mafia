@@ -10,23 +10,17 @@ Content-Type: application/json
       "is_host": false,
       "name": "civil1"
     },
-    "civil2": {
-      "character": "civil",
-      "is_alive": true,
-      "is_host": false,
-      "name": "civil2"
-    },
     "hostessa": {
       "character": "civil",
       "is_alive": true,
       "is_host": true,
       "name": "hostessa"
     },
-    "mafioso": {
+    "mafioso1": {
       "character": "civil",
       "is_alive": true,
       "is_host": false,
-      "name": "mafioso"
+      "name": "mafioso1"
     }
   },
   "slug": "Swiebodzin",

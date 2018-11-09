@@ -19,7 +19,6 @@ class Game(object):
     initial_state = 'waiting_for_players'
     timed_states = ['day_voting', 'day_results', 'night_voting', 'night_results']
     voting_states = ['day_voting', 'night_voting']
-    state_ttl = 5
 
     def __init__(self, slug):
         self.town = Town(slug)
@@ -66,29 +65,25 @@ class Game(object):
                 'trigger': 't_execute_vote',
                 'source': 'day_voting',
                 'dest': 'day_results',
-                'conditions': self.can_progress,
                 'after': self.end_game_maybe,
             })
         transitions.append({
                 'trigger': 't_progress',
                 'source': 'day_results',
                 'dest': 'night_voting',
-                'conditions': self.can_progress,
-                'before': self.progress,
+                'before': self.clear_vote_pool,
             })
         transitions.append({
-                'trigger': 't_progress',
+                'trigger': 't_execute_vote',
                 'source': 'night_voting',
                 'dest': 'night_results',
-                'conditions': self.can_progress,
                 'after': self.end_game_maybe, 
             })
         transitions.append({
                 'trigger': 't_progress',
                 'source': 'night_results',
                 'dest': 'day_voting',
-                'conditions': self.can_progress,
-                'before': self.progress,
+                'before': self.clear_vote_pool,
             })
         transitions.append({
                 'trigger': 't_end_game',
@@ -121,7 +116,7 @@ class Game(object):
     def execute_vote(self, *args, **kwargs):
         self.status['killed_player'] = self.town.execute_vote()
 
-    def progress(self, *args, **kwargs):
+    def clear_vote_pool(self, *args, **kwargs):
         self.town.clear_vote_pool()
 
     def end_game(self, *args, **kwargs):
@@ -130,24 +125,22 @@ class Game(object):
     def vote(self, voterName, voteeName):
         if self.state not in Game.voting_states:
             raise NotInVotingStateException
-        self.town.vote(voterName, voteeName)
 
+        is_night_vote = (self.state == 'night_voting')
+        self.town.vote(voterName, voteeName, is_night_vote)     
 
-    def is_state_outdated(self):
-        return self.status['started_at'] + Game.state_ttl < self.version
+        if self.town.is_voting_finished(is_night_vote):
+            self.t_execute_vote()
 
     def can_game_continue(self, *args, **kwargs):
         winners = self.town.get_winner()
         return (winners is None)
 
-    def can_progress(self, *args, **kwargs):
-        return self.is_state_outdated() or self.town.is_voting_finished()
-
-    def next_state_maybe(self):
+    def progress(self):
         if self.state in Game.voting_states:
             self.t_execute_vote()
         else:
-            self.t_progress()      
+            self.t_progress()
 
     def end_game_maybe(self):
         if not self.can_game_continue(): 
@@ -168,8 +161,8 @@ class Game(object):
             raise NotInWaitingForPlayersStateException
         self.town.add_player(player, is_host)
 
+class WrongStateException(Exception): pass
 
-class NotInWaitingForPlayersStateException(Exception): pass
+class NotInWaitingForPlayersStateException(WrongStateException): pass
 
-
-class NotInVotingStateException(Exception): pass
+class NotInVotingStateException(WrongStateException): pass

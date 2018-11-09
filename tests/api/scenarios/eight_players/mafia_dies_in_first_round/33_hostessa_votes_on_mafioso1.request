@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "vote": {
-    "voterName": "civil2",
-    "voteeName": "mafioso"
+    "voterName": "hostessa",
+    "voteeName": "mafioso1"
   }
 }

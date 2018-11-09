@@ -6,5 +6,8 @@ Content-Type: application/json
     "civil1": "civil",
     "civil2": "civil",
     "civil3": "civil",
-    "mafioso": "mafia"
+    "civil4": "civil",
+    "civil5": "civil",
+    "mafioso1": "mafia",
+    "mafioso2": "mafia"
 }
