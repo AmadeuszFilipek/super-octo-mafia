@@ -1,6 +1,5 @@
 require 'diffy'
 require 'tty-reader'
-require_relative 'step_ui'
 require_relative 'request_dumper'
 require_relative 'request_parser'
 require_relative 'response_dumper'
@@ -28,22 +27,20 @@ class StepRunner
     actual_response_string = dumper.to_s
     diff = Diffy::Diff.new(response_string, actual_response_string)
 
-    ui.started(step)
+    ui.step_started(step)
 
     if diff.none?
-      ui.ok(step)
+      ui.step_ok(step)
     else
-      ui.failed(step)
-      ui.show_diff(step, diff, request, response)
+      ui.step_response_differs(step, diff, request, response)
 
       if ui.ask_to_cache(step, diff, request, response)
         File.open(response_path, 'wb') { |f| f.write(actual_response_string) }
-        ui.step_cached
+        ui.step_cached(step)
       else
-        ui.exiting
-        exit 1
+        ui.step_failed(step)
       end
-      ui.step_ended
+      ui.step_ended(step)
     end
   end
 
