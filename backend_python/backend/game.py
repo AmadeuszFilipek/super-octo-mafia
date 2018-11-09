@@ -1,15 +1,17 @@
 from backend.town import Town
-
 import code
 import logging
 from datetime import datetime
-
 from flask import jsonify
 from transitions import Machine, State, Transition
 
-logging.basicConfig(filename='state_machine.log', level=logging.DEBUG)
-logging.getLogger('transitions').setLevel(logging.DEBUG)
+log_handler = logging.FileHandler('log/state_machine.log')
+log_handler.setLevel(logging.DEBUG)
+log_handler.setFormatter(logging.Formatter('%(asctime)-15s %(message)s'))
 
+logger = logging.getLogger('transitions')
+logger.setLevel(logging.DEBUG)
+logger.handlers = [log_handler]
 
 class Game(object):
 

@@ -30,9 +30,6 @@ def endpoint_create_game():
         game = Game(request.json['town']['slug'])
         game.add_player(request.json['player']['name'], True)
 
-        app.logger.info('new town = ' + str(game.jversonify()))
-        print('New town = ' + str(game.jversonify()))
-
     app_state[request.json['town']['slug']] = game
     return game.jversonify()
 
