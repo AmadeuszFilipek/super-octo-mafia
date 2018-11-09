@@ -5,6 +5,7 @@ require_relative 'lib/logging_ui'
 
 task :default do
   list = ScenariosList.new('./scenarios')
+
   ui = if ENV['CI']
          LoggingUI.new(STDOUT)
        else
