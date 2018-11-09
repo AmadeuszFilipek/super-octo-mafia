@@ -1,7 +1,4 @@
-try:
-    from backend_python.backend.player import Player
-except ModuleNotFoundError:
-    from player import Player
+from backend.player import Player
 
 import code
 from datetime import datetime
@@ -24,7 +21,7 @@ class Town(object):
     def to_dict(self):
         dictionary = self.__dict__.copy()
         dictionary['players'] = {}
-    
+
         for player in self.players.keys():
             dictionary['players'][player] = self.players[player].to_dict()
 
@@ -83,13 +80,13 @@ class Town(object):
         return player_to_die.name
 
     def resolve_vote(self):
-    
+
         vote_counts = dict.fromkeys(self.votes.values(), 0)
         for voteeName in self.votes.values(): vote_counts[voteeName] += 1
-            
+
         voteeWithMaxVotes = None
         maxVotes = 0
-        
+
         for voteeName, voteCounts in vote_counts.items():
             if voteCounts >= maxVotes:
                 voteeWithMaxVotes = voteeName
@@ -97,7 +94,7 @@ class Town(object):
 
         if voteeWithMaxVotes is None:
             raise EmptyVotePoolException
-            
+
         return self.players[voteeWithMaxVotes]
 
 
