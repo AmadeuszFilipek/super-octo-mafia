@@ -24,6 +24,7 @@ def endpoint_index(path = None):
 def endpoint_create_game():
     try:
         game = find_game(request.json['town']['slug'])
+        raise GameAlreadyExistException
 
     except GameDoesNotExistException:
         game = Game(request.json['town']['slug'])
@@ -48,9 +49,9 @@ def endpoint_show_game(slug):
 
 @app.route('/api/towns/<slug>/progress', methods=['PUT'])
 def endpoint_progress(slug):
-    game = find_game(slug)   
+    game = find_game(slug)
     game.progress()
-    
+
     return game.jversonify()
 
 
@@ -91,16 +92,19 @@ def endpoint_start_game(slug):
 @app.route('/api/towns/<slug>/votes', methods=['POST'])
 def endpoint_vote(slug):
     game = find_game(slug)
-    
+
     vote = request.json['vote']
     game.vote(vote['voterName'], vote['voteeName'])
 
     return game.jversonify()
 
-
+class GameDoesNotExistException(Exception): pass
+class GameAlreadyExistException(Exception): pass
 
 @app.errorhandler(VoteException)
+@app.errorhandler(GameDoesNotExistException)
+@app.errorhandler(GameAlreadyExistException)
+@app.errorhandler(WrongStateException)
 def exception_handler(error):
     return jsonify({'error': error.__class__.__name__}), 422
-   
-class GameDoesNotExistException(Exception): pass
+

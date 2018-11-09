@@ -1,0 +1,6 @@
+POST /api/towns/NonExistingTown/players
+Content-Type: application/json
+
+{
+  "player": { "name": "mafioso1" }
+}
