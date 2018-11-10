@@ -1,6 +1,6 @@
 from flask import request, send_from_directory, jsonify, Flask
-from backend.game import Game, WrongStateException
-from backend.town import VoteException
+from backend.game import Game, GameException
+from backend.town import TownException
 
 app = Flask(__name__)
 app_state = {}
@@ -95,13 +95,13 @@ def endpoint_vote(slug):
 
     return game.jversonify()
 
-class GameDoesNotExistException(Exception): pass
-class GameAlreadyExistException(Exception): pass
+class RoutesException(Exception): pass
+class GameDoesNotExistException(RoutesException): pass
+class GameAlreadyExistException(RoutesException): pass
 
-@app.errorhandler(VoteException)
-@app.errorhandler(GameDoesNotExistException)
-@app.errorhandler(GameAlreadyExistException)
-@app.errorhandler(WrongStateException)
+@app.errorhandler(TownException)
+@app.errorhandler(GameException)
+@app.errorhandler(RoutesException)
 def exception_handler(error):
     return jsonify({'error': error.__class__.__name__}), 422
 

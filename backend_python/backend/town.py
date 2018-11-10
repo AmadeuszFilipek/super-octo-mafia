@@ -29,6 +29,8 @@ class Town(object):
 
 
     def add_player(self, name, is_host = False):
+        if name in self.players:
+            raise PlayerAlreadyExistsException
         self.players[name] = Player(name, is_host)
         self.check_ready_to_start()
 
@@ -134,8 +136,11 @@ class Town(object):
 
         return winner
 
+class TownException(Exception): pass
 
-class VoteException(Exception): pass
+class PlayerAlreadyExistsException(TownException): pass
+
+class VoteException(TownException): pass
 
 class NonExistingVoterException(VoteException): pass
 
