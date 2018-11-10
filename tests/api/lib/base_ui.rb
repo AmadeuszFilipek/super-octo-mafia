@@ -41,6 +41,8 @@ class BaseUI
     end
   end
 
+  def exit_with_status; end
+
   private
 
   attr_reader :output, :failed_scenarios

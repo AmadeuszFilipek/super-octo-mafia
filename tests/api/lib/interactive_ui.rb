@@ -42,6 +42,10 @@ class InteractiveUI < BaseUI
     output.puts
   end
 
+  def exit_with_status
+    exit 0
+  end
+
   private
 
   def tty_reader

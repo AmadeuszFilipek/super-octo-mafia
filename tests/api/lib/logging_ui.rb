@@ -19,4 +19,11 @@ class LoggingUI < BaseUI
   def scenario_failed(scenario)
     failed_scenarios.push(scenario)
   end
+
+  def exit_with_status
+    status = 0
+    status = 1 if failed_scenarios.any?
+
+    exit status
+  end
 end
