@@ -38,7 +38,7 @@ class InteractiveUI < BaseUI
     output.puts Paint["---> cached", :green]
   end
 
-  def step_ended
+  def step_ended(_step)
     output.puts
   end
 
