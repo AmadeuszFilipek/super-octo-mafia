@@ -46,7 +46,7 @@ function init() {
       },
 
       canShowStartButton() {
-        return this.isHost && this.appState.is_read_to_start;
+        return this.isHost && this.appState.is_ready_to_start;
       },
 
       api() {
