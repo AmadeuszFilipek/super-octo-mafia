@@ -5,9 +5,6 @@
 version: 2
 jobs:
   build:
-    branches:
-      only:
-        - add-circleci-integration
     docker:
       - image: jumski/super-octo-mafia-circleci:latest
     working_directory: ~/repo

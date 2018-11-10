@@ -34,7 +34,7 @@ class InteractiveUI < BaseUI
     raise StepFailed
   end
 
-  def step_cached
+  def step_cached(_step)
     output.puts Paint["---> cached", :green]
   end
 
