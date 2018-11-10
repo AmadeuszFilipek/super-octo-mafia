@@ -14,29 +14,39 @@ jobs:
     steps:
       - checkout
 
+      # Gemfile
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "tests/api/Gemfile.lock" }}
+          - v1-ruby-dependencies-{{ checksum "tests/api/Gemfile.lock" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
+          - v1-ruby-dependencies-
       - run:
           name: install test dependencies
           command: |
             cd tests/api
             bundle install --jobs=4 --retry=3 --path vendor/bundle
-
       - save_cache:
           paths:
             - ./vendor/bundle
-          key: v1-dependencies-{{ checksum "tests/api/Gemfile.lock" }}
+          key: v1-ruby-dependencies-{{ checksum "tests/api/Gemfile.lock" }}
 
+      # requirements.txt
+      - restore_cache:
+          keys:
+          - v1-python-dependencies-{{ checksum "backend_python/requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-python-dependencies-
       - run:
           name: install python dependencies
           command: |
             cd backend_python
             pip install -r requirements.txt
+      - save_cache:
+          paths:
+            - ~/.pyenv/versions/3.6.4/
+          key: v1-python-dependencies-{{ checksum "backend_python/requirements.txt" }}
 
+      # server
       - run:
 <<<<<<< HEAD
           name: start server in background
@@ -51,6 +61,7 @@ jobs:
             cd backend_python && ./run_server 2>&1 >/dev/null
 >>>>>>> 646dbbd... Add simple `.circleci/config.yml`
 
+      # tests
       - run:
           name: start server and run tests
           command: |
