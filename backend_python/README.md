@@ -1,4 +1,4 @@
-# Mafia
+# Backend in Python using Flask
 
 ## Requirements
 
@@ -17,20 +17,16 @@ pip install -r requirements.txt
 ./run_server
 ```
 
+or
+
+```
+./run_server APP_HOST=127.0.0.1 APP_PORT=9999
+```
+
 ## Freezeing requirements
+
+Please do this after installing some new dependencies.
 
 ```
 pip freeze -r requirements.txt > requirements.txt
 ```
-
-## State machine
-
-![State machine](docs/state_machine.png)
-
-## API
-
-[API](docs/API.md)
-
-## Backend
-
-* Flask "http://flask.pocoo.org/"

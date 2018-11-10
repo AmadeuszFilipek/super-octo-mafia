@@ -1,9 +1,9 @@
-from flask import request
-from flask import send_from_directory
-from flask import jsonify
-from backend_python.backend.game import Game, WrongStateException
-from backend_python import app, app_state
-from backend_python.backend.town import VoteException
+from flask import request, send_from_directory, jsonify, Flask
+from backend.game import Game, WrongStateException
+from backend.town import VoteException
+
+app = Flask(__name__)
+app_state = {}
 
 def find_game(slug):
     try:
@@ -29,9 +29,6 @@ def endpoint_create_game():
     except GameDoesNotExistException:
         game = Game(request.json['town']['slug'])
         game.add_player(request.json['player']['name'], True)
-
-        app.logger.info('new town = ' + str(game.jversonify()))
-        print('New town = ' + str(game.jversonify()))
 
     app_state[request.json['town']['slug']] = game
     return game.jversonify()

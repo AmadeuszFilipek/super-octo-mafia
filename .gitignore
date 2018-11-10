@@ -1,5 +1,7 @@
 __pycache__
 node_modules
 tmp/
+log/
+*.log
 *.pyc
 backend_python/state_machine.log

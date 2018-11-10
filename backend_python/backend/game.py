@@ -1,21 +1,20 @@
-try:
-    from backend_python.backend.town import Town
-except ModuleNotFoundError:
-    from town import Town
-
+from backend.town import Town
 import code
 import logging
 from datetime import datetime
-
 from flask import jsonify
 from transitions import Machine, State, Transition
 
-logging.basicConfig(filename='state_machine.log', level=logging.DEBUG)
-logging.getLogger('transitions').setLevel(logging.DEBUG)
+log_handler = logging.FileHandler('log/state_machine.log')
+log_handler.setLevel(logging.DEBUG)
+log_handler.setFormatter(logging.Formatter('%(asctime)-15s %(message)s'))
 
+logger = logging.getLogger('transitions')
+logger.setLevel(logging.DEBUG)
+logger.handlers = [log_handler]
 
 class Game(object):
-    
+
     initial_state = 'waiting_for_players'
     timed_states = ['day_voting', 'day_results', 'night_voting', 'night_results']
     voting_states = ['day_voting', 'night_voting']
@@ -34,23 +33,23 @@ class Game(object):
         states = []
         states.append(State('waiting_for_players', on_enter=self.stamp_state))
 
-        states.append(State('day_voting', 
+        states.append(State('day_voting',
             on_enter=[self.stamp_state, self.clear_results],
             on_exit=self.execute_vote))
 
         states.append(State('day_results',
             on_enter=self.stamp_state))
 
-        states.append(State('night_voting', 
+        states.append(State('night_voting',
             on_enter=[self.stamp_state, self.clear_results],
             on_exit=self.execute_vote))
 
         states.append(State('night_results',
             on_enter=self.stamp_state))
-            
-        states.append(State('game_ended', 
+
+        states.append(State('game_ended',
             on_enter=[self.stamp_state, self.set_winner]))
-                
+
         return states
 
     def generate_transitions(self):
@@ -77,7 +76,7 @@ class Game(object):
                 'trigger': 't_execute_vote',
                 'source': 'night_voting',
                 'dest': 'night_results',
-                'after': self.end_game_maybe, 
+                'after': self.end_game_maybe,
             })
         transitions.append({
                 'trigger': 't_progress',
@@ -91,7 +90,7 @@ class Game(object):
                 'dest': 'game_ended',
                 'before': self.end_game
             })
-        
+
         return transitions
 
 
@@ -120,14 +119,14 @@ class Game(object):
         self.town.clear_vote_pool()
 
     def end_game(self, *args, **kwargs):
-        pass    
+        pass
 
     def vote(self, voterName, voteeName):
         if self.state not in Game.voting_states:
             raise NotInVotingStateException
 
         is_night_vote = (self.state == 'night_voting')
-        self.town.vote(voterName, voteeName, is_night_vote)     
+        self.town.vote(voterName, voteeName, is_night_vote)
 
         if self.town.is_voting_finished(is_night_vote):
             self.t_execute_vote()
@@ -143,13 +142,13 @@ class Game(object):
             self.t_progress()
 
     def end_game_maybe(self):
-        if not self.can_game_continue(): 
+        if not self.can_game_continue():
             self.t_end_game()
 
 
     def stamp_state(self, *args, **kwargs):
         self.status['started_at'] = datetime.now().timestamp()
-    
+
     def clear_results(self, *args, **kwargs):
         self.status.pop('killed_player', None)
 

@@ -1,3 +1,6 @@
-export FLASK_APP=.
-export FLASK_DEBUG=true
-flask run --debugger --reload -h 0.0.0.0 --reload --port 5000
+#!/bin/bash
+
+export FLASK_HOST=${APP_HOST:-0.0.0.0}
+export FLASK_PORT=${APP_PORT:-5000}
+
+exec python .
