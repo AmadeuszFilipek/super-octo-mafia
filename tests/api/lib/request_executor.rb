@@ -6,7 +6,7 @@ class RequestExecutor
   end
 
   def call
-    uri = "http://localhost:5000#{request[:uri]}"
+    uri = "http://127.0.0.1:5000#{request[:uri]}"
 
     http_response = HTTP.send(
       request[:verb].downcase,

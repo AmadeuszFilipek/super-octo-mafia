@@ -4,15 +4,6 @@ require_relative 'base_ui'
 require_relative 'errors'
 
 class InteractiveUI < BaseUI
-  def scenario_started(scenario)
-    output.print Paint["- #{scenario.name}", :bold]
-    output.print ' '
-  end
-
-  def step_ok(step)
-    output.print Paint['.', :green]
-  end
-
   def step_response_differs(step, diff, request, response)
     output.puts Paint['F', :red]
 
@@ -43,16 +34,16 @@ class InteractiveUI < BaseUI
     raise StepFailed
   end
 
-  def scenario_ended(_scenario)
-    output.puts
-  end
-
   def step_cached
     output.puts Paint["---> cached", :green]
   end
 
   def step_ended
     output.puts
+  end
+
+  def exit_with_status
+    exit 0
   end
 
   private

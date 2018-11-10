@@ -20,15 +20,10 @@ class LoggingUI < BaseUI
     failed_scenarios.push(scenario)
   end
 
-  def summary
-    output.puts '--------------------------------'
-    output.puts
+  def exit_with_status
+    status = 0
+    status = 1 if failed_scenarios.any?
 
-    if failed_scenarios.any?
-      output.puts Paint["#{failed_scenarios.length} scenarios have failed.", :red]
-      output.puts failed_scenarios.map { |scenario|
-        Paint[" - #{scenario.name}", :bold] # + Paint[' failed!', :red]
-      }.join("\n")
-    end
+    exit status
   end
 end
