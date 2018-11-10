@@ -53,12 +53,21 @@ jobs:
           command: |
               cd backend_python
               ./run_server
-
-      # tests
       - run:
-          name: start server and run tests
+        name: Wait for server to boot up
+        command: sleep 3
+
+      # run testrunner specs
+      - run:
+        name: Run testrunner specs
+        command: |
+          cd tests/api/lib
+          bundle exec rake
+
+      # run api scenarios
+      - run:
+          name: Run Scenarios
           command: |
-            sleep 3
             cd tests/api
             bundle exec rake
 
