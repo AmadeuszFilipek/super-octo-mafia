@@ -27,9 +27,9 @@ class BaseUI
     output.puts
   end
 
-  def step_cached; end
+  def step_cached(_step); end
 
-  def step_ended; end
+  def step_ended(_step); end
 
   def summary
     output.puts
