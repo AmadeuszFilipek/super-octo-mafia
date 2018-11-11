@@ -5,7 +5,7 @@ class BaseUI
   end
 
   def scenario_started(scenario)
-    output.print Paint["- #{scenario.name}", :bold]
+    output.print "- #{readable_name(scenario.name)}"
     output.print ' '
   end
 
@@ -51,8 +51,17 @@ class BaseUI
     output.puts Paint[" #{failed_scenarios.length} scenarios have failed:", :red]
     output.puts
     output.puts failed_scenarios.map { |scenario|
-      Paint[" - #{scenario.name}", :bold] # + Paint[' failed!', :red]
+      " - #{readable_name(scenario.name)}"
     }.join("\n")
+  end
+
+  def readable_name(name, part: :bold, delim: :black)
+    part_color = part
+    delim_color = delim
+
+    name.split('/').map do |name_part|
+      Paint[name_part, part_color]
+    end.join(Paint['/', delim_color])
   end
 end
 
