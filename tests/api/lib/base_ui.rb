@@ -55,10 +55,13 @@ class BaseUI
     }.join("\n")
   end
 
-  def readable_name(name, part_color = :bold)
-    name.split('/').map do |part|
-      Paint[part, part_color]
-    end.join(Paint['/', '#2F4F4F'])
+  def readable_name(name, part: :bold, delim: :black)
+    part_color = part
+    delim_color = delim
+
+    name.split('/').map do |name_part|
+      Paint[name_part, part_color]
+    end.join(Paint['/', delim_color])
   end
 end
 
