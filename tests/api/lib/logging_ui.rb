@@ -3,6 +3,12 @@ require_relative 'base_ui'
 
 class LoggingUI < BaseUI
   def step_response_differs(step, diff, _request, _response)
+    scenario = step.scenario
+
+    output.print "\r"
+    output.puts Paint["- #{scenario.name}", :red]
+    output.print '  -> failed on step '
+    output.puts Paint[step.name, :yellow]
     output.puts
     output.puts diff.to_s(:color)
     output.puts
@@ -13,6 +19,8 @@ class LoggingUI < BaseUI
   end
 
   def step_failed(_step)
+    output.puts
+    output.puts
     raise StepFailed
   end
 

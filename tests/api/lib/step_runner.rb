@@ -1,3 +1,4 @@
+require 'pry'
 require 'diffy'
 require 'tty-reader'
 require_relative 'request_dumper'
