@@ -8,7 +8,8 @@ class InteractiveUI < BaseUI
     output.puts Paint['F', :red]
 
     content_to_page = [
-      "Response for " + Paint[step.name, :yellow],
+      'Scenario: ' + Paint[step.scenario.name, :bold],
+      "Response for step " + Paint[step.name, :yellow],
       '',
       diff.to_s(:color)
     ]
@@ -22,7 +23,8 @@ class InteractiveUI < BaseUI
   end
 
   def ask_to_cache(step, diff, request, response)
-    output.puts '- Response for ' + Paint[step.name, :yellow] + ' differs from cached version'
+    output.puts 'Scenario: ' + Paint[step.scenario.name, :bold]
+    output.puts '- Response for step ' + Paint[step.name, :yellow] + ' differs from cached version'
     output.print '  Do you want to save it? [n] '
 
     tty_reader.read_char.downcase == 'y'
@@ -35,7 +37,7 @@ class InteractiveUI < BaseUI
   end
 
   def step_cached(_step)
-    output.puts Paint["---> cached", :green]
+    output.puts Paint['---> cached', :green]
   end
 
   def step_ended(_step)

@@ -2,7 +2,7 @@ require 'pathname'
 require_relative 'scenario_step'
 
 class Scenario
-  attr_reader :root_path, :steps
+  attr_reader :root_path
 
   def self.from_leaf(root_path, leaf_path)
     root_path = Pathname.new(root_path).expand_path
@@ -15,22 +15,26 @@ class Scenario
       end
     end.sort
 
-    steps = request_paths.map do |request_path|
-      ScenarioStep.from_request_path(root_path, request_path)
-    end
-
-    new(root_path, steps)
+    new(root_path, request_paths)
   end
 
   def name
     steps.last.relative_path.dirname.to_s
   end
 
+  def steps
+    @steps ||= request_paths.map do |request_path|
+      ScenarioStep.from_request_path(self, request_path)
+    end
+  end
+
   private
 
-  def initialize(root_path, steps)
+  attr_reader :request_paths
+
+  def initialize(root_path, request_paths)
     @root_path = Pathname.new(root_path).expand_path
-    @steps = steps
+    @request_paths = request_paths
   end
 end
 

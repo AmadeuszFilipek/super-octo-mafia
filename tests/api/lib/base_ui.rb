@@ -23,8 +23,8 @@ class BaseUI
 
   def scenario_failed(_scenario) end
 
-  def scenario_ended(_scenario)
-    output.puts
+  def scenario_passed(_scenario)
+    output.puts Paint[' OK', :green]
   end
 
   def step_cached(_step); end
@@ -48,7 +48,8 @@ class BaseUI
   attr_reader :output, :failed_scenarios
 
   def print_failed_scenarios
-    output.puts Paint["#{failed_scenarios.length} scenarios have failed.", :red]
+    output.puts Paint[" #{failed_scenarios.length} scenarios have failed:", :red]
+    output.puts
     output.puts failed_scenarios.map { |scenario|
       Paint[" - #{scenario.name}", :bold] # + Paint[' failed!', :red]
     }.join("\n")

@@ -12,7 +12,7 @@ class ScenarioRunner
     scenario.steps.each do |step|
       StepRunner.new(step, ui: ui).call
     end
-    ui.scenario_ended(scenario)
+    ui.scenario_passed(scenario)
   rescue StepFailed
     ui.scenario_failed(scenario)
   end
