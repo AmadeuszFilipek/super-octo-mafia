@@ -1,12 +1,16 @@
 require 'pathname'
 
 class ScenarioStep
-  attr_reader :root_path, :step_path
+  attr_reader :step_path, :scenario
 
-  def self.from_request_path(root_path, request_path)
+  def self.from_request_path(scenario, request_path)
     step_path = Pathname.new(request_path).sub_ext('')
 
-    new(root_path, step_path)
+    new(scenario, step_path)
+  end
+
+  def root_path
+    scenario.root_path
   end
 
   def name
@@ -32,8 +36,8 @@ class ScenarioStep
 
   private
 
-  def initialize(root_path, step_path)
-    @root_path = Pathname.new(root_path).expand_path
+  def initialize(scenario, step_path)
+    @scenario = scenario
     @step_path = Pathname.new(step_path).expand_path
   end
 end
