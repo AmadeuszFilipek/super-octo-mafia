@@ -63,17 +63,15 @@ class Town(object):
 
     def assign_characters(self, backdoor_players=None):
 
-        for player in self.players.values():
-            if backdoor_players and player.name in backdoor_players.keys():
-
-                player.set_character(backdoor_players[player.name])
-
-            else:
-                number_of_mafia = floor(len(self.players.keys()) * self.MAFIA_RATIO)
-
-                for player in sample(self.players.values(), number_of_mafia):
-                    player.set_character('mafia')
-
+        if backdoor_players:
+            for player in self.players.values():
+                if player.name in backdoor_players.keys():
+                    player.set_character(backdoor_players[player.name])
+        else:
+            number_of_mafia = floor(len(self.players.keys()) * self.MAFIA_RATIO)
+            
+            for player in sample(list(self.players), number_of_mafia):
+                self.players[player].set_character('mafia')
 
     def execute_vote(self, *args, **kwargs):
         player_to_die = self.resolve_vote()

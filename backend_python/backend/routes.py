@@ -16,7 +16,7 @@ def find_game(slug):
 @app.route('/')
 @app.route('/towns/<path>')
 def endpoint_index(path = None):
-    return send_from_directory('../frontend/', 'index.html')
+    return send_from_directory('../../frontend/', 'index.html')
 
 
 
@@ -73,7 +73,7 @@ def endpoint_join_game(slug):
 
 @app.route('/<path>')
 def static_files_handler(path):
-    return send_from_directory('../frontend/', path)
+    return send_from_directory('../../frontend/', path)
 
 
 
