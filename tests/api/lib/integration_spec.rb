@@ -1,4 +1,3 @@
-require_relative 'spec_helper'
 require_relative 'request_parser'
 require_relative 'request_dumper'
 require_relative 'response_parser'
