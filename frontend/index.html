@@ -58,12 +58,11 @@
         <button id='progress-btn' v-on:click=progressState>Continue Game</button>
       </div>
 
-      // get abstraction by creating vue component of this voting table
       <div id="night-voting" v-if="appState.state.id === 'night_voting'">
         <ul id="players">
           <li v-for="player in appState.players" v-bind:id="player.name" v-bind:class="{ voted: hasVotedOn(player) }">
             {{player.name}}
-            <button class='voting-btn' v-if="currentPlayer !== player || player.character === 'mafia'" 
+            <button class='voting-btn' v-if="currentPlayer !== player && currentPlayer.character === 'mafia'" 
               v-on:click="vote(player)">Vote!</button>
           </li>
         </ul>
