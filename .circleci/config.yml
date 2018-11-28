@@ -24,7 +24,7 @@ jobs:
             bundle install --jobs=4 --retry=3 --path vendor/bundle
       - save_cache:
           paths:
-            - ./vendor/bundle
+            - tests/api/vendor/bundle
           key: v1-ruby-dependencies-{{ checksum "tests/api/Gemfile.lock" }}
 
       # requirements.txt

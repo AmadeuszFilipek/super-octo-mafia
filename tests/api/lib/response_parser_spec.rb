@@ -1,4 +1,3 @@
-require_relative 'spec_helper'
 require_relative 'response_parser'
 
 describe ResponseParser do
