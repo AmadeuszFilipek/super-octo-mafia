@@ -20,6 +20,8 @@
   <body>
     <div class="container-fluid"><div class="row"><div id="app" class="col-md-12">
 
+      <h2 v-if="appState.state.id === 'waiting_for_players'">Town name: {{ appState.slug }}</h2>
+
       <div id="game-ended" v-if="appState.state.id === 'game_ended'">Game is Ended!</div>
 
       <div id="new-town-form" v-if="appState.state.id === 'new_town_form'">
@@ -36,12 +38,9 @@
         </b-button>
       </div>
 
-
       <b-list-group> 
         <b-list-group-item v-for="player in appState.players">{{player.name}}</b-list-group-item>
       </b-list-group>
-
-
 
       <div id="waiting-for-players" v-if="appState.state.id === 'waiting_for_players'">
         <div v-if="currentPlayer">
