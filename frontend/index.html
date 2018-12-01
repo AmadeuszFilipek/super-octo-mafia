@@ -36,6 +36,13 @@
         </b-button>
       </div>
 
+
+      <b-list-group> 
+        <b-list-group-item v-for="player in appState.players">{{player.name}}</b-list-group-item>
+      </b-list-group>
+
+
+
       <div id="waiting-for-players" v-if="appState.state.id === 'waiting_for_players'">
         <div v-if="currentPlayer">
           currentPlayer={{currentPlayer}}
