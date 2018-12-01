@@ -76,6 +76,16 @@ function init() {
         return this.appState.votes[this.playerName] === votee.name;
       },
 
+      canVoteOn(player) {
+        if (this.appState.state.id === 'night_voting' && this.currentPlayer.character === 'civil') {
+          return false;
+        }
+        if (!this.currentPlayer.is_alive || !player.is_alive) {
+          return false;
+        }
+        return this.currentPlayer !== player;
+      },
+
       startPolling() {
         setInterval(this.loadState.bind(this), 1000);
       },
