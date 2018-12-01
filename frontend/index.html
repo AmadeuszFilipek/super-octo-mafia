@@ -31,9 +31,9 @@
           <b-form-input id="player-name" v-model="playerName" type="text" placeholder="input your player name"/></b-form-input>
         </b-form-group>
   
-        <button id="create-town" v-on:click=createTown :disabled="!appState.slug || !playerName">
+        <b-button id="create-town" v-on:click=createTown :disabled="!appState.slug || !playerName">
           Create town
-        </button>
+        </b-button>
       </div>
 
       <div id="waiting-for-players" v-if="appState.state.id === 'waiting_for_players'">
