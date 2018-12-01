@@ -18,14 +18,19 @@
   </head>
 
   <body>
-    <div id="app">
+    <div class="container-fluid"><div class="row"><div id="app" class="col-md-12">
 
       <div id="game-ended" v-if="appState.state.id === 'game_ended'">Game is Ended!</div>
 
       <div id="new-town-form" v-if="appState.state.id === 'new_town_form'">
-        Town slug: <input id="town-slug" placeholder="input your town slug" v-model=appState.slug /> <br/>
-        Player name: <input id="player-name" placeholder="input your player name" v-model=playerName /> <br/>
+        <b-form-group label="Town name">
+          <b-form-input id="town-slug" v-model="appState.slug" type="text" placeholder="Enter city name"></b-form-input>
+        </b-form-group>
 
+        <b-form-group label="Player name">
+          <b-form-input id="player-name" v-model="playerName" type="text" placeholder="input your player name"/></b-form-input>
+        </b-form-group>
+  
         <button id="create-town" v-on:click=createTown :disabled="!appState.slug || !playerName">
           Create town
         </button>
@@ -76,5 +81,6 @@
 
       <debug v-bind:value="appState"/>
     </div>
+    </div></div>
   </body>
 </html>
