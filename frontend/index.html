@@ -1,9 +1,15 @@
 <html>
   <head>
     <script type="text/javascript" src="/vue.js"></script>
+    <script src="/polyfill.min.js"></script>
+    <script src="/bootstrap-vue.js"></script>
     <script type="module">
       import App from '/app.js';
-    </script>
+</script>
+
+<link type="text/css" rel="stylesheet" href="/bootstrap.min.css"/>
+<link type="text/css" rel="stylesheet" href="/bootstrap-vue.css"/>
+
     <style>
       .voted {
         background-color: red;
@@ -68,9 +74,7 @@
         </ul>
       </div>
 
-      <pre>
-        appState={{appState}}
-      </pre>
+      <debug v-bind:value="appState"/>
     </div>
   </body>
 </html>

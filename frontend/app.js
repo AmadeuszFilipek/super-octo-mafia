@@ -1,5 +1,10 @@
 import ApiClient from '/api_client.js';
 
+Vue.component('debug', {
+  props: [`value`],
+  template: `<pre>value={{value}}</pre>`
+})
+
 function init() {
   console.log('init');
 
