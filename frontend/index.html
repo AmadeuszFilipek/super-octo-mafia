@@ -54,6 +54,20 @@
         </ul>
       </div>
 
+      <div id="progress" v-if="canShowProgressButton">
+        <button id='progress-btn' v-on:click=progressState>Continue Game</button>
+      </div>
+
+      <div id="night-voting" v-if="appState.state.id === 'night_voting'">
+        <ul id="players">
+          <li v-for="player in appState.players" v-bind:id="player.name" v-bind:class="{ voted: hasVotedOn(player) }">
+            {{player.name}}
+            <button class='voting-btn' v-if="currentPlayer !== player && currentPlayer.character === 'mafia'" 
+              v-on:click="vote(player)">Vote!</button>
+          </li>
+        </ul>
+      </div>
+
       <pre>
         appState={{appState}}
       </pre>

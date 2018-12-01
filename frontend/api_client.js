@@ -4,6 +4,11 @@ class ApiClient {
     return await res.json();
   }
 
+  async progressState({ townSlug }){
+    let res = await fetch(`/api/towns/${townSlug}/progress`, {method: 'PUT'});
+    return await res.json();
+  }
+
   async createTown({ townSlug, playerName }) {
     return await this.post('/api/towns', {
       town: { slug: townSlug },
