@@ -15,7 +15,7 @@ bundle install
 ## Running all scenarios
 
 ```
-./run_tests
+./run_scenarios
 ```
 
 
@@ -37,7 +37,7 @@ All scenarios passed.
 ## Running subset of scenarios
 
 ```
-./run_tests scenarios/errors
+./run_scenarios scenarios/errors
 ```
 
 Will run all scenarios having path `scenarios/errors` in ancestors
