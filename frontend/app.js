@@ -49,6 +49,10 @@ function init() {
         return this.isHost && this.appState.is_ready_to_start;
       },
 
+      canShowProgressButton() {
+        return this.isHost && (this.appState.state.id === 'day_results' || this.appState.state.id === 'night_results'); 
+      },
+
       api() {
         return new ApiClient({ pathPrefix: 'http://127.0.0.1:5000/' });
       },
@@ -105,7 +109,7 @@ function init() {
         this.setState(json);
         window.history.pushState({}, null, `/towns/${this.appState.slug}`);
       },
-
+      
       async startGame() {
         let json = await this.api.startGame({
           townSlug: this.appState.slug
@@ -122,6 +126,12 @@ function init() {
         });
 
         this.setState(json);
+      },
+
+      async progressState() {
+        let json = await this.api.progressState({
+          townSlug: this.appState.slug
+        });
       },
     },
 
