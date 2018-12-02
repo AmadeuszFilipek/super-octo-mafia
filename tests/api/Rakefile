@@ -3,7 +3,9 @@ require_relative 'lib/scenario_runner'
 require_relative 'lib/interactive_ui'
 require_relative 'lib/logging_ui'
 
-task :default do
+task :default, [:path] do |t, args|
+  scenarios_filter_by = args.fetch(:path, false)
+
   list = ScenariosList.new('./scenarios')
 
   ui = if ENV['CI']
@@ -12,7 +14,13 @@ task :default do
          InteractiveUI.new(STDOUT)
        end
 
-  list.all.each do |scenario|
+  scenarios = if scenarios_filter_by
+                list.by_root_path(scenarios_filter_by)
+              else
+                list.all
+              end
+
+  scenarios.each do |scenario|
     ScenarioRunner.new(scenario, ui: ui).call
   end
 

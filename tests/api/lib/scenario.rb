@@ -19,7 +19,15 @@ class Scenario
   end
 
   def name
-    steps.last.relative_path.dirname.to_s
+    relative_path.dirname.to_s
+  end
+
+  def path
+    root_path.join(relative_path).parent
+  end
+
+  def relative_path
+    steps.last.relative_path
   end
 
   def steps

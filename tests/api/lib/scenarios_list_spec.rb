@@ -36,4 +36,17 @@ describe ScenariosList do
     expect(s5.steps).to eq s5.steps.sort_by(&:request_path)
     expect(s6.steps).to eq s6.steps.sort_by(&:request_path)
   end
+
+  describe '#by_root_path' do
+    it 'returns scenarios matching provided path as a direct ancestor' do
+      list = ScenariosList.new('./fixtures/scenarios')
+      scenarios = list.by_root_path('fixtures/scenarios/happy_path/part1')
+      expect(scenarios.length).to eq 2
+
+      s1, s2 = scenarios
+
+      expect(s1.name).to eq 'happy_path/part1/part1_1'
+      expect(s2.name).to eq 'happy_path/part1/part1_2'
+    end
+  end
 end

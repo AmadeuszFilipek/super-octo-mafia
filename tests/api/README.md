@@ -1,37 +1,52 @@
-# CURL tests
-
-## Test mode
-
-Setup old api url (needed only to record new responses):
+# API Scenarios
 
 ```
-export OLD_API_URL=http://localhost:5000
+cd tests/api
 ```
 
-Run tests
+## Install
+
+* Need ruby
 
 ```
-export NEW_API_URL=http://localhost:5000
-cd tests/curl
-./tests.sh
+bundle install
 ```
 
-The idea is to use `diff` to compare current responses with valid, cached ones in order
-to check if app still behaves properly.
-
-Testsuite is composed from steps, that live in `steps/*.sh`.
-
-Those are simple bash scripts, that accept one argument: api url prefix,
-that will be prepended to paths (`{prefix}/api/towns` etc).
-
-Each do one request with `curl` (important!).
-
-## Record mode
-
-If you want to record all steps or given step only and do not perform
-request to new api, set proper env var:
+## Running all scenarios
 
 ```
-RECORD_MODE=true ./tests.sh
-RECORD_MODE=true ./tests.sh steps/02_create_town.sh
+./run_scenarios
+```
+
+
+```
+- eight_players/errors/can_only_join_when_in_waiting_for_players ............ OK
+- eight_players/errors/cannot_vote_on_non_existing ............ OK
+- eight_players/errors/cannot_vote_on_self ............ OK
+- eight_players/errors/must_exist_to_vote ............ OK
+- eight_players/mafia_dies_in_first_round/civil1_dies_second_round ....................... OK
+- eight_players/mafia_dies_in_first_round/errors/cannot_vote_when_dead ..................... OK
+- eight_players/mafia_dies_in_first_round/errors/civil_cannot_vote_at_night ..................... OK
+- errors/cannot_join_to_nonexisting_town .. OK
+- errors/cannot_join_with_duplicated_name ... OK
+- errors/town_already_exist ... OK
+
+All scenarios passed.
+```
+
+## Running subset of scenarios
+
+```
+./run_scenarios scenarios/errors
+```
+
+Will run all scenarios having path `scenarios/errors` in ancestors
+
+```
+- errors/cannot_join_to_nonexisting_town .. OK
+- errors/cannot_join_with_duplicated_name ... OK
+- errors/town_already_exist ... OK
+
+All scenarios passed.
+```
 ```
