@@ -1,9 +1,17 @@
-digraph G {
-  "waiting_for_players" -> "day_voting"
-  "day_voting" -> "day_results"
-  "day_results" -> "night_voting" [ label="m < c" ]
-  "day_results" -> "end_game" [ label="m >= c" ]
-  "night_voting" -> "night_results"
-  "night_results" -> "day_voting" [ label="m >= c" ]
-  "night_results" -> "end_game" [ label="m < c" ]
+digraph GameStateMachine {
+  {
+    node [margin=0.1 fontsize=16 style=filled fontname="Comic New Sans"]
+    waiting_for_players [fillcolor=darkgreen fontcolor=white]
+    day_voting [fillcolor=white]
+    day_results [fillcolor=white]
+    night_voting [fillcolor=black fontcolor=white]
+    night_results [fillcolor=black fontcolor=white]
+    end_game [fillcolor=red fontcolor=black]
+  }
+
+  waiting_for_players -> day_voting
+  day_voting    -> day_results
+  day_results   -> { night_voting end_game }
+  night_voting  -> night_results
+  night_results -> { day_voting end_game }
 }
