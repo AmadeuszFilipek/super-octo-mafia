@@ -6,19 +6,25 @@
   <script src="/bootstrap-vue.js"></script>
   <script type="module">
     import App from '/app.js';
+    import info_header from '/info-header.js';
+    import copy_url_button from '/copy-url-button.js';
   </script>
 
   <link type="text/css" rel="stylesheet" href="/bootstrap.min.css" />
   <link type="text/css" rel="stylesheet" href="/bootstrap-vue.css" />
 
   <style>
-    #players .voting-btn{
+    #players .voting-btn {
       float: right;
     }
     .voted {
-        background-color: red;
-        font-size: 17pt;
-      }
+      background-color: red;
+      font-size: 17pt;
+    }
+    .info-header {
+      text-align: center;
+      color: indigo;
+    }
     </style>
 </head>
 
@@ -26,6 +32,10 @@
   <div class="container-fluid">
     <div class="row">
       <div id="app" class="col-md-12">
+
+
+        <info-header v-bind:state="appState.state.id"></info-header>
+
 
         <h2 v-if="appState.state.id === 'waiting_for_players'">Town name: {{ appState.slug }}</h2>
 
@@ -86,6 +96,8 @@
         <div id="progress" v-if="canShowProgressButton">
           <b-button id='progress-btn' v-on:click=progressState>Continue Game</b-button>
         </div>
+
+        <copy-url-button/>
 
         <debug v-bind:value="appState" />
       </div>
