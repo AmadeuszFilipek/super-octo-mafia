@@ -57,8 +57,7 @@ def endpoint_progress(slug):
 @app.route('/api/towns/<slug>', methods=['DELETE'])
 def endpoint_delete_game(slug):
     app_state.pop(slug, None)
-    return "{}"
-
+    return jsonify({})
 
 
 @app.route('/api/towns/<slug>/players', methods=['POST'])
