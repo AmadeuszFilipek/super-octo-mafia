@@ -12,8 +12,12 @@
   <link type="text/css" rel="stylesheet" href="/bootstrap-vue.css" />
 
   <style>
+    #players .voting-btn{
+      float: right;
+    }
     .voted {
         background-color: red;
+        font-size: 17pt;
       }
     </style>
 </head>
@@ -50,7 +54,7 @@
           </b-list-group>
 
           <div v-if="!currentPlayer">
-            <b-form-group label="Town name">
+            <b-form-group label="Player name">
               <b-form-input id="player-name" v-model=playerName type="text" placeholder="input your name"></b-form-input>
             </b-form-group>
 
@@ -59,8 +63,6 @@
 
           <b-button id="start-game" v-if=canShowStartButton v-on:click=startGame>Start game</b-button>
         </div>
-
-
 
         <div id="day-voting" v-if="appState.state.id === 'day_voting'">
 
@@ -71,7 +73,6 @@
             </b-list-group-item>
           </b-list-group>
         </div>
-
 
         <div id="night-voting" v-if="appState.state.id === 'night_voting'">
           <b-list-group id="players">
