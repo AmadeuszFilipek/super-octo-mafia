@@ -1,76 +1,96 @@
 <html>
-  <head>
-    <script type="text/javascript" src="/vue.js"></script>
-    <script type="module">
-      import App from '/app.js';
-    </script>
-    <style>
-      .voted {
+
+<head>
+  <script type="text/javascript" src="/vue.js"></script>
+  <script src="/polyfill.min.js"></script>
+  <script src="/bootstrap-vue.js"></script>
+  <script type="module">
+    import App from '/app.js';
+  </script>
+
+  <link type="text/css" rel="stylesheet" href="/bootstrap.min.css" />
+  <link type="text/css" rel="stylesheet" href="/bootstrap-vue.css" />
+
+  <style>
+    #players .voting-btn{
+      float: right;
+    }
+    .voted {
         background-color: red;
+        font-size: 17pt;
       }
     </style>
-  </head>
+</head>
 
-  <body>
-    <div id="app">
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div id="app" class="col-md-12">
 
-      <div id="game-ended" v-if="appState.state.id === 'game_ended'">Game is Ended!</div>
+        <h2 v-if="appState.state.id === 'waiting_for_players'">Town name: {{ appState.slug }}</h2>
 
-      <div id="new-town-form" v-if="appState.state.id === 'new_town_form'">
-        Town slug: <input id="town-slug" placeholder="input your town slug" v-model=appState.slug /> <br/>
-        Player name: <input id="player-name" placeholder="input your player name" v-model=playerName /> <br/>
+        <div id="game-ended" v-if="appState.state.id === 'game_ended'">Game is Ended!</div>
 
-        <button id="create-town" v-on:click=createTown :disabled="!appState.slug || !playerName">
-          Create town
-        </button>
-      </div>
+        <div id="new-town-form" v-if="appState.state.id === 'new_town_form'">
+          <b-form-group label="Town name">
+            <b-form-input id="town-slug" v-model="appState.slug" type="text" placeholder="Enter city name"></b-form-input>
+          </b-form-group>
 
-      <div id="waiting-for-players" v-if="appState.state.id === 'waiting_for_players'">
-        <div v-if="currentPlayer">
-          currentPlayer={{currentPlayer}}
+          <b-form-group label="Player name">
+            <b-form-input id="player-name" v-model="playerName" type="text" placeholder="input your player name" />
+            </b-form-input>
+          </b-form-group>
+
+          <b-button id="create-town" v-on:click=createTown :disabled="!appState.slug || !playerName">
+            Create town
+          </b-button>
         </div>
-        <div v-else>
-          Player name: <input id="player-name" placeholder="input your player name" v-model=playerName /> <br/>
-          <button id="join-town" v-on:click=joinTown :disabled=!playerName>Join town</button>
+
+        <div id="waiting-for-players" v-if="appState.state.id === 'waiting_for_players'">
+          <h3>Players:</h3>
+
+          <b-list-group>
+            <b-list-group-item v-for="player in appState.players">{{player.name}}</b-list-group-item>
+          </b-list-group>
+
+          <div v-if="!currentPlayer">
+            <b-form-group label="Player name">
+              <b-form-input id="player-name" v-model=playerName type="text" placeholder="input your name"></b-form-input>
+            </b-form-group>
+
+            <b-button id="join-town" v-on:click=joinTown :disabled=!playerName>Join town</b-button>
+          </div>
+
+          <b-button id="start-game" v-if=canShowStartButton v-on:click=startGame>Start game</b-button>
         </div>
-        Town name: {{ appState.slug }} <br/>
-        Players:
 
-        <ul id="players">
-          <li v-for="player in appState.players">
-            {{player.name}}
-          </li>
-        </ul>
+        <div id="day-voting" v-if="appState.state.id === 'day_voting'">
 
-        <button id="start-game" v-if=canShowStartButton v-on:click=startGame>Start game</button>
+          <b-list-group id="players">
+            <b-list-group-item v-for="player in appState.players" v-bind:id="player.name" v-bind:class="{ voted: hasVotedOn(player) }">
+              {{player.name}}
+              <b-button class='voting-btn' v-if="canVoteOn(player)" v-on:click="vote(player)">Vote!</b-button>
+            </b-list-group-item>
+          </b-list-group>
+        </div>
+
+        <div id="night-voting" v-if="appState.state.id === 'night_voting'">
+          <b-list-group id="players">
+            <b-list-group-item v-for="player in appState.players" v-bind:id="player.name" v-bind:class="{ voted: hasVotedOn(player) }">
+              {{player.name}}
+              <b-button class='voting-btn' v-if="canVoteOn(player)" v-on:click="vote(player)">Vote!</b-button>
+            </b-list-group-item>
+          </b-list-group>
+        </div>
+
+        <div id="progress" v-if="canShowProgressButton">
+          <b-button id='progress-btn' v-on:click=progressState>Continue Game</b-button>
+        </div>
+
+        <debug v-bind:value="appState" />
       </div>
-
-      <div id="day-voting" v-if="appState.state.id === 'day_voting'">
-        <ul id="players">
-          <li v-for="player in appState.players" v-bind:id="player.name" v-bind:class="{ voted: hasVotedOn(player) }">
-            {{player.name}}
-            <button class='voting-btn' v-if="currentPlayer !== player" v-on:click="vote(player)">Vote!</button>
-          </li>
-        </ul>
-      </div>
-
-      <div id="progress" v-if="canShowProgressButton">
-        <button id='progress-btn' v-on:click=progressState>Continue Game</button>
-      </div>
-
-      <div id="night-voting" v-if="appState.state.id === 'night_voting'">
-        <ul id="players">
-          <li v-for="player in appState.players" v-bind:id="player.name" v-bind:class="{ voted: hasVotedOn(player) }">
-            {{player.name}}
-            <button class='voting-btn' v-if="currentPlayer !== player && currentPlayer.character === 'mafia'" 
-              v-on:click="vote(player)">Vote!</button>
-          </li>
-        </ul>
-      </div>
-
-      <pre>
-        appState={{appState}}
-      </pre>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

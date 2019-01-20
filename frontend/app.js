@@ -1,5 +1,10 @@
 import ApiClient from '/api_client.js';
 
+Vue.component('debug', {
+  props: [`value`],
+  template: `<pre>value={{value}}</pre>`
+})
+
 function init() {
   console.log('init');
 
@@ -69,6 +74,16 @@ function init() {
 
       hasVotedOn(votee) {
         return this.appState.votes[this.playerName] === votee.name;
+      },
+
+      canVoteOn(player) {
+        if (this.appState.state.id === 'night_voting' && this.currentPlayer.character === 'civil') {
+          return false;
+        }
+        if (!this.currentPlayer.is_alive || !player.is_alive) {
+          return false;
+        }
+        return this.currentPlayer !== player;
       },
 
       startPolling() {
