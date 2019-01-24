@@ -8,6 +8,7 @@
     import App from '/app.js';
     import info_header from '/info-header.js';
     import copy_url_button from '/copy-url-button.js';
+    import players_list from '/players-list.js';
   </script>
 
   <link type="text/css" rel="stylesheet" href="/bootstrap.min.css" />
@@ -60,9 +61,7 @@
         <div id="waiting-for-players" v-if="appState.state.id === 'waiting_for_players'">
           <h3>Players:</h3>
 
-          <b-list-group>
-            <b-list-group-item v-for="player in appState.players">{{player.name}}</b-list-group-item>
-          </b-list-group>
+          <players-list v-bind:players=appState.players></players-list>
 
           <div v-if="!currentPlayer">
             <b-form-group label="Player name">
@@ -73,32 +72,28 @@
           </div>
 
           <b-button id="start-game" v-if=canShowStartButton v-on:click=startGame>Start game</b-button>
+
+          <copy-url-button/>
         </div>
 
         <div id="day-voting" v-if="appState.state.id === 'day_voting'">
-
-          <b-list-group id="players">
-            <b-list-group-item v-for="player in appState.players" v-bind:id="player.name" v-bind:class="{ voted: hasVotedOn(player) }">
-              {{player.name}}
-              <b-button class='voting-btn' v-if="canVoteOn(player)" v-on:click="vote(player)">Vote!</b-button>
-            </b-list-group-item>
-          </b-list-group>
+          <players-list players=appState.players>
+            <template slot-scope="">
+            {{player.name}}
+            <b-button class='voting-btn' v-if="canVoteOn(player)" v-on:click="vote(player)">Vote!</b-button>
+          </players-list>
         </div>
 
         <div id="night-voting" v-if="appState.state.id === 'night_voting'">
-          <b-list-group id="players">
-            <b-list-group-item v-for="player in appState.players" v-bind:id="player.name" v-bind:class="{ voted: hasVotedOn(player) }">
-              {{player.name}}
-              <b-button class='voting-btn' v-if="canVoteOn(player)" v-on:click="vote(player)">Vote!</b-button>
-            </b-list-group-item>
-          </b-list-group>
+          <players-list players=appState.players>
+            {{player.name}}
+            <b-button class='voting-btn' v-if="canVoteOn(player)" v-on:click="vote(player)">Vote!</b-button>
+          </players-list>
         </div>
 
         <div id="progress" v-if="canShowProgressButton">
           <b-button id='progress-btn' v-on:click=progressState>Continue Game</b-button>
         </div>
-
-        <copy-url-button/>
 
         <debug v-bind:value="appState" />
       </div>
