@@ -12,6 +12,7 @@
 
   <link type="text/css" rel="stylesheet" href="/bootstrap.min.css" />
   <link type="text/css" rel="stylesheet" href="/bootstrap-vue.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
     #players .voting-btn {
@@ -25,24 +26,13 @@
       text-align: center;
       color: rgb(56, 47, 36);
     }
-    #create-town {
-      display: block;
-      float: left;
-      justify-content: center;
-    }
-    #container {
-      display: flex;
-      flex-flow: column;
-      justify-content: center;
-      align-items: center;
-    }
     </style>
 </head>
 
 <body>
   <div class="container">
     <div class="row">
-      <div id="app" class="col-lg-3">
+      <div id="app" class="col-xs-3">
 
 
         <info-header v-bind:state="appState.state.id"></info-header>
