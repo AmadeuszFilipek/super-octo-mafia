@@ -12,9 +12,6 @@ Vue.component('info-header', {
     props: ['state'],
     computed: {
         text() {
-            console.log(stateToLabel)
-            console.log(stateToLabel[this.state])
-
             return stateToLabel[this.state];
         },
     },

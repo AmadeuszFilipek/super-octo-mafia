@@ -23,15 +23,26 @@
     }
     .info-header {
       text-align: center;
-      color: indigo;
+      color: rgb(56, 47, 36);
+    }
+    #create-town {
+      display: block;
+      float: left;
+      justify-content: center;
+    }
+    #container {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
     }
     </style>
 </head>
 
 <body>
-  <div class="container-fluid">
+  <div class="container">
     <div class="row">
-      <div id="app" class="col-md-12">
+      <div id="app" class="col-lg-3">
 
 
         <info-header v-bind:state="appState.state.id"></info-header>
@@ -43,7 +54,7 @@
 
         <div id="new-town-form" v-if="appState.state.id === 'new_town_form'">
           <b-form-group label="Town name">
-            <b-form-input id="town-slug" v-model="appState.slug" type="text" placeholder="Enter city name"></b-form-input>
+            <b-form-input id="town-slug" v-model="appState.slug" type="text" placeholder="Enter town name"></b-form-input>
           </b-form-group>
 
           <b-form-group label="Player name">
