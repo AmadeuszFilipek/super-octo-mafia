@@ -15,6 +15,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
+    body {
+      padding: 10px;
+    }
     #players .voting-btn {
       float: right;
     }
@@ -33,10 +36,7 @@
   <div class="container">
     <div class="row">
       <div id="app" class="col-xs-3">
-
-
         <info-header v-bind:state="appState.state.id"></info-header>
-
 
         <h2 v-if="appState.state.id === 'waiting_for_players'">Town name: {{ appState.slug }}</h2>
 
@@ -52,7 +52,7 @@
             </b-form-input>
           </b-form-group>
 
-          <b-button id="create-town" v-on:click=createTown :disabled="!appState.slug || !playerName">
+          <b-button id="create-town" v-on:click=createTown :disabled="!appState.slug || !playerName" class="btn-block">
             Create town
           </b-button>
         </div>
