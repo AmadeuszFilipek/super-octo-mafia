@@ -104,3 +104,9 @@ class GameAlreadyExistException(RoutesException): pass
 def exception_handler(error):
     return jsonify({'error': error.__class__.__name__}), 422
 
+@app.after_request
+def disable_caching(response):
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
