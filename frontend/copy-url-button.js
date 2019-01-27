@@ -18,8 +18,9 @@ Vue.component('copy-url-button', {
     },
   },
   template: `<div>
-            <button v-on:click=copyTestingCode class="btn-sm btn"> copy town url </button>
-            <input id="town-url" v-bind:value="url"/>
+            <b-button v-on:click=copyTestingCode class="btn-sm btn"> copy town url </b-button>
+            <b-input id="town-url" type='text' v-bind:value="url">
+            </b-input>
             </div>`
 })
 
