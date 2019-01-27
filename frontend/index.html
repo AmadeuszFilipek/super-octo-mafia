@@ -45,6 +45,10 @@
       display: block;
       width: 100%;
     }
+    #start-game {
+      font-size: 16pt;
+      margin-top: 10px;
+    }
     </style>
 </head>
 
@@ -86,7 +90,7 @@
             <b-button id="join-town" v-on:click=joinTown :disabled=!playerName>Join town</b-button>
           </div>
 
-          <b-button id="start-game" v-if=canShowStartButton v-on:click=startGame>Start game</b-button>
+          <b-button id="start-game" v-if=canShowStartButton v-on:click=startGame class='btn-block'>Start game</b-button>
 
           <div id='div-url'>
             <copy-url-button/>
