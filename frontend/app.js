@@ -42,6 +42,10 @@ function init() {
         return false;
       },
 
+      votedOn() {
+        return this.appState.votes[this.playerName];
+      },
+
       isHost() {
         if (this.currentPlayer) {
           return this.currentPlayer.is_host;
@@ -55,7 +59,7 @@ function init() {
       },
 
       canShowProgressButton() {
-        return this.isHost && (this.appState.state.id === 'day_results' || this.appState.state.id === 'night_results'); 
+        return this.isHost && (this.appState.state.id === 'day_results' || this.appState.state.id === 'night_results');
       },
 
       api() {
@@ -124,7 +128,7 @@ function init() {
         this.setState(json);
         window.history.pushState({}, null, `/towns/${this.appState.slug}`);
       },
-      
+
       async startGame() {
         let json = await this.api.startGame({
           townSlug: this.appState.slug

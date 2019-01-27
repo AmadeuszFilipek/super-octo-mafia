@@ -1,9 +1,12 @@
 
 Vue.component('players-list', {
-  props: ['players', 'currentPlayer'],
+  props: ['players', 'currentPlayer', 'votee'],
   methods: {
     isCurrentPlayer(player) {
       return this.currentPlayer === player;
+    },
+    isAVotee(player) {
+      return this.votee === player.name;
     }
   },
   computed: {
@@ -19,12 +22,16 @@ Vue.component('players-list', {
   <b-list-group id="players">
     <b-list-group-item
       v-for="player in sortedPlayers"
-      v-bind:class="{ current: isCurrentPlayer(player) }"
-      v-bind:key=player.name>
+      v-bind:class="{
+        current: isCurrentPlayer(player),
+        voted: isAVotee(player)
+      }"
+      v-bind:key=player.name
+    >
 
       <slot v-bind:player=player>
-        {{player.name}}
       </slot>
+
     </b-list-group-item>
   </b-list-group>
   `

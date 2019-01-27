@@ -22,13 +22,13 @@
     #players .voting-btn {
       float: right;
     }
-    .voted {
-      background-color: red;
-      font-size: 17pt;
-    }
     .info-header {
       text-align: center;
       color: rgb(56, 47, 36);
+    }
+    #players .voted {
+      background-color: rgba(255, 0, 0, 0.5);
+      font-size: 17pt;
     }
     #players .current {
       font-weight: bold;
@@ -80,7 +80,11 @@
         <div id="waiting-for-players" v-if="appState.state.id === 'waiting_for_players'">
           <h3>Players:</h3>
 
-          <players-list v-bind:players=appState.players v-bind:current-player=currentPlayer></players-list>
+          <players-list v-bind:players=appState.players v-bind:current-player=currentPlayer>
+            <template slot-scope='{ player }'>
+              {{player.name}}
+            </template>
+          </players-list>
 
           <div v-if="!currentPlayer">
             <b-form-group label="Player name">
@@ -98,22 +102,30 @@
         </div>
 
         <div id="day-voting" v-if="appState.state.id === 'day_voting'">
-          <players-list players=appState.players>
-            <template slot-scope="">
+          <players-list
+            v-bind:players=appState.players
+            v-bind:current-player=currentPlayer
+            v-bind:votee=votedOn>
+            <template slot-scope='{ player }'>
             {{player.name}}
             <b-button class='voting-btn' v-if="canVoteOn(player)" v-on:click="vote(player)">Vote!</b-button>
+            </template>
           </players-list>
         </div>
 
         <div id="night-voting" v-if="appState.state.id === 'night_voting'">
-          <players-list players=appState.players>
+          <players-list
+            v-bind:players=appState.players
+            v-bind:current-player=currentPlayer
+            v-bind:votee=votedOn>
+            <template slot-scope="{ player }">
             {{player.name}}
             <b-button class='voting-btn' v-if="canVoteOn(player)" v-on:click="vote(player)">Vote!</b-button>
           </players-list>
         </div>
 
         <div id="progress" v-if="canShowProgressButton">
-          <b-button id='progress-btn' v-on:click=progressState>Continue Game</b-button>
+          <b-button id='progress-btn' v-on:click=progressState class='btn-block'>Continue Game</b-button>
         </div>
 
         <debug v-bind:value="appState" />
