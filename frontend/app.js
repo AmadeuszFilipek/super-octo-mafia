@@ -34,12 +34,24 @@ function init() {
     },
 
     computed: {
+      killedPlayerCharacter() {
+        if (this.appState.state.id === 'day_results' || this.appState.state.id === 'night_results') {
+          return this.appState.players[this.appState.state.killed_player].character;
+        }
+
+        return false;
+      },
+
       currentPlayer() {
         if (this.appState && this.appState.players) {
           return this.appState.players[this.playerName];
         }
 
         return false;
+      },
+
+      isCurrentPlayerMafia() {
+        return this.appState.players[this.playerName].character === 'mafia';
       },
 
       votedOn() {

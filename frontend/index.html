@@ -49,6 +49,10 @@
       font-size: 16pt;
       margin-top: 10px;
     }
+    #results {
+      display: block;
+      text-align: center;
+    }
     </style>
 </head>
 
@@ -56,7 +60,7 @@
   <div class="container">
     <div class="row">
       <div id="app" class="col-xs-3">
-        <info-header v-bind:state="appState.state.id"></info-header>
+        <info-header v-bind:state="appState.state.id" v-bind:character=isCurrentPlayerMafia></info-header>
 
         <h2 v-if="appState.state.id === 'waiting_for_players'">Town name: {{ appState.slug }}</h2>
 
@@ -106,17 +110,18 @@
           </players-list>
         </div>
 
-        <div id="night-voting" v-if="appState.state.id === 'night_voting'">
+        <div id="night-voting" v-if="appState.state.id === 'night_voting' && isCurrentPlayerMafia">
           <players-list v-bind:players=appState.players v-bind:current-player=currentPlayer v-bind:votee=votedOn>
-            <template slot-scope="{ player }">
+            <template slot-scope='{ player }'>
               {{player.name}}
               <b-button class='voting-btn' v-if="canVoteOn(player)" v-on:click="vote(player)">Vote!</b-button>
+            </template>
           </players-list>
         </div>
 
-        <div>Killed player: {{ appState.state.id }}</div>
         <div id="results" v-if="appState.state.id === 'day_results' || appState.state.id === 'night_results'">
-            <h2>Killed player: {{ appState }}</h2>
+            <h2>Killed player: {{ appState.state.killed_player }}</h2>
+            <h2>{{appState.state.killed_player}} was a {{ killedPlayerCharacter }}</h2>
           <b-button id='progress-btn' v-if=canShowProgressButton
             v-on:click=progressState class='btn-block'>Continue Game</b-button>
         </div>
