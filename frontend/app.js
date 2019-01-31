@@ -5,6 +5,25 @@ Vue.component('debug', {
   template: `<pre>value={{value}}</pre>`
 })
 
+function stateIdChanged(oldState, newState) {
+  return oldState.state.id !== newState.state.id;
+}
+function notifyNewState(appState) {
+  console.log('state id changed!', appState.state.id);
+  if (appState.state.id === 'night_voting' || appState.state.id === 'night_results') {
+    let audio = new Audio(`/${appState.state.id}.wav`);
+    audio.play();
+  }
+
+  if (appState.state.id === 'night_voting') {
+    setTimeout(() => {
+      let audio = new Audio(`/mafia_open_eyes.wav`);
+      audio.play();
+    }, 15000);
+  }
+}
+window.notifyNewState = notifyNewState;
+
 function init() {
   console.log('init');
 
@@ -51,7 +70,11 @@ function init() {
       },
 
       isCurrentPlayerMafia() {
-        return this.appState.players[this.playerName].character === 'mafia';
+        if (this.appState && this.appState.players) {
+          return this.appState.players[this.playerName].character === 'mafia';
+        }
+
+        return false;
       },
 
       votedOn() {
@@ -82,9 +105,11 @@ function init() {
     methods: {
       setState(newState) {
         if (newState.version > this.appState.version) {
-          // console.log("setting new state", newState);
           this.appState = newState;
-          // console.log("this.appState = ", this.appState);
+
+          if (this.isHost && stateIdChanged(this.appState, newState)) {
+            notifyNewState(newState);
+          }
         }
       },
 
