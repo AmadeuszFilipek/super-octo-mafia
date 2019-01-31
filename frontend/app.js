@@ -34,12 +34,28 @@ function init() {
     },
 
     computed: {
+      killedPlayerCharacter() {
+        if (this.appState.state.id === 'day_results' || this.appState.state.id === 'night_results') {
+          return this.appState.players[this.appState.state.killed_player].character;
+        }
+
+        return false;
+      },
+
       currentPlayer() {
         if (this.appState && this.appState.players) {
           return this.appState.players[this.playerName];
         }
 
         return false;
+      },
+
+      isCurrentPlayerMafia() {
+        return this.appState.players[this.playerName].character === 'mafia';
+      },
+
+      votedOn() {
+        return this.appState.votes[this.playerName];
       },
 
       isHost() {
@@ -55,7 +71,7 @@ function init() {
       },
 
       canShowProgressButton() {
-        return this.isHost && (this.appState.state.id === 'day_results' || this.appState.state.id === 'night_results'); 
+        return this.isHost && (this.appState.state.id === 'day_results' || this.appState.state.id === 'night_results');
       },
 
       api() {
@@ -124,7 +140,7 @@ function init() {
         this.setState(json);
         window.history.pushState({}, null, `/towns/${this.appState.slug}`);
       },
-      
+
       async startGame() {
         let json = await this.api.startGame({
           townSlug: this.appState.slug

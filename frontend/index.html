@@ -8,42 +8,65 @@
     import App from '/app.js';
     import info_header from '/info-header.js';
     import copy_url_button from '/copy-url-button.js';
+    import players_list from '/players-list.js';
   </script>
 
   <link type="text/css" rel="stylesheet" href="/bootstrap.min.css" />
   <link type="text/css" rel="stylesheet" href="/bootstrap-vue.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
+    body {
+      padding: 10px;
+    }
     #players .voting-btn {
       float: right;
     }
-    .voted {
-      background-color: red;
-      font-size: 17pt;
-    }
     .info-header {
       text-align: center;
-      color: indigo;
+      color: rgb(56, 47, 36);
+    }
+    #players .voted {
+      background-color: rgba(255, 0, 0, 0.5);
+      font-size: 17pt;
+    }
+    #players .current {
+      font-weight: bold;
+      font-size: 16pt;
+    }
+    #div-url {
+      text-align: center;
+      margin: 10px;
+      margin-top: 20px;
+    }
+    #town-url {
+
+      margin-top: 10px;
+      display: block;
+      width: 100%;
+    }
+    #start-game {
+      font-size: 16pt;
+      margin-top: 10px;
+    }
+    #results {
+      display: block;
+      text-align: center;
     }
     </style>
 </head>
 
 <body>
-  <div class="container-fluid">
+  <div class="container">
     <div class="row">
-      <div id="app" class="col-md-12">
-
-
-        <info-header v-bind:state="appState.state.id"></info-header>
-
+      <div id="app" class="col-xs-3">
+        <info-header v-bind:state="appState.state.id" v-bind:character=isCurrentPlayerMafia></info-header>
 
         <h2 v-if="appState.state.id === 'waiting_for_players'">Town name: {{ appState.slug }}</h2>
 
-        <div id="game-ended" v-if="appState.state.id === 'game_ended'">Game is Ended!</div>
-
         <div id="new-town-form" v-if="appState.state.id === 'new_town_form'">
           <b-form-group label="Town name">
-            <b-form-input id="town-slug" v-model="appState.slug" type="text" placeholder="Enter city name"></b-form-input>
+            <b-form-input id="town-slug" v-model="appState.slug" type="text" placeholder="Enter town name"></b-form-input>
           </b-form-group>
 
           <b-form-group label="Player name">
@@ -51,7 +74,7 @@
             </b-form-input>
           </b-form-group>
 
-          <b-button id="create-town" v-on:click=createTown :disabled="!appState.slug || !playerName">
+          <b-button id="create-town" v-on:click=createTown :disabled="!appState.slug || !playerName" class="btn-block">
             Create town
           </b-button>
         </div>
@@ -59,9 +82,11 @@
         <div id="waiting-for-players" v-if="appState.state.id === 'waiting_for_players'">
           <h3>Players:</h3>
 
-          <b-list-group>
-            <b-list-group-item v-for="player in appState.players">{{player.name}}</b-list-group-item>
-          </b-list-group>
+          <players-list v-bind:players=appState.players v-bind:current-player=currentPlayer>
+            <template slot-scope='{ player }'>
+              {{player.name}}
+            </template>
+          </players-list>
 
           <div v-if="!currentPlayer">
             <b-form-group label="Player name">
@@ -71,33 +96,35 @@
             <b-button id="join-town" v-on:click=joinTown :disabled=!playerName>Join town</b-button>
           </div>
 
-          <b-button id="start-game" v-if=canShowStartButton v-on:click=startGame>Start game</b-button>
+          <b-button id="start-game" v-if=canShowStartButton v-on:click=startGame class='btn-block'>Start game</b-button>
+
+          <div id='div-url'><copy-url-button /></div>
         </div>
 
         <div id="day-voting" v-if="appState.state.id === 'day_voting'">
-
-          <b-list-group id="players">
-            <b-list-group-item v-for="player in appState.players" v-bind:id="player.name" v-bind:class="{ voted: hasVotedOn(player) }">
+          <players-list v-bind:players=appState.players v-bind:current-player=currentPlayer v-bind:votee=votedOn>
+            <template slot-scope='{ player }'>
               {{player.name}}
               <b-button class='voting-btn' v-if="canVoteOn(player)" v-on:click="vote(player)">Vote!</b-button>
-            </b-list-group-item>
-          </b-list-group>
+            </template>
+          </players-list>
         </div>
 
-        <div id="night-voting" v-if="appState.state.id === 'night_voting'">
-          <b-list-group id="players">
-            <b-list-group-item v-for="player in appState.players" v-bind:id="player.name" v-bind:class="{ voted: hasVotedOn(player) }">
+        <div id="night-voting" v-if="appState.state.id === 'night_voting' && isCurrentPlayerMafia">
+          <players-list v-bind:players=appState.players v-bind:current-player=currentPlayer v-bind:votee=votedOn>
+            <template slot-scope='{ player }'>
               {{player.name}}
               <b-button class='voting-btn' v-if="canVoteOn(player)" v-on:click="vote(player)">Vote!</b-button>
-            </b-list-group-item>
-          </b-list-group>
+            </template>
+          </players-list>
         </div>
 
-        <div id="progress" v-if="canShowProgressButton">
-          <b-button id='progress-btn' v-on:click=progressState>Continue Game</b-button>
+        <div id="results" v-if="appState.state.id === 'day_results' || appState.state.id === 'night_results'">
+            <h2>Killed player: {{ appState.state.killed_player }}</h2>
+            <h2>{{appState.state.killed_player}} was a {{ killedPlayerCharacter }}</h2>
+          <b-button id='progress-btn' v-if=canShowProgressButton
+            v-on:click=progressState class='btn-block'>Continue Game</b-button>
         </div>
-
-        <copy-url-button/>
 
         <debug v-bind:value="appState" />
       </div>
