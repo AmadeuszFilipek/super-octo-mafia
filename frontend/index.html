@@ -129,7 +129,7 @@
         </div>
 
         <div id="game-ended" v-if="appState.state.id === 'game_ended'">
-          <b-button class='replay-btn' v-on:click="playAgain()">Play again !</b-button>
+          <b-button class='replay-btn' v-if=isHost v-on:click="playAgain()">Play again !</b-button>
         </div>
 
         <debug v-bind:value="appState" />
