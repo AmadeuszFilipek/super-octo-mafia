@@ -40,7 +40,6 @@
       margin-top: 20px;
     }
     #town-url {
-
       margin-top: 10px;
       display: block;
       width: 100%;
@@ -51,6 +50,9 @@
     }
     #results {
       display: block;
+      text-align: center;
+    }
+    #game-ended {
       text-align: center;
     }
     </style>
@@ -124,6 +126,10 @@
             <h2>{{appState.state.killed_player}} was a {{ killedPlayerCharacter }}</h2>
           <b-button id='progress-btn' v-if=canShowProgressButton
             v-on:click=progressState class='btn-block'>Continue Game</b-button>
+        </div>
+
+        <div id="game-ended" v-if="appState.state.id === 'game_ended'">
+          <b-button class='replay-btn' v-on:click="playAgain()">Play again !</b-button>
         </div>
 
         <debug v-bind:value="appState" />

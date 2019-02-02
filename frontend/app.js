@@ -70,7 +70,7 @@ function init() {
       },
 
       isCurrentPlayerMafia() {
-        if (this.appState && this.appState.players) {
+        if (this.appState && this.appState.players && this.appState.players[this.playerName]) {
           return this.appState.players[this.playerName].character === 'mafia';
         }
 
@@ -128,7 +128,20 @@ function init() {
       },
 
       startPolling() {
-        setInterval(this.loadState.bind(this), 1000);
+        setInterval(this.loadState.bind(this), 5000);
+      },
+
+      async playAgain() {
+        try {
+          let json = await this.api.restartTown({
+            townSlug: this.appState.slug
+          });
+
+          this.setState(json);
+        } catch (e) {
+          console.error('error =', e);
+          window.history.pushState({}, null, '/');
+        }
       },
 
       async loadState() {
