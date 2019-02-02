@@ -52,6 +52,13 @@ def endpoint_progress(slug):
     return game.jversonify()
 
 
+@app.route('/api/towns/<slug>/restart', methods=['PUT'])
+def endpoint_restart(slug):
+    game = find_game(slug)
+    game.restart()
+
+    return game.jversonify()
+
 
 # debug purposes
 @app.route('/api/towns/<slug>', methods=['DELETE'])

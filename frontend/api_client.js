@@ -1,4 +1,9 @@
 class ApiClient {
+  async restartTown({ townSlug }){
+    let res = await fetch(`/api/towns/${townSlug}/restart`, {method: 'PUT'});
+    return await res.json();
+  }
+
   async getTown({ townSlug }) {
     let res = await fetch(`/api/towns/${townSlug}`);
     return await res.json();
