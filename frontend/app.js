@@ -51,7 +51,11 @@ function init() {
       },
 
       isCurrentPlayerMafia() {
-        return this.appState.players[this.playerName].character === 'mafia';
+        if (this.appState && this.appState.players && this.appState.players[this.playerName]) {
+          return this.appState.players[this.playerName].character === 'mafia';
+        }
+
+        return false;
       },
 
       votedOn() {
