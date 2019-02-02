@@ -20,7 +20,7 @@ pip install -r requirements.txt
 or
 
 ```
-./run_server APP_HOST=127.0.0.1 APP_PORT=9999
+./run_server HOST=127.0.0.1 PORT=9999
 ```
 
 ## Freezeing requirements
