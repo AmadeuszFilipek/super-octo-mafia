@@ -17,6 +17,10 @@ class Player(object):
             raise KillingDeadPlayerException('Player %s is already dead.' % self.name)
         self.is_alive = False
 
+    def clear(self):
+        self.is_alive = True
+        self.character = 'civil'
+
     def set_character(self, character):
         if character in self.CHARACTERS:
             self.character = character

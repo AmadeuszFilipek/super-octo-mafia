@@ -69,7 +69,7 @@ class Town(object):
                     player.set_character(backdoor_players[player.name])
         else:
             number_of_mafia = floor(len(self.players.keys()) * self.MAFIA_RATIO)
-            
+
             for player in sample(list(self.players), number_of_mafia):
                 self.players[player].set_character('mafia')
 
@@ -110,6 +110,9 @@ class Town(object):
     def clear_vote_pool(self):
         self.votes = {}
 
+    def clear_player_characters(self):
+        for player in self.players.values():
+            player.clear()
 
     def get_winner(self):
 

@@ -90,6 +90,12 @@ class Game(object):
                 'dest': 'game_ended',
                 'before': self.end_game
             })
+        transitions.append({
+            'trigger': 't_restart',
+            'source': 'game_ended',
+            'dest': 'waiting_for_players',
+            'before': self.clear_game
+        })
 
         return transitions
 
@@ -145,12 +151,20 @@ class Game(object):
         if not self.can_game_continue():
             self.t_end_game()
 
+    def restart(self):
+        self.t_restart()
 
     def stamp_state(self, *args, **kwargs):
         self.status['started_at'] = datetime.now().timestamp()
 
     def clear_results(self, *args, **kwargs):
         self.status.pop('killed_player', None)
+
+    def clear_game(self):
+        self.clear_results()
+        self.clear_vote_pool()
+        self.status.pop('winners', None)
+        self.town.clear_player_characters()
 
     def set_winner(self, *args, **kwargs):
         self.status['winners'] = self.town.get_winner()
