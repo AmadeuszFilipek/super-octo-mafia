@@ -30,18 +30,18 @@ jobs:
       # requirements.txt
       - restore_cache:
           keys:
-          - v1-python-dependencies-{{ checksum "backend_python/requirements.txt" }}
+          - v1-python-dependencies-{{ checksum "requirements.txt" }}
           # fallback to using the latest cache if no exact match is found
           - v1-python-dependencies-
       - run:
           name: install python dependencies
           command: |
             cd backend_python
-            pip install -r requirements.txt
+            pip install -r ../requirements.txt
       - save_cache:
           paths:
             - ~/.pyenv/versions/3.6.4/
-          key: v1-python-dependencies-{{ checksum "backend_python/requirements.txt" }}
+          key: v1-python-dependencies-{{ checksum "requirements.txt" }}
 
       # server
       - run:

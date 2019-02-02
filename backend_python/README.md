@@ -8,8 +8,11 @@ to manage it (also, it reads `.python-version` so no manual work is required).
 To install required packages, run:
 
 ```
-pip install -r requirements.txt
+pip install -r ../requirements.txt
 ```
+
+`requirements.txt` is in the root of the repo because heroku python buildpack
+expects it there.
 
 ## Running sever
 
@@ -20,7 +23,7 @@ pip install -r requirements.txt
 or
 
 ```
-./run_server APP_HOST=127.0.0.1 APP_PORT=9999
+./run_server HOST=127.0.0.1 PORT=9999
 ```
 
 ## Freezeing requirements
