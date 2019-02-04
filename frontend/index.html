@@ -67,7 +67,7 @@
   <div class="container">
     <div class="row">
       <div id="app" class="col-xs-3">
-        <info-header v-bind:state="appState.state.id" v-bind:is-mafia=isCurrentPlayerMafia v-bind:is-alive=currentPlayer.is_alive></info-header>
+        <info-header v-bind:state="appState.state.id" v-bind:is-mafia=isCurrentPlayerMafia v-bind:is-alive="currentPlayer ? currentPlayer.is_alive : true"></info-header>
 
         <h2 v-if="appState.state.id === 'waiting_for_players'">Town name: {{ appState.slug }}</h2>
 
