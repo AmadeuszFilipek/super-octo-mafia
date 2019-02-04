@@ -25,6 +25,9 @@ Vue.component('players-list', {
       return `/${alive_status}.png`;
     },
     currentPlayerKnows(player) {
+      if (!this.currentPlayer) {
+        return false;
+      }
       return !player.is_alive ||
         this.currentPlayer.character === "mafia" ||
         this.currentPlayer.is_alive === false;
