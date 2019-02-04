@@ -9,16 +9,16 @@ const audioFiles = {
 function stateIdChanged(oldState, newState) {
 }
 function notifyNewState(appState) {
-  console.log('state id changed!', appState);
+  // console.log('state id changed!', appState);
   if (appState.state.id === 'night_voting' || appState.state.id === 'night_results') {
-    console.log('in regular play');
+    // console.log('in regular play');
     audioFiles[appState.state.id].play().then((e) => console.log('played:', e));
   }
 
   if (appState.state.id === 'night_voting') {
-    console.log('set timeout');
+    // console.log('set timeout');
     setTimeout(() => {
-      console.log('in set timeout');
+      // console.log('in set timeout');
       audioFiles['mafia_open_eyes'].play().then((e) => console.log('delay played:', e));
     }, 15000);
   }
@@ -105,11 +105,10 @@ function init() {
 
     methods: {
       setState(newState) {
-        console.log('aaaa');
         if (newState.version > this.appState.version) {
-          console.log("this.isHost = ", this.isHost);
-          console.log("this.appState.state.id = ", this.appState.state.id);
-          console.log("newState.state.id = ", newState.state.id);
+          // console.log("this.isHost = ", this.isHost);
+          // console.log("this.appState.state.id = ", this.appState.state.id);
+          // console.log("newState.state.id = ", newState.state.id);
           if (this.isHost && this.appState.state.id !== newState.state.id) {
             notifyNewState(newState);
           }
