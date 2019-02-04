@@ -35,6 +35,10 @@
       font-weight: bold;
       font-size: 16pt;
     }
+    #players img {
+      max-width: 32px;
+      max-height: 32px;
+    }
     #div-url {
       text-align: center;
       margin: 10px;
@@ -63,7 +67,7 @@
   <div class="container">
     <div class="row">
       <div id="app" class="col-xs-3">
-        <info-header v-bind:state="appState.state.id" v-bind:character=isCurrentPlayerMafia></info-header>
+        <info-header v-bind:state="appState.state.id" v-bind:is-mafia=isCurrentPlayerMafia v-bind:is-alive=currentPlayer.is_alive></info-header>
 
         <h2 v-if="appState.state.id === 'waiting_for_players'">Town name: {{ appState.slug }}</h2>
 
@@ -86,9 +90,6 @@
           <h3>Players:</h3>
 
           <players-list v-bind:players=appState.players v-bind:current-player=currentPlayer>
-            <template slot-scope='{ player }'>
-              {{player.name}}
-            </template>
           </players-list>
 
           <div v-if="!currentPlayer">
@@ -107,7 +108,6 @@
         <div id="day-voting" v-if="appState.state.id === 'day_voting'">
           <players-list v-bind:players=appState.players v-bind:current-player=currentPlayer v-bind:votee=votedOn>
             <template slot-scope='{ player }'>
-              {{player.name}}
               <b-button class='voting-btn' v-if="canVoteOn(player)" v-on:click="vote(player)">Vote!</b-button>
             </template>
           </players-list>
@@ -116,7 +116,6 @@
         <div id="night-voting" v-if="appState.state.id === 'night_voting' && isCurrentPlayerMafia">
           <players-list v-bind:players=appState.players v-bind:current-player=currentPlayer v-bind:votee=votedOn>
             <template slot-scope='{ player }'>
-              {{player.name}}
               <b-button class='voting-btn' v-if="canVoteOn(player)" v-on:click="vote(player)">Vote!</b-button>
             </template>
           </players-list>
@@ -130,6 +129,7 @@
         </div>
 
         <div id="game-ended" v-if="appState.state.id === 'game_ended'">
+          <h2><small>Winners are: {{ appState.state.winners }}</small></h2>
           <b-button class='replay-btn' v-if=isHost v-on:click="playAgain()">Play again !</b-button>
         </div>
 

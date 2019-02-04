@@ -7,6 +7,27 @@ Vue.component('players-list', {
     },
     isAVotee(player) {
       return this.votee === player.name;
+    },
+    character_icon_for(player) {
+
+      if (this.currentPlayer === player) {
+        return `/${this.currentPlayer.character}.png`;
+      }
+      else if (this.currentPlayerKnows(player)) {
+        return `/${player.character}.png`;
+      }
+      else {
+        return `/unknown.png`;
+      }
+    },
+    alive_icon_for(player) {
+      let alive_status = player.is_alive ? "alive" : "dead"
+      return `/${alive_status}.png`;
+    },
+    currentPlayerKnows(player) {
+      return !player.is_alive ||
+        this.currentPlayer.character === "mafia" ||
+        this.currentPlayer.is_alive === false;
     }
   },
   computed: {
@@ -28,7 +49,9 @@ Vue.component('players-list', {
       }"
       v-bind:key=player.name
     >
-
+      <img v-bind:src="character_icon_for(player)"/>
+      <img v-bind:src="alive_icon_for(player)"/>
+      {{player.name}}
       <slot v-bind:player=player>
       </slot>
 
@@ -37,5 +60,4 @@ Vue.component('players-list', {
   `
 })
 
- // v-bind:class="{ voted: hasVotedOn(player) }"
 export default null;
