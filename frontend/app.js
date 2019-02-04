@@ -1,24 +1,25 @@
 import ApiClient from '/api_client.js';
 
-Vue.component('debug', {
-  props: [`value`],
-  template: `<pre>value={{value}}</pre>`
-})
+const audioFiles = {
+  night_voting: new Audio(`/night_voting.wav`),
+  night_results: new Audio(`/night_results.wav`),
+  mafia_open_eyes: new Audio('/mafia_open_eyes.wav')
+}
 
 function stateIdChanged(oldState, newState) {
-  return oldState.state.id !== newState.state.id;
 }
 function notifyNewState(appState) {
-  console.log('state id changed!', appState.state.id);
+  console.log('state id changed!', appState);
   if (appState.state.id === 'night_voting' || appState.state.id === 'night_results') {
-    let audio = new Audio(`/${appState.state.id}.wav`);
-    audio.play();
+    console.log('in regular play');
+    audioFiles[appState.state.id].play().then((e) => console.log('played:', e));
   }
 
   if (appState.state.id === 'night_voting') {
+    console.log('set timeout');
     setTimeout(() => {
-      let audio = new Audio(`/mafia_open_eyes.wav`);
-      audio.play();
+      console.log('in set timeout');
+      audioFiles['mafia_open_eyes'].play().then((e) => console.log('delay played:', e));
     }, 15000);
   }
 }
@@ -104,12 +105,16 @@ function init() {
 
     methods: {
       setState(newState) {
+        console.log('aaaa');
         if (newState.version > this.appState.version) {
-          this.appState = newState;
-
-          if (this.isHost && stateIdChanged(this.appState, newState)) {
+          console.log("this.isHost = ", this.isHost);
+          console.log("this.appState.state.id = ", this.appState.state.id);
+          console.log("newState.state.id = ", newState.state.id);
+          if (this.isHost && this.appState.state.id !== newState.state.id) {
             notifyNewState(newState);
           }
+
+          this.appState = newState;
         }
       },
 
@@ -201,6 +206,8 @@ function init() {
         let json = await this.api.progressState({
           townSlug: this.appState.slug
         });
+
+        this.setState(json);
       },
     },
 
