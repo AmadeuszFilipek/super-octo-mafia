@@ -16,7 +16,7 @@ Detailed game rules: https://en.wikipedia.org/wiki/Werewolf_(social_deduction_ga
 - See the result of the votes on the app
 
 ## Notes
--This app uses sound effects to indicate when the mafia can open eyes and when everyone can open eyes.
--Admin player should have their speaker enabled.
--This app is intended to use when playing toghether in one room. 
--App does not support text chat between players.
+- This app uses sound effects to indicate when the mafia can open eyes and when everyone can open eyes.
+- Admin player should have their speaker enabled.
+- This app is intended to use when playing toghether in one room. 
+- App does not support text chat between players.
