@@ -3,6 +3,7 @@
 This app allows to play social game mafia also known as werewolf toghether without need for a game leader.
 
 Available live at: https://the-game-of-mafia.herokuapp.com/
+
 Detailed game rules: https://en.wikipedia.org/wiki/Werewolf_(social_deduction_game)
 
 
