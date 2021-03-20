@@ -4,7 +4,7 @@ configobj==5.0.6
 Flask==1.0.2
 ino==0.3.6
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==2.11.3
 MarkupSafe==1.0
 obd==0.6.1
 ordereddict==1.1
